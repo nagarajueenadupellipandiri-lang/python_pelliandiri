@@ -287,3 +287,6 @@ def logout_view(request):
     )
 
     return redirect("login")
+
+def user_view(request):
+    return render( request, "admin_app/users.html")
