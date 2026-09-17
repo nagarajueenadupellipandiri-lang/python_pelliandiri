@@ -1,0 +1,1225 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+    <!-- ========================================= -->
+    <!-- TAILWIND CSS -->
+    <!-- ========================================= -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            sky: '#0284c7',
+                            blue: '#0369a1',
+                            light: '#e0f2fe',
+                            soft: '#f0f9ff'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+
+    <!-- ========================================= -->
+    <!-- DYNAMIC THEME CSS -->
+    <!-- ========================================= -->
+    <link rel="stylesheet" href="{% static 'admin_app/css/theme.css' %}">
+
+    <!-- ========================================= -->
+    <!-- LOAD SAVED THEME -->
+    <!-- ========================================= -->
+    <script src="{% static 'admin_app/js/theme.js' %}"></script>
+
+</head>
+<body class="theme-page theme-dark-text">
+<div class="min-h-screen flex">
+    <!-- ========================================= -->
+    <!-- MOBILE OVERLAY -->
+    <!-- ========================================= -->
+    <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden"> </div>
+
+
+    <!-- ========================================= -->
+    <!-- SIDEBAR -->
+    <!-- ========================================= -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-72 theme-sidebar text-white flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+
+        <!-- ===================================== -->
+        <!-- LOGO -->
+        <!-- ===================================== -->
+        <div class="h-20 px-6 flex items-center gap-3 border-b border-white/20">
+
+
+            <!-- Logo -->
+
+            <div class="w-11 h-11 rounded-xl bg-white flex items-center justify-center shadow-lg"> <span class="theme-primary-text font-bold text-xl"> A </span> </div>
+
+            <!-- Logo Text -->
+            <div>
+                <h1 class="font-bold text-lg"> Admin Portal </h1>
+                <p class="text-white/70 text-xs"> Management System </p>
+            </div>
+
+            <!-- Mobile Close -->
+            <button type="button" onclick="toggleSidebar()" class="ml-auto lg:hidden text-white/70 hover:text-white text-xl"> ✕ </button>
+        </div>
+
+
+        <!-- ===================================== -->
+        <!-- MENU -->
+        <!-- ===================================== -->
+
+        <nav class="flex-1 px-4 py-6 space-y-2">
+
+            <!-- Main Menu -->
+            <p class="text-white/70 text-xs uppercase tracking-wider font-semibold px-3 mb-4"> Main Menu
+            </p>
+
+            <!-- Dashboard -->
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white theme-primary-text font-semibold shadow-sm"> <span class="text-lg"> ▦ </span> Dashboard </a>
+
+
+            <!-- Employees -->
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/15 hover:text-white transition"> <span class="text-lg"> 👥 </span> Employees </a>
+
+            <!-- Users -->
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/15 hover:text-white transition"> <span class="text-lg"> ◉ </span> Users </a>
+
+
+            <!-- Events -->
+            <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/15 hover:text-white transition"> <span class="text-lg"> ▣ </span> Events </a>
+
+
+            <!-- Reports -->
+
+            <a href="#"
+
+               class="flex
+                      items-center
+                      gap-3
+
+                      px-4
+                      py-3
+
+                      rounded-xl
+
+                      text-white/80
+
+                      hover:bg-white/15
+                      hover:text-white
+
+                      transition">
+
+                <span class="text-lg">
+                    ▤
+                </span>
+
+                Reports
+
+            </a>
+
+
+            <!-- Settings Heading -->
+
+            <p class="text-white/70
+                      text-xs
+                      uppercase
+                      tracking-wider
+                      font-semibold
+                      px-3
+                      pt-6
+                      mb-4">
+
+                Settings
+
+            </p>
+
+
+            <!-- Settings -->
+
+            <a href="#"
+
+               class="flex
+                      items-center
+                      gap-3
+
+                      px-4
+                      py-3
+
+                      rounded-xl
+
+                      text-white/80
+
+                      hover:bg-white/15
+                      hover:text-white
+
+                      transition">
+
+                <span class="text-lg">
+                    ⚙
+                </span>
+
+                Settings
+
+            </a>
+
+        </nav>
+
+
+        <!-- ===================================== -->
+        <!-- LOGOUT -->
+        <!-- ===================================== -->
+
+        <div class="p-4
+                    border-t
+                    border-white/20">
+
+
+            <a href="{% url 'logout' %}"
+
+               class="flex
+                      items-center
+                      gap-3
+
+                      px-4
+                      py-3
+
+                      rounded-xl
+
+                      text-white/80
+
+                      hover:bg-red-500
+                      hover:text-white
+
+                      transition">
+
+                <span class="text-lg">
+                    ↪
+                </span>
+
+                Logout
+
+            </a>
+
+        </div>
+
+
+    </aside>
+
+
+    <!-- ========================================= -->
+    <!-- MAIN CONTENT -->
+    <!-- ========================================= -->
+
+    <div class="flex-1
+                lg:ml-72
+                min-w-0">
+
+
+        <!-- ===================================== -->
+        <!-- TOPBAR -->
+        <!-- ===================================== -->
+
+        <header class="h-20
+
+                       theme-card
+
+                       border-b
+                       theme-border
+
+                       px-4
+                       sm:px-6
+                       lg:px-8
+
+                       flex
+                       items-center
+                       justify-between">
+
+
+            <!-- ================================= -->
+            <!-- LEFT -->
+            <!-- ================================= -->
+
+            <div class="flex
+                        items-center
+                        gap-4">
+
+
+                <!-- Mobile Menu -->
+
+                <button
+                    type="button"
+                    onclick="toggleSidebar()"
+
+                    class="lg:hidden
+                           w-10
+                           h-10
+
+                           rounded-xl
+
+                           theme-soft
+
+                           theme-primary-text
+
+                           text-xl">
+
+                    ☰
+
+                </button>
+
+
+                <!-- Heading -->
+
+                <div>
+
+                    <h2 class="text-xl
+                               sm:text-2xl
+                               font-bold
+                               theme-dark-text">
+
+                        Dashboard
+
+                    </h2>
+
+
+                    <p class="text-xs
+                              sm:text-sm
+                              theme-secondary-text">
+
+                        Welcome back, Administrator
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ================================= -->
+            <!-- RIGHT SIDE -->
+            <!-- ================================= -->
+
+            <div class="flex
+                        items-center
+                        gap-3">
+
+
+                <!-- ================================= -->
+                <!-- THEME SELECTOR -->
+                <!-- ================================= -->
+
+                <div class="relative">
+
+
+                    <button
+                        id="themeButton"
+                        type="button"
+                        onclick="toggleThemeMenu()"
+
+                        class="flex
+                               items-center
+                               gap-2
+
+                               px-3
+                               sm:px-4
+                               py-2
+
+                               rounded-lg
+
+                               border
+                               theme-border
+
+                               theme-card
+
+                               theme-primary-text
+
+                               hover:shadow
+
+                               transition">
+
+                        <span class="text-lg">
+                            🎨
+                        </span>
+
+
+                        <span class="hidden sm:block
+                                     font-medium">
+
+                            Theme
+
+                        </span>
+
+                    </button>
+
+
+                    <!-- ================================= -->
+                    <!-- THEME MENU -->
+                    <!-- ================================= -->
+
+                    <div
+                        id="themeMenu"
+
+                        class="theme-menu
+                               hidden
+
+                               absolute
+                               right-0
+
+                               mt-2
+
+                               w-48
+
+                               rounded-xl
+
+                               shadow-xl
+
+                               overflow-hidden
+
+                               z-50">
+
+
+                        <button
+                            type="button"
+                            onclick="setTheme('sky')"
+
+                            class="theme-menu-item
+                                   w-full
+                                   text-left
+                                   px-4
+                                   py-3
+                                   flex
+                                   items-center
+                                   gap-3">
+
+                            <span>🔵</span>
+                            <span>Sky Blue</span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            onclick="setTheme('green')"
+
+                            class="theme-menu-item
+                                   w-full
+                                   text-left
+                                   px-4
+                                   py-3
+                                   flex
+                                   items-center
+                                   gap-3">
+
+                            <span>🟢</span>
+                            <span>Green</span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            onclick="setTheme('purple')"
+
+                            class="theme-menu-item
+                                   w-full
+                                   text-left
+                                   px-4
+                                   py-3
+                                   flex
+                                   items-center
+                                   gap-3">
+
+                            <span>🟣</span>
+                            <span>Purple</span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            onclick="setTheme('orange')"
+
+                            class="theme-menu-item
+                                   w-full
+                                   text-left
+                                   px-4
+                                   py-3
+                                   flex
+                                   items-center
+                                   gap-3">
+
+                            <span>🟠</span>
+                            <span>Orange</span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            onclick="setTheme('red')"
+
+                            class="theme-menu-item
+                                   w-full
+                                   text-left
+                                   px-4
+                                   py-3
+                                   flex
+                                   items-center
+                                   gap-3">
+
+                            <span>🔴</span>
+                            <span>Red</span>
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            onclick="setTheme('dark')"
+
+                            class="theme-menu-item
+                                   w-full
+                                   text-left
+                                   px-4
+                                   py-3
+                                   flex
+                                   items-center
+                                   gap-3">
+
+                            <span>🌙</span>
+                            <span>Dark</span>
+
+                        </button>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- ================================= -->
+                <!-- PROFILE -->
+                <!-- ================================= -->
+
+                <div class="flex
+                            items-center
+                            gap-3">
+
+
+                    <div class="hidden
+                                sm:block
+                                text-right">
+
+
+                        <p class="font-semibold
+                                  text-sm
+                                  theme-dark-text">
+
+                            Super Admin
+
+                        </p>
+
+
+                        <p class="text-xs
+                                  theme-secondary-text">
+
+                            Administrator
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- Profile Circle -->
+
+                    <div class="w-11
+                                h-11
+                                rounded-full
+
+                                theme-primary
+
+                                flex
+                                items-center
+                                justify-center
+
+                                text-white
+
+                                font-bold
+
+                                shadow-md">
+
+                        SA
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- ========================================= -->
+        <!-- PAGE CONTENT -->
+        <!-- ========================================= -->
+
+        <main class="p-4
+                     sm:p-6
+                     lg:p-8">
+
+
+            <!-- ===================================== -->
+            <!-- WELCOME BANNER -->
+            <!-- ===================================== -->
+
+            <div class="relative
+                        overflow-hidden
+
+                        theme-sidebar
+
+                        rounded-2xl
+
+                        p-6
+                        sm:p-8
+
+                        text-white
+
+                        mb-8
+
+                        shadow-lg">
+
+
+                <div class="relative z-10">
+
+                    <p class="text-white/70
+                              text-sm
+                              font-medium">
+
+                        ADMINISTRATION
+
+                    </p>
+
+
+                    <h1 class="text-2xl
+                               sm:text-3xl
+                               font-bold
+                               mt-2">
+
+                        Welcome to your dashboard!
+
+                    </h1>
+
+
+                    <p class="text-white/75
+                              mt-2
+                              max-w-xl">
+
+                        Manage your users, employees, events and
+                        application settings from one place.
+
+                    </p>
+
+                </div>
+
+
+                <!-- Decorative Circle -->
+
+                <div class="absolute
+                            -right-12
+                            -top-16
+                            w-64
+                            h-64
+                            rounded-full
+                            bg-white/10">
+
+                </div>
+
+
+                <div class="absolute
+                            right-16
+                            -bottom-24
+                            w-48
+                            h-48
+                            rounded-full
+                            bg-white/10">
+
+                </div>
+
+            </div>
+
+
+            <!-- ===================================== -->
+            <!-- STATISTICS -->
+            <!-- ===================================== -->
+
+            <div class="grid
+                        grid-cols-1
+                        sm:grid-cols-2
+                        xl:grid-cols-4
+
+                        gap-5
+
+                        mb-8">
+
+
+                <!-- USERS -->
+
+                <div class="theme-card
+                            rounded-2xl
+                            border
+                            p-5
+                            shadow-sm
+                            hover:shadow-md
+                            transition">
+
+                    <div class="flex
+                                items-center
+                                justify-between">
+
+
+                        <div class="w-12
+                                    h-12
+                                    rounded-xl
+                                    theme-soft
+                                    flex
+                                    items-center
+                                    justify-center
+                                    theme-primary-text
+                                    text-xl">
+
+                            👥
+
+                        </div>
+
+
+                        <span class="text-xs
+                                     font-semibold
+                                     theme-primary-text
+                                     theme-soft
+                                     px-2
+                                     py-1
+                                     rounded-full">
+
+                            +12%
+
+                        </span>
+
+                    </div>
+
+
+                    <p class="theme-secondary-text
+                              text-sm
+                              mt-5">
+
+                        Total Users
+
+                    </p>
+
+
+                    <h3 class="text-3xl
+                               font-bold
+                               theme-dark-text
+                               mt-1">
+
+                        1,248
+
+                    </h3>
+
+                </div>
+
+
+                <!-- EMPLOYEES -->
+                <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-12 h-12 rounded-xl theme-soft flex items-center justify-center theme-primary-text text-xl"> 👨‍💼 </div>
+                        <span class="text-xs font-semibold theme-primary-text theme-soft px-2 py-1 rounded-full"> Active </span>
+                    </div>
+                    <p class="theme-secondary-text text-sm mt-5"> Employees </p> 
+                    <h3 class="text-3xl font-bold theme-dark-text mt-1"> {{total_employees}} </h3>
+                </div>
+
+
+                <!-- EVENTS -->
+                <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-12 h-12 rounded-xl theme-soft flex items-center justify-center theme-primary-text text-xl"> 📅 </div> <span class="text-xs font-semibold theme-primary-text theme-soft px-2 py-1 rounded-full"> Upcoming </span> </div>
+                    <p class="theme-secondary-text text-sm mt-5"> Total Events </p>
+                    <h3 class="text-3xl font-bold theme-dark-text mt-1"> {{ total_events }} </h3>
+                </div>
+
+
+                <!-- REPORTS -->
+
+                <div class="theme-card
+                            rounded-2xl
+                            border
+                            p-5
+                            shadow-sm
+                            hover:shadow-md
+                            transition">
+
+                    <div class="flex
+                                items-center
+                                justify-between">
+
+
+                        <div class="w-12
+                                    h-12
+                                    rounded-xl
+                                    theme-soft
+                                    flex
+                                    items-center
+                                    justify-center
+                                    theme-primary-text
+                                    text-xl">
+
+                            📊
+
+                        </div>
+
+
+                        <span class="text-xs
+                                     font-semibold
+                                     theme-primary-text
+                                     theme-soft
+                                     px-2
+                                     py-1
+                                     rounded-full">
+
+                            This Month
+
+                        </span>
+
+                    </div>
+
+
+                    <p class="theme-secondary-text
+                              text-sm
+                              mt-5">
+
+                        Reports
+
+                    </p>
+
+
+                    <h3 class="text-3xl
+                               font-bold
+                               theme-dark-text
+                               mt-1">
+
+                        156
+
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================================= -->
+            <!-- LOWER SECTION -->
+            <!-- ========================================= -->
+
+            <div class="grid
+                        grid-cols-1
+                        xl:grid-cols-3
+                        gap-6">
+
+
+                <!-- ===================================== -->
+                <!-- RECENT ACTIVITY -->
+                <!-- ===================================== -->
+
+                <div class="xl:col-span-2
+
+                            theme-card
+
+                            rounded-2xl
+
+                            border
+
+                            shadow-sm">
+
+
+                    <!-- Header -->
+
+                    <div class="p-6
+                                border-b
+                                theme-border
+
+                                flex
+                                items-center
+                                justify-between">
+
+
+                        <h3 class="font-bold
+                                   text-lg
+                                   theme-dark-text">
+
+                            Recent Activity
+
+                        </h3>
+
+
+                        <button
+                            type="button"
+
+                            class="theme-primary-text
+                                   text-sm
+                                   font-semibold">
+
+                            View All
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- Activities -->
+
+                    <div class="divide-y
+                                theme-border">
+
+
+                        <!-- Activity 1 -->
+
+                        <div class="p-5
+                                    flex
+                                    items-center
+                                    gap-4">
+
+
+                            <div class="w-10
+                                        h-10
+                                        rounded-full
+                                        theme-soft
+                                        flex
+                                        items-center
+                                        justify-center">
+
+                                👤
+
+                            </div>
+
+
+                            <div class="flex-1
+                                        min-w-0">
+
+
+                                <p class="font-semibold
+                                          text-sm
+                                          theme-dark-text">
+
+                                    New user registered
+
+                                </p>
+
+
+                                <p class="text-xs
+                                          theme-secondary-text
+                                          mt-1">
+
+                                    A new user joined the system
+
+                                </p>
+
+                            </div>
+
+
+                            <span class="text-xs
+                                         theme-secondary-text">
+
+                                2 min ago
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- Activity 2 -->
+
+                        <div class="p-5
+                                    flex
+                                    items-center
+                                    gap-4">
+
+
+                            <div class="w-10
+                                        h-10
+                                        rounded-full
+                                        theme-soft
+                                        flex
+                                        items-center
+                                        justify-center">
+
+                                📅
+
+                            </div>
+
+
+                            <div class="flex-1
+                                        min-w-0">
+
+
+                                <p class="font-semibold
+                                          text-sm
+                                          theme-dark-text">
+
+                                    New event created
+
+                                </p>
+
+
+                                <p class="text-xs
+                                          theme-secondary-text
+                                          mt-1">
+
+                                    An event was added
+
+                                </p>
+
+                            </div>
+
+
+                            <span class="text-xs
+                                         theme-secondary-text">
+
+                                15 min ago
+
+                            </span>
+
+                        </div>
+
+
+                        <!-- Activity 3 -->
+
+                        <div class="p-5
+                                    flex
+                                    items-center
+                                    gap-4">
+
+
+                            <div class="w-10
+                                        h-10
+                                        rounded-full
+                                        theme-soft
+                                        flex
+                                        items-center
+                                        justify-center">
+
+                                ✓
+
+                            </div>
+
+
+                            <div class="flex-1
+                                        min-w-0">
+
+
+                                <p class="font-semibold
+                                          text-sm
+                                          theme-dark-text">
+
+                                    System login successful
+
+                                </p>
+
+
+                                <p class="text-xs
+                                          theme-secondary-text
+                                          mt-1">
+
+                                    Super Admin logged in
+
+                                </p>
+
+                            </div>
+
+
+                            <span class="text-xs
+                                         theme-secondary-text">
+
+                                1 hour ago
+
+                            </span>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- ===================================== -->
+                <!-- QUICK ACTIONS -->
+                <!-- ===================================== -->
+
+                <div class="theme-card
+                            rounded-2xl
+                            border
+                            shadow-sm
+                            p-6">
+
+
+                    <h3 class="font-bold
+                               text-lg
+                               theme-dark-text
+                               mb-5">
+
+                        Quick Actions
+
+                    </h3>
+
+
+                    <div class="space-y-3">
+
+
+                        <!-- Add User -->
+
+                        <button
+                            type="button"
+
+                            class="w-full
+                                   flex
+                                   items-center
+                                   gap-3
+
+                                   px-4
+                                   py-3
+
+                                   rounded-xl
+
+                                   theme-soft
+
+                                   theme-primary-text
+
+                                   hover:opacity-80
+
+                                   transition">
+
+                            <span class="text-xl">
+                                +
+                            </span>
+
+                            Add New User
+
+                        </button>
+
+
+                        <!-- Create Event -->
+
+                        <button
+                            type="button"
+
+                            class="w-full
+                                   flex
+                                   items-center
+                                   gap-3
+
+                                   px-4
+                                   py-3
+
+                                   rounded-xl
+
+                                   theme-soft
+
+                                   theme-primary-text
+
+                                   hover:opacity-80
+
+                                   transition">
+
+                            <span class="text-xl">
+                                +
+                            </span>
+
+                            Create Event
+
+                        </button>
+
+
+                        <!-- Reports -->
+
+                        <button
+                            type="button"
+
+                            class="w-full
+                                   flex
+                                   items-center
+                                   gap-3
+
+                                   px-4
+                                   py-3
+
+                                   rounded-xl
+
+                                   theme-soft
+
+                                   theme-primary-text
+
+                                   hover:opacity-80
+
+                                   transition">
+
+                            <span>
+                                ▤
+                            </span>
+
+                            View Reports
+
+                        </button>
+
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+        </main>
+
+    </div>
+
+</div>
+
+
+<!-- ========================================= -->
+<!-- SIDEBAR SCRIPT -->
+<!-- ========================================= -->
+
+<script>
+
+function toggleSidebar() {
+
+    const sidebar =
+        document.getElementById("sidebar");
+
+    const overlay =
+        document.getElementById("overlay");
+
+
+    sidebar.classList.toggle("-translate-x-full");
+
+    overlay.classList.toggle("hidden");
+
+}
+
+</script>
+
+
+</body>
+
+</html>
