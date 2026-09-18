@@ -19,7 +19,6 @@ def login(
 ):
 
     validate_common_request(request, "login")
-
     employee = db.query(EnLogin).filter(
         EnLogin.username == request.params.username
     ).first()

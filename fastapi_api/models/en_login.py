@@ -37,11 +37,7 @@ class EnLogin(Base):
     logged_in_dt = Column(DateTime, nullable=True)
     logged_out_dt = Column(DateTime, nullable=True)
 
-    photo = Column(
-        String(255),
-        nullable=True,
-        default="default_avatar.png"
-    )
+    photo = Column( String(255), nullable=True, default="default_avatar.png" )
 
     last_group_read_at = Column(DateTime, nullable=True)
 
