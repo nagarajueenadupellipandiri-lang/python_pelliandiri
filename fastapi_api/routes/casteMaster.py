@@ -1,8 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-
 from database import get_db
-from models import EnParichayaVedika
+from models import EnCasteMaster
 
 from core.security import (
     validate_common_request,
@@ -11,28 +10,28 @@ from core.security import (
 
 from schemas.common import CommonRequest
 
-router = APIRouter( prefix="/parichayaVedika", tags=["ParichayaVedika"] )
+router = APIRouter( prefix="/caste", tags=["Caste"] )
 
 @router.post("")
-def get_parichayavedica_events(
+def get_caste_list(
     request: CommonRequest,
     current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
 
     validate_common_request(request, "login")
-
-    events = db.query(EnParichayaVedika).all()
-
+    castes = db.query(EnCasteMaster).all()
     return {
         "status": True,
-        "message": "Events fetched successfully",
-        "total_events": len(events),
+        "message": "Castes fetched successfully",
         "data": [
             {
-                "id": event.id,
-                "eng_title": event.eng_title,
+                "caste_id": cst.caste_id,
+                "caste_name": cst.caste_name,
+                "religion_id": cst.religion_id,
+                "status": cst.status,
+                "deleted": cst.deleted,
             }
-            for event in events
+            for cst in castes
         ]
     }

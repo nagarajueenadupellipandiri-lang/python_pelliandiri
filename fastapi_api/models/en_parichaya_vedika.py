@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, Text
 from database import Base
 
 
-class parichayavedicaEvents(Base):
+class EnParichayaVedika(Base):
     __tablename__ = "en_parichaya_vedika"
 
     id = Column(Integer, primary_key=True, autoincrement=True)

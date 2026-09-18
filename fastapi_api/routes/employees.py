@@ -21,7 +21,6 @@ def get_employees(
 ):
 
     validate_common_request(request, "login")
-
     employee = db.query(EnLogin).all()
     total_employees = len(employee)
     return {

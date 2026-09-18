@@ -3,58 +3,6 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib import messages
 
-def common_payload(request):
-    access_token = request.session.get("access_token")
-
-    if not access_token:
-        return redirect("login")
-
-    api_type = request.session.get("api_type")
-    api_authkey = request.session.get("api_authkey")
-
-    if not api_type or not api_authkey:
-        request.session.flush()
-        return redirect("login")
-
-    payload = { "type": api_type, "Authkey": api_authkey, "params": {} }
-    headers = { "Authorization": f"Bearer {access_token}" }
-
-    return payload, headers
-
-def get_registartions_data(request):
-
-    payload, headers = common_payload(request)
-
-    registers_response = requests.post(
-            f"{settings.FASTAPI_BASE_URL}/registrations",
-            json=payload,
-            headers=headers,
-            timeout=10
-        )
-    return registers_response
-
-def get_employees_data(request):
-    payload, headers = common_payload(request)
-
-    employees_response = requests.post(
-            f"{settings.FASTAPI_BASE_URL}/employees",
-            json=payload,
-            headers=headers,
-            timeout=10
-        )
-    return employees_response
-
-def get_events_data(request):
-    payload, headers = common_payload(request)
-    
-    events_response = requests.post(
-            f"{settings.FASTAPI_BASE_URL}/parichayaVedika",
-            json=payload,
-            headers=headers,
-            timeout=10
-        )
-    return events_response
-
 def login_view(request):
 
     logout_success = request.session.pop(
@@ -195,20 +143,63 @@ def login_view(request):
     )
 
 def dashboard_view(request):
+    # --------------------------------
+    # Get JWT from Django session
+    # --------------------------------
+    access_token = request.session.get("access_token")
 
-    payload, headers = common_payload(request)
+    # JWT not available
+    if not access_token:
+        return redirect("login")
 
-    if payload is None or headers is None:
+    api_type = request.session.get("api_type")
+    api_authkey = request.session.get("api_authkey")
+
+    # --------------------------------
+    # API configuration not available
+    # --------------------------------
+    if not api_type or not api_authkey:
+        request.session.flush()
         return redirect("login")
 
     # --------------------------------
-    # Call FastAPI APIs
+    # Common API payload
+    # --------------------------------
+    common_payload = {
+        "type": api_type,
+        "Authkey": api_authkey,
+        "params": {}
+    }
+
+    # --------------------------------
+    # JWT Authorization
+    # --------------------------------
+    headers = { "Authorization": f"Bearer {access_token}" }
+
+    # --------------------------------
+    # Call FastAPI Employees API
     # --------------------------------
     try:
-        events_response = get_events_data(request)
+        employees_response = requests.post(
+            f"{settings.FASTAPI_BASE_URL}/employees",
+            json=common_payload,
+            headers=headers,
+            timeout=10
+        )
+        
+        events_response = requests.post(
+            f"{settings.FASTAPI_BASE_URL}/parichayaVedika",
+            json=common_payload,
+            headers=headers,
+            timeout=10
+        )
 
-        employees_response = get_employees_data(request)
-        registers_response = get_registartions_data(request)
+        registers_response = requests.post(
+            f"{settings.FASTAPI_BASE_URL}/registrations",
+            json=common_payload,
+            headers=headers,
+            timeout=10
+        )
 
         employees = employees_response.json()
         events = events_response.json()
@@ -216,54 +207,34 @@ def dashboard_view(request):
 
     except requests.RequestException as e:
         print("FastAPI connection error:", e)
-
         return render(
             request,
-            "admin_app/dashboard.html",
-            {
-                "error": "Unable to connect to API server."
-            }
+            "admin_app/dashboard.html", { "error": "Unable to connect to API server." }
         )
 
     # --------------------------------
     # JWT invalid / expired
     # --------------------------------
-    if (
-        employees_response.status_code == 401
-        or events_response.status_code == 401
-        or registers_response.status_code == 401
-    ):
+    if employees_response.status_code == 401:
         request.session.flush()
         return redirect("login")
 
     # --------------------------------
-    # Employees API error
+    # API error
     # --------------------------------
-    if (
-        employees_response.status_code != 200
-        or not employees.get("status")
-    ):
+    if ( employees_response.status_code != 200 or not employees.get("status") ):
         return render(
             request,
             "admin_app/dashboard.html",
             {
-                "error": employees.get(
-                    "message",
-                    "Unable to load employees."
-                )
+                "error": employees.get( "message", "Unable to load employees." )
             }
         )
 
-    # --------------------------------
-    # Dashboard totals
-    # --------------------------------
     total_employees = employees.get( "total_employees", 0 )
-    total_events = events.get( "total_events", 0 )
+    total_events = events.get("total_events", 0)
     total_registrations = registers.get( "pagination", {} ).get( "total_registrations", 0 )
 
-    # --------------------------------
-    # Dashboard data
-    # --------------------------------
     data = {
         "total_employees": total_employees,
         "total_events": total_events,
