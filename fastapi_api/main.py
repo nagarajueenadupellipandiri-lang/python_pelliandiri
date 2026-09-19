@@ -7,9 +7,9 @@ from routes.theme import router as theme_router
 from routes.employees import router as employees_router
 from routes.parichayavedicaEvents import router as parichayavedicaEvents_router
 from routes.registrations import router as registrations_router
-from routes.casteMaster import router as casteMaster_router
-from routes.religionMaster import router as religionMaster_router
-from routes.heightMaster import router as heightMaster_router
+from routes.location import router as location_router
+from routes.socioReligious import router as socioReligious_router
+from routes.basicInfo import router as basicInfo_router
 
 app = FastAPI( title="Pellipandiri API", version="1.0.0" )
 
@@ -18,9 +18,9 @@ app.include_router(auth_router)
 app.include_router(employees_router)
 app.include_router(parichayavedicaEvents_router)
 app.include_router(registrations_router)
-app.include_router(casteMaster_router)
-app.include_router(religionMaster_router)
-app.include_router(heightMaster_router)
+app.include_router(basicInfo_router)
+app.include_router(location_router)
+app.include_router(socioReligious_router)
 
 @app.get("/db-test")
 def db_test():
