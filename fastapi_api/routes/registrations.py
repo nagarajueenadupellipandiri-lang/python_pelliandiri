@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import func, or_
 
 from database import get_db
 from models import EngRegister
@@ -12,12 +12,7 @@ from core.security import (
 
 from schemas.common import CommonRequest
 
-
-router = APIRouter(
-    prefix="/registrations",
-    tags=["Registrations"]
-)
-
+router = APIRouter( prefix="/registrations", tags=["Registrations"] )
 
 @router.post("")
 def get_registrations(
@@ -25,37 +20,46 @@ def get_registrations(
     current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-
     # =========================================================
     # 1. Validate common request
     # =========================================================
     validate_common_request(request, "login")
 
-
     # =========================================================
-    # 2. Read pagination from params
+    # 2. Read params
     # =========================================================
     params = request.params or {}
 
+    # =========================================================
+    # 3. Page
+    # =========================================================
     try:
         page = int(params.get("page", 1))
     except (TypeError, ValueError):
         page = 1
 
+
+    # =========================================================
+    # 4. Limit
+    # =========================================================
     try:
-        limit = int(params.get("limit", 20))
+        limit = int(params.get("limit", 50))
     except (TypeError, ValueError):
-        limit = 20
+        limit = 50
 
 
     # =========================================================
-    # 3. Validate page and limit
+    # 5. Validate page
     # =========================================================
     if page < 1:
         page = 1
 
+
+    # =========================================================
+    # 6. Validate limit
+    # =========================================================
     if limit < 1:
-        limit = 20
+        limit = 50
 
     # Maximum 100 records per request
     if limit > 100:
@@ -63,49 +67,45 @@ def get_registrations(
 
 
     # =========================================================
-    # 4. Calculate offset
+    # 7. Search
     # =========================================================
-    offset = (page - 1) * limit
+    search = params.get("search", "")
+
+    if search is None:
+        search = ""
+
+    search = str(search).strip()
 
 
     # =========================================================
-    # 5. Get total count
+    # 8. Base query
     # =========================================================
-    total_registrations = (
-        db.query(func.count(EngRegister.register_id))
-        .scalar()
-    )
+    query = db.query(EngRegister)
 
+    # =========================================================
+    # 9. Apply search
+    # =========================================================
+    if search:
+        search_value = f"%{search}%"
+        query = query.filter(
+            or_(
+                EngRegister.profile_id.ilike(search_value),
+                EngRegister.name.ilike(search_value)
+            )
+        )
+
+
+    # =========================================================
+    # 10. Total records
+    # =========================================================
+    total_registrations = query.with_entities(
+        func.count(EngRegister.register_id)
+    ).scalar()
     total_registrations = total_registrations or 0
 
-    # =========================================================
-    # 6. Get only required records
-    # =========================================================
-    registrations = (
-        db.query(EngRegister)
-        .offset(offset)
-        .limit(limit)
-        .all()
-    )
-
 
     # =========================================================
-    # 7. Prepare response
-    # =========================================================
-    data = []
-
-    for reg in registrations:
-        data.append({
-            "register_id": reg.register_id,
-            "profile_id": reg.profile_id,
-            "name": reg.name,
-            "dob": reg.dob,
-            "tob": reg.tob
-        })
-
-
-    # =========================================================
-    # 8. Pagination information
+    # 11. Calculate total pages
     # =========================================================
     total_pages = (
         (total_registrations + limit - 1) // limit
@@ -115,18 +115,49 @@ def get_registrations(
 
 
     # =========================================================
-    # 9. Final response
+    # 12. Calculate offset
+    # =========================================================
+    offset = (page - 1) * limit
+
+
+    # =========================================================
+    # 13. Get current page records
+    # =========================================================
+    registrations = (
+        query
+        .order_by(EngRegister.register_id.desc())
+        .offset(offset)
+        .limit(limit)
+        .all()
+    )
+
+
+    # =========================================================
+    # 14. Prepare response data
+    # =========================================================
+    data = []
+    for reg in registrations:
+        data.append({
+            "register_id": reg.register_id,
+            "profile_id": reg.profile_id,
+            "name": reg.name,
+            "dob": reg.dob,
+            "tob": reg.tob,
+        })
+
+
+    # =========================================================
+    # 15. Final response
     # =========================================================
     return {
         "status": True,
         "message": "Registrations fetched successfully",
-
         "pagination": {
             "page": page,
             "limit": limit,
             "total_registrations": total_registrations,
-            "total_pages": total_pages
+            "total_pages": total_pages,
         },
-
-        "data": data
+        "search": search,
+        "data": data,
     }

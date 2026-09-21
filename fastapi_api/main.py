@@ -10,6 +10,8 @@ from routes.registrations import router as registrations_router
 from routes.location import router as location_router
 from routes.socioReligious import router as socioReligious_router
 from routes.basicInfo import router as basicInfo_router
+from routes.educationDetails import router as educationDetails_router
+from routes.employmentDetails import router as employmentDetails_router
 
 app = FastAPI( title="Pellipandiri API", version="1.0.0" )
 
@@ -21,6 +23,8 @@ app.include_router(registrations_router)
 app.include_router(basicInfo_router)
 app.include_router(location_router)
 app.include_router(socioReligious_router)
+app.include_router(educationDetails_router)
+app.include_router(employmentDetails_router)
 
 @app.get("/db-test")
 def db_test():
