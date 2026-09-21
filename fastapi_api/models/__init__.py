@@ -10,3 +10,7 @@ from .en_raasi_master import EnRaasiMaster
 from .en_country_master import EnCountryMaster
 from .en_state_master import EnStateMaster
 from .en_city import EnCity
+from .en_qualification_master import EnQualificationMaster
+from .en_occupation_master_head import EnOccupationMasterHead
+from .en_occupation_master import EnOccupationMaster
+
