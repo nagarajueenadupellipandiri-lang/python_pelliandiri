@@ -22,16 +22,23 @@ def common_payload(request):
     return payload, headers
 
 def get_registartions_data(request):
-
     payload, headers = common_payload(request)
 
     registers_response = requests.post(
-            f"{settings.FASTAPI_BASE_URL}/registrations",
+            f"{settings.FASTAPI_BASE_URL}/registrations/getRegistartions",
             json=payload,
             headers=headers,
             timeout=10
         )
-    return registers_response
+
+    registers = registers_response.json()
+    total_registrations = registers.get( "pagination", {} ) .get( "total_registrations", 0 )
+
+    return (
+        registers_response.status_code, 
+        registers, 
+        total_registrations
+    )
 
 def get_employees_data(request):
     payload, headers = common_payload(request)
@@ -206,13 +213,13 @@ def dashboard_view(request):
     # --------------------------------
     try:
         events_response = get_events_data(request)
-
         employees_response = get_employees_data(request)
-        registers_response = get_registartions_data(request)
-
+        registers_status_code, registers, total_registrations = get_registartions_data(request)
         employees = employees_response.json()
         events = events_response.json()
-        registers = registers_response.json()
+
+        print("=========registers data:========", registers)
+        print("=========total registrations:=========", total_registrations)
 
     except requests.RequestException as e:
         print("FastAPI connection error:", e)
@@ -231,7 +238,7 @@ def dashboard_view(request):
     if (
         employees_response.status_code == 401
         or events_response.status_code == 401
-        or registers_response.status_code == 401
+        or registers_status_code == 401
     ):
         request.session.flush()
         return redirect("login")
@@ -259,7 +266,6 @@ def dashboard_view(request):
     # --------------------------------
     total_employees = employees.get( "total_employees", 0 )
     total_events = events.get( "total_events", 0 )
-    total_registrations = registers.get( "pagination", {} ).get( "total_registrations", 0 )
 
     # --------------------------------
     # Dashboard data
@@ -309,5 +315,124 @@ def logout_view(request):
 
     return redirect("login")
 
+# def user_view(request):
+
+#     payload, headers = common_payload(request)
+
+#     if payload is None or headers is None:
+#         return redirect("login")
+
+#     # --------------------------------
+#     # Call FastAPI APIs
+#     # --------------------------------
+#     try:
+#         (registers_status_code, registers, total_registrations) = get_registartions_data(request)
+
+#         print("=========registers data:========", registers)
+#         print("=========total registrations:=========", total_registrations)
+
+#     except requests.RequestException as e:
+#         print("FastAPI connection error:", e)
+
+#         return render(
+#             request,
+#             "admin_app/dashboard.html",
+#             {
+#                 "error": "Unable to connect to API server."
+#             }
+#         )
+    
+#     data = {
+#         "total_registrations": total_registrations,
+#         "registers": registers,
+#     }
+        
+#     return render( request, "admin_app/users.html", data)
+
 def user_view(request):
-    return render( request, "admin_app/users.html")
+
+    payload, headers = common_payload(request)
+
+    if payload is None or headers is None:
+        return redirect("login")
+
+    # --------------------------------
+    # Call FastAPI API
+    # --------------------------------
+    try:
+
+        (
+            registers_status_code,
+            registers_response,
+            total_registrations
+        ) = get_registartions_data(request)
+
+        print(
+            "========= registers response: =========",
+            registers_response
+        )
+
+        print(
+            "========= total registrations: =========",
+            total_registrations
+        )
+
+        # Get only registration data
+        # registers = registers_response.get("data", [])
+        register_users = registers_response.get("data", [])
+
+        print(
+            "========= registration list: =========",
+            register_users
+        )
+
+    except requests.RequestException as e:
+
+        print("FastAPI connection error:", e)
+
+        return render(
+            request,
+            "admin_app/users.html",
+            {
+                "error": "Unable to connect to API server."
+            }
+        )
+
+    # --------------------------------
+    # JWT invalid / expired
+    # --------------------------------
+    if registers_status_code == 401:
+        request.session.flush()
+        return redirect("login")
+
+    # --------------------------------
+    # API error
+    # --------------------------------
+    if registers_status_code != 200:
+
+        return render(
+            request,
+            "admin_app/users.html",
+            {
+                "error": registers_response.get(
+                    "message",
+                    "Unable to load registrations."
+                )
+            }
+        )
+
+    # --------------------------------
+    # Send data to template
+    # --------------------------------
+    data = {
+        "total_registrations": total_registrations,
+        # "registers": registers,
+        "register_users": register_users,
+    }
+
+    return render(
+        request,
+        "admin_app/users.html",
+        data
+    )
+
