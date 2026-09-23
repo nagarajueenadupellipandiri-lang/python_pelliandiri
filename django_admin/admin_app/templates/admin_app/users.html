@@ -516,140 +516,26 @@
 
             <!-- USERS -->
 
-            <div class="theme-card
-                        rounded-2xl
-                        border
-                        p-5
-                        shadow-sm
-                        hover:shadow-md
-                        transition">
-
-
-                <div class="flex
-                            items-center
-                            justify-between">
-
-                    <div class="w-12
-                                h-12
-                                rounded-xl
-                                theme-soft
-                                flex
-                                items-center
-                                justify-center
-                                theme-primary-text
-                                text-xl">
-
-                        👥
-
-                    </div>
-
-
-                    <span class="text-xs
-                                 font-semibold
-                                 theme-primary-text
-                                 theme-soft
-                                 px-2
-                                 py-1
-                                 rounded-full">
-
-                        +12%
-
-                    </span>
-
+            <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
+                <div class="flex items-center justify-between">
+                    <div class="w-12 h-12 rounded-xl theme-soft flex items-center justify-center theme-primary-text text-xl"> 👥 </div>
+                    <span class="text-xs font-semibold theme-primary-text theme-soft px-2 py-1 rounded-full"> +12% </span>
                 </div>
-
-
-                <p class="theme-secondary-text
-                          text-sm
-                          mt-5">
-
-                    Total Users
-
-                </p>
-
-
-                <h3 class="text-3xl
-                           font-bold
-                           theme-dark-text
-                           mt-1">
-
-                    1,248
-
-                </h3>
-
+                <p class="theme-secondary-text text-sm mt-5"> Total Users </p> 
+                <h3 class="text-3xl font-bold theme-dark-text mt-1"> {{ total_registrations }} </h3>
             </div>
-
-
 
             <!-- EMPLOYEES -->
-
-            <div class="theme-card
-                        rounded-2xl
-                        border
-                        p-5
-                        shadow-sm
-                        hover:shadow-md
-                        transition">
-
-
-                <div class="flex
-                            items-center
-                            justify-between">
-
-                    <div class="w-12
-                                h-12
-                                rounded-xl
-                                theme-soft
-                                flex
-                                items-center
-                                justify-center
-                                theme-primary-text
-                                text-xl">
-
-                        👨‍💼
-
-                    </div>
-
-
-                    <span class="text-xs
-                                 font-semibold
-                                 theme-primary-text
-                                 theme-soft
-                                 px-2
-                                 py-1
-                                 rounded-full">
-
-                        Active
-
-                    </span>
-
+            <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
+                <div class="flex items-center justify-between">
+                    <div class="w-12 h-12 rounded-xl theme-soft flex items-center justify-center theme-primary-text text-xl"> 👨‍💼 </div>
+                    <span class="text-xs font-semibold theme-primary-text theme-soft px-2 py-1 rounded-full"> Active </span>
                 </div>
-
-
-                <p class="theme-secondary-text
-                          text-sm
-                          mt-5">
-
-                    Employees
-
-                </p>
-
-
-                <h3 class="text-3xl
-                           font-bold
-                           theme-dark-text
-                           mt-1">
-
-                    {{ total_employees }}
-
-                </h3>
-
+                <p class="theme-secondary-text text-sm mt-5"> Employees </p>
+                <h3 class="text-3xl font-bold theme-dark-text mt-1"> {{ total_employees }} </h3>
             </div>
 
-
-
             <!-- EVENTS -->
-
             <div class="theme-card
                         rounded-2xl
                         border
@@ -788,47 +674,20 @@
         <!-- SAMPLE USERS TABLE -->
         <!-- ================================================= -->
 
-        <div class="theme-card
-                    rounded-2xl
-                    border
-                    shadow-sm
-                    mb-8">
+        <div class="theme-card rounded-2xl border shadow-sm mb-8">
 
 
             <!-- TABLE HEADER -->
 
-            <div class="p-5
-                        sm:p-6
-                        border-b
-                        theme-border">
+            <div class="p-5 sm:p-6 border-b theme-border">
 
 
-                <div class="flex
-                            flex-col
-                            lg:flex-row
-                            lg:items-center
-                            lg:justify-between
-                            gap-4">
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"> <div>
+
+                        <h3 class="text-lg font-bold theme-dark-text">Users </h3>
 
 
-                    <div>
-
-                        <h3 class="text-lg
-                                   font-bold
-                                   theme-dark-text">
-
-                            Sample Users
-
-                        </h3>
-
-
-                        <p class="text-sm
-                                  theme-secondary-text
-                                  mt-1">
-
-                            Manage sample users and their status
-
-                        </p>
+                        <p class="text-sm theme-secondary-text mt-1"> Manage sample users and their status </p>
 
                     </div>
 
@@ -836,35 +695,7 @@
 
                     <!-- CREATE -->
 
-                    <button
-
-                        type="button"
-
-                        onclick="openCreateModal()"
-
-                        class="theme-primary
-                               text-white
-                               px-4
-                               py-2.5
-                               rounded-xl
-                               font-semibold
-                               shadow-sm
-                               hover:opacity-90
-                               transition
-                               flex
-                               items-center
-                               justify-center
-                               gap-2">
-
-                        <span class="text-lg">
-
-                            +
-
-                        </span>
-
-                        Create User
-
-                    </button>
+                    <button type="button" onclick="openCreateModal()" class="theme-primary text-white px-4 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-90 transition flex items-center justify-center gap-2"> <span class="text-lg"> + </span> Create User </button>
 
                 </div>
 
@@ -878,54 +709,18 @@
                         sm:p-6">
 
 
-                <div class="flex
-                            flex-col
-                            md:flex-row
-                            gap-3
-                            md:items-center
-                            md:justify-between">
+                <div class="flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
 
 
                     <!-- SEARCH -->
 
-                    <div class="relative
-                                w-full
-                                md:max-w-md">
+                    <div class="relative w-full md:max-w-md">
 
 
-                        <span class="absolute
-                                     left-3
-                                     top-1/2
-                                     -translate-y-1/2
-                                     theme-secondary-text">
-
-                            🔍
-
-                        </span>
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 theme-secondary-text"> 🔍 </span>
 
 
-                        <input
-
-                            type="text"
-
-                            id="userSearch"
-
-                            onkeyup="filterUsers()"
-
-                            placeholder="Search users..."
-
-                            class="w-full
-                                   pl-10
-                                   pr-4
-                                   py-2.5
-                                   rounded-xl
-                                   border
-                                   theme-border
-                                   theme-page
-                                   theme-dark-text
-                                   outline-none
-                                   focus:ring-2
-                                   focus:ring-sky-400">
+                        <input type="text" id="userSearch" onkeyup="filterUsers()" placeholder="Search users..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400">
 
                     </div>
 
@@ -933,897 +728,74 @@
 
                     <!-- STATUS FILTER -->
 
-                    <div class="flex
-                                items-center
-                                gap-1
-                                theme-soft
-                                p-1
-                                rounded-xl
-                                w-fit">
+                    <div class="flex items-center gap-1 theme-soft p-1 rounded-xl w-fit">
 
 
-                        <button
-
-                            type="button"
-
-                            onclick="filterStatus('all')"
-
-                            id="filterAll"
-
-                            class="status-filter
-                                   px-4
-                                   py-2
-                                   rounded-lg
-                                   text-sm
-                                   font-semibold
-                                   theme-primary
-                                   text-white
-                                   transition">
-
-                            All
-
-                        </button>
+                        <button type="button" onclick="filterStatus('all')" id="filterAll" class="status-filter px-4 py-2 rounded-lg text-sm font-semibold theme-primary text-white transition"> All </button>
 
 
-                        <button
-
-                            type="button"
-
-                            onclick="filterStatus('active')"
-
-                            id="filterActive"
-
-                            class="status-filter
-                                   px-4
-                                   py-2
-                                   rounded-lg
-                                   text-sm
-                                   font-semibold
-                                   theme-dark-text
-                                   transition">
-
-                            Active
-
-                        </button>
+                        <button type="button" onclick="filterStatus('active')" id="filterActive" class="status-filter px-4 py-2 rounded-lg text-sm font-semibold theme-dark-text transition"> Active </button>
 
 
-                        <button
-
-                            type="button"
-
-                            onclick="filterStatus('inactive')"
-
-                            id="filterInactive"
-
-                            class="status-filter
-                                   px-4
-                                   py-2
-                                   rounded-lg
-                                   text-sm
-                                   font-semibold
-                                   theme-dark-text
-                                   transition">
-
-                            Inactive
-
-                        </button>
+                        <button type="button" onclick="filterStatus('inactive')" id="filterInactive" class="status-filter px-4 py-2 rounded-lg text-sm font-semibold theme-dark-text transition"> Inactive </button>
 
                     </div>
 
                 </div>
 
             </div>
-
-
-
-            <!-- ================================= -->
-            <!-- TABLE -->
-            <!-- ================================= -->
-
+            
             <div class="overflow-x-auto">
-
-
-                <table class="w-full
-                              min-w-[850px]
-                              text-sm">
-
-
-                    <!-- HEAD -->
-
+                <table class="w-full min-w-[850px] text-sm">
                     <thead>
-
-                        <tr class="theme-soft
-                                   border-y
-                                   theme-border">
-
-
-                            <th class="px-6
-                                       py-4
-                                       text-left
-                                       font-semibold
-                                       theme-dark-text">
-
-                                #
-
-                            </th>
-
-
-                            <th class="px-6
-                                       py-4
-                                       text-left
-                                       font-semibold
-                                       theme-dark-text">
-
-                                User
-
-                            </th>
-
-
-                            <th class="px-6
-                                       py-4
-                                       text-left
-                                       font-semibold
-                                       theme-dark-text">
-
-                                Email
-
-                            </th>
-
-
-                            <th class="px-6
-                                       py-4
-                                       text-left
-                                       font-semibold
-                                       theme-dark-text">
-
-                                Role
-
-                            </th>
-
-
-                            <th class="px-6
-                                       py-4
-                                       text-left
-                                       font-semibold
-                                       theme-dark-text">
-
-                                Status
-
-                            </th>
-
-
-                            <th class="px-6
-                                       py-4
-                                       text-right
-                                       font-semibold
-                                       theme-dark-text">
-
-                                Action
-
-                            </th>
-
+                        <tr class="theme-soft border-y theme-border">
+                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> # </th>
+                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Name </th>
+                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> ProfileId </th>
+                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Mobile </th>
+                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Date Of Birth </th>
+                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Gender </th>
+                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Martisal Status </th>
+                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Religion </th>
+                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Caste </th>
+                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Status </th>
+                            <th class="px-6 py-4 text-right font-semibold theme-dark-text"> Action </th>
                         </tr>
-
                     </thead>
-
-
-
-                    <!-- BODY -->
-
-                    <tbody id="userTableBody"
-                           class="divide-y
-                                  theme-border">
-
-
-
-                        <!-- ================================= -->
-                        <!-- USER 1 -->
-                        <!-- ================================= -->
-
-                        <tr class="user-row"
-                            data-status="active">
-
-
-                            <td class="px-6
-                                       py-4
-                                       theme-secondary-text">
-
-                                1
-
-                            </td>
-
-
-                            <td class="px-6
-                                       py-4">
-
-
-                                <div class="flex
-                                            items-center
-                                            gap-3">
-
-
-                                    <div class="w-10
-                                                h-10
-                                                rounded-full
-                                                theme-primary
-                                                text-white
-                                                flex
-                                                items-center
-                                                justify-center
-                                                font-bold">
-
-                                        NR
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <p class="font-semibold
-                                                  theme-dark-text">
-
-                                            Nagaraju
-
-                                        </p>
-
-
-                                        <p class="text-xs
-                                                  theme-secondary-text">
-
-                                            @nagaraju
-
-                                        </p>
-
-                                    </div>
-
+                    <tbody id="userTableBody" class="divide-y theme-border">
+                        {% for user in register_users %}
+                        <tr class="user-row" data-status="active">
+                            <td class="px-6 py-4 theme-secondary-text"> 1 </td>
+                            <td class="px-6 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-full theme-primary text-white flex items-center justify-center font-bold"> NR </div>
+                                    <div> <p class="font-semibold theme-dark-text"> {{ user.name }} </p> </div>
                                 </div>
-
                             </td>
-
-
-                            <td class="px-6
-                                       py-4
-                                       theme-secondary-text">
-
-                                nagaraju@example.com
-
+                            <td class="px-6 py-4">{{ user.profile_id }}</td>
+                            <td class="px-6 py-4">{{user.mobile}}</td>
+                            <td class="px-6 py-4">{{user.dob}}</td>
+                            <td class="px-6 py-4">{{user.gender}}</td>
+                            <td class="px-6 py-4">{{user.maritialstatus}}</td>
+                            <td class="px-6 py-4"> {{user.religion_id}} </td>
+                            <td class="px-6 py-4"> {{user.caste_id}} </td>
+                            <td class="px-6 py-4"> <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700"> <span class="w-2 h-2 rounded-full bg-green-500"> </span> Active </span> </td>
+                            <td class="px-6 py-4 text-right whitespace-nowrap">
+                                <button type="button" onclick="viewUser(1)" class="theme-primary-text hover:underline font-semibold mr-3"> View </button>
+                                <button type="button" onclick="editUser(1)" class="theme-primary-text hover:underline font-semibold mr-3"> Edit </button>
+                                <button type="button" onclick="deleteUser(1)" class="text-red-500 hover:text-red-700 font-semibold"> Delete </button>
                             </td>
-
-
-                            <td class="px-6
-                                       py-4">
-
-
-                                <span class="theme-soft
-                                             theme-primary-text
-                                             px-3
-                                             py-1
-                                             rounded-full
-                                             text-xs
-                                             font-semibold">
-
-                                    Admin
-
-                                </span>
-
-                            </td>
-
-
-                            <td class="px-6 py-4">
-
-
-                                <span class="inline-flex
-                                             items-center
-                                             gap-1.5
-                                             px-3
-                                             py-1
-                                             rounded-full
-                                             text-xs
-                                             font-semibold
-                                             bg-green-100
-                                             text-green-700">
-
-                                    <span class="w-2
-                                                 h-2
-                                                 rounded-full
-                                                 bg-green-500">
-
-                                    </span>
-
-                                    Active
-
-                                </span>
-
-                            </td>
-
-
-                            <td class="px-6
-                                       py-4
-                                       text-right
-                                       whitespace-nowrap">
-
-
-                                <button
-                                    type="button"
-                                    onclick="viewUser(1)"
-                                    class="theme-primary-text
-                                           hover:underline
-                                           font-semibold
-                                           mr-3">
-
-                                    View
-
-                                </button>
-
-
-                                <button
-                                    type="button"
-                                    onclick="editUser(1)"
-                                    class="theme-primary-text
-                                           hover:underline
-                                           font-semibold
-                                           mr-3">
-
-                                    Edit
-
-                                </button>
-
-
-                                <button
-                                    type="button"
-                                    onclick="deleteUser(1)"
-                                    class="text-red-500
-                                           hover:text-red-700
-                                           font-semibold">
-
-                                    Delete
-
-                                </button>
-
-                            </td>
-
                         </tr>
-
-
-
-                        <!-- ================================= -->
-                        <!-- USER 2 -->
-                        <!-- ================================= -->
-
-                        <tr class="user-row"
-                            data-status="active">
-
-
-                            <td class="px-6
-                                       py-4
-                                       theme-secondary-text">
-
-                                2
-
-                            </td>
-
-
-                            <td class="px-6
-                                       py-4">
-
-
-                                <div class="flex
-                                            items-center
-                                            gap-3">
-
-
-                                    <div class="w-10
-                                                h-10
-                                                rounded-full
-                                                theme-primary
-                                                text-white
-                                                flex
-                                                items-center
-                                                justify-center
-                                                font-bold">
-
-                                        RK
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <p class="font-semibold
-                                                  theme-dark-text">
-
-                                            Ravi Kumar
-
-                                        </p>
-
-
-                                        <p class="text-xs
-                                                  theme-secondary-text">
-
-                                            @ravi
-
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            </td>
-
-
-                            <td class="px-6
-                                       py-4
-                                       theme-secondary-text">
-
-                                ravi@example.com
-
-                            </td>
-
-
-                            <td class="px-6 py-4">
-
-                                <span class="theme-soft
-                                             theme-primary-text
-                                             px-3
-                                             py-1
-                                             rounded-full
-                                             text-xs
-                                             font-semibold">
-
-                                    Manager
-
-                                </span>
-
-                            </td>
-
-
-                            <td class="px-6 py-4">
-
-                                <span class="inline-flex
-                                             items-center
-                                             gap-1.5
-                                             px-3
-                                             py-1
-                                             rounded-full
-                                             text-xs
-                                             font-semibold
-                                             bg-green-100
-                                             text-green-700">
-
-                                    <span class="w-2
-                                                 h-2
-                                                 rounded-full
-                                                 bg-green-500">
-
-                                    </span>
-
-                                    Active
-
-                                </span>
-
-                            </td>
-
-
-                            <td class="px-6
-                                       py-4
-                                       text-right
-                                       whitespace-nowrap">
-
-
-                                <button
-                                    onclick="viewUser(2)"
-                                    class="theme-primary-text
-                                           hover:underline
-                                           font-semibold
-                                           mr-3">
-
-                                    View
-
-                                </button>
-
-
-                                <button
-                                    onclick="editUser(2)"
-                                    class="theme-primary-text
-                                           hover:underline
-                                           font-semibold
-                                           mr-3">
-
-                                    Edit
-
-                                </button>
-
-
-                                <button
-                                    onclick="deleteUser(2)"
-                                    class="text-red-500
-                                           hover:text-red-700
-                                           font-semibold">
-
-                                    Delete
-
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-
-
-                        <!-- ================================= -->
-                        <!-- USER 3 -->
-                        <!-- ================================= -->
-
-                        <tr class="user-row"
-                            data-status="inactive">
-
-
-                            <td class="px-6
-                                       py-4
-                                       theme-secondary-text">
-
-                                3
-
-                            </td>
-
-
-                            <td class="px-6 py-4">
-
-
-                                <div class="flex
-                                            items-center
-                                            gap-3">
-
-
-                                    <div class="w-10
-                                                h-10
-                                                rounded-full
-                                                bg-gray-400
-                                                text-white
-                                                flex
-                                                items-center
-                                                justify-center
-                                                font-bold">
-
-                                        AS
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <p class="font-semibold
-                                                  theme-dark-text">
-
-                                            Anil Sharma
-
-                                        </p>
-
-
-                                        <p class="text-xs
-                                                  theme-secondary-text">
-
-                                            @anil
-
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            </td>
-
-
-                            <td class="px-6
-                                       py-4
-                                       theme-secondary-text">
-
-                                anil@example.com
-
-                            </td>
-
-
-                            <td class="px-6 py-4">
-
-                                <span class="theme-soft
-                                             theme-primary-text
-                                             px-3
-                                             py-1
-                                             rounded-full
-                                             text-xs
-                                             font-semibold">
-
-                                    User
-
-                                </span>
-
-                            </td>
-
-
-                            <td class="px-6 py-4">
-
-                                <span class="inline-flex
-                                             items-center
-                                             gap-1.5
-                                             px-3
-                                             py-1
-                                             rounded-full
-                                             text-xs
-                                             font-semibold
-                                             bg-gray-100
-                                             text-gray-600">
-
-                                    <span class="w-2
-                                                 h-2
-                                                 rounded-full
-                                                 bg-gray-400">
-
-                                    </span>
-
-                                    Inactive
-
-                                </span>
-
-                            </td>
-
-
-                            <td class="px-6
-                                       py-4
-                                       text-right
-                                       whitespace-nowrap">
-
-
-                                <button
-                                    onclick="viewUser(3)"
-                                    class="theme-primary-text
-                                           hover:underline
-                                           font-semibold
-                                           mr-3">
-
-                                    View
-
-                                </button>
-
-
-                                <button
-                                    onclick="editUser(3)"
-                                    class="theme-primary-text
-                                           hover:underline
-                                           font-semibold
-                                           mr-3">
-
-                                    Edit
-
-                                </button>
-
-
-                                <button
-                                    onclick="deleteUser(3)"
-                                    class="text-red-500
-                                           hover:text-red-700
-                                           font-semibold">
-
-                                    Delete
-
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-
-
-                        <!-- ================================= -->
-                        <!-- USER 4 -->
-                        <!-- ================================= -->
-
-                        <tr class="user-row"
-                            data-status="active">
-
-
-                            <td class="px-6
-                                       py-4
-                                       theme-secondary-text">
-
-                                4
-
-                            </td>
-
-
-                            <td class="px-6 py-4">
-
-
-                                <div class="flex
-                                            items-center
-                                            gap-3">
-
-
-                                    <div class="w-10
-                                                h-10
-                                                rounded-full
-                                                theme-primary
-                                                text-white
-                                                flex
-                                                items-center
-                                                justify-center
-                                                font-bold">
-
-                                        SK
-
-                                    </div>
-
-
-                                    <div>
-
-                                        <p class="font-semibold
-                                                  theme-dark-text">
-
-                                            Suresh Kumar
-
-                                        </p>
-
-
-                                        <p class="text-xs
-                                                  theme-secondary-text">
-
-                                            @suresh
-
-                                        </p>
-
-                                    </div>
-
-                                </div>
-
-                            </td>
-
-
-                            <td class="px-6
-                                       py-4
-                                       theme-secondary-text">
-
-                                suresh@example.com
-
-                            </td>
-
-
-                            <td class="px-6 py-4">
-
-                                <span class="theme-soft
-                                             theme-primary-text
-                                             px-3
-                                             py-1
-                                             rounded-full
-                                             text-xs
-                                             font-semibold">
-
-                                    Editor
-
-                                </span>
-
-                            </td>
-
-
-                            <td class="px-6 py-4">
-
-                                <span class="inline-flex
-                                             items-center
-                                             gap-1.5
-                                             px-3
-                                             py-1
-                                             rounded-full
-                                             text-xs
-                                             font-semibold
-                                             bg-green-100
-                                             text-green-700">
-
-                                    <span class="w-2
-                                                 h-2
-                                                 rounded-full
-                                                 bg-green-500">
-
-                                    </span>
-
-                                    Active
-
-                                </span>
-
-                            </td>
-
-
-                            <td class="px-6
-                                       py-4
-                                       text-right
-                                       whitespace-nowrap">
-
-
-                                <button
-                                    onclick="viewUser(4)"
-                                    class="theme-primary-text
-                                           hover:underline
-                                           font-semibold
-                                           mr-3">
-
-                                    View
-
-                                </button>
-
-
-                                <button
-                                    onclick="editUser(4)"
-                                    class="theme-primary-text
-                                           hover:underline
-                                           font-semibold
-                                           mr-3">
-
-                                    Edit
-
-                                </button>
-
-
-                                <button
-                                    onclick="deleteUser(4)"
-                                    class="text-red-500
-                                           hover:text-red-700
-                                           font-semibold">
-
-                                    Delete
-
-                                </button>
-
-                            </td>
-
-                        </tr>
-
-
+                        {% endfor %}
                     </tbody>
-
                 </table>
-
             </div>
-
-
 
             <!-- TABLE FOOTER -->
-
-            <div class="px-6
-                        py-4
-                        border-t
-                        theme-border
-                        flex
-                        flex-col
-                        sm:flex-row
-                        sm:items-center
-                        sm:justify-between
-                        gap-3">
-
-
-                <p class="text-sm
-                          theme-secondary-text">
-
-                    Showing
-
-                    <span id="visibleCount"
-                          class="font-semibold
-                                 theme-dark-text">
-
-                        4
-
-                    </span>
-
-                    users
-
-                </p>
-
-
-                <div class="text-sm
-                            theme-secondary-text">
-
-                    Sample Data
-
-                </div>
-
+            <div class="px-6 py-4 border-t theme-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <p class="text-sm theme-secondary-text"> Showing <span id="visibleCount" class="font-semibold theme-dark-text"> 4 </span> users </p>
+                <div class="text-sm theme-secondary-text"> Sample Data </div>
             </div>
-
         </div>
 
 
