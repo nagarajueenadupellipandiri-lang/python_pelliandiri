@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from sqlalchemy import text
 from database import engine
-from models import User,EnLogin
 from routes.auth import router as auth_router
 from routes.theme import router as theme_router
 from routes.employees import router as employees_router

@@ -1,5 +1,6 @@
 from datetime import datetime, date
 from fastapi import APIRouter, Depends
+from hashlib import md5
 from sqlalchemy.orm import Session
 from sqlalchemy import func, or_
 from database import get_db
@@ -269,9 +270,9 @@ def new_registartion(
     # =========================================================
     # 2. READ en_register PARAMETERS
     # =========================================================
-    password = params.get("password")
+    password = md5( params.get("password").encode("utf-8") ).hexdigest()
+
     name = params.get("name")
-    # dob = params.get("dob")
     dob = params.get("dob")
 
     if not dob:
@@ -317,9 +318,6 @@ def new_registartion(
             "status": False,
             "message": "dob must be in YYYY-MM-DD format"
         }
-
-
-
 
     tob = params.get("tob")
     gender = params.get("gender")
@@ -383,13 +381,12 @@ def new_registartion(
     # 4. REQUIRED REGISTER FIELDS
     # =========================================================
     required_register_fields = {
-        "password": password,
         "name": name,
+        "password": password,
         "dob": dob,
         "gender": gender,
         "religion_id": religion_id,
         "caste_id": caste_id,
-        "subcaste": subcaste,
         "citizenship": citizenship,
         "livingin": livingin,
         "state_id": state_id,
@@ -430,12 +427,12 @@ def new_registartion(
         citizenship = int(citizenship)
         livingin = int(livingin)
         state_id = int(state_id)
-        height_id = int(height_id)
-        weight = int(weight)
-        mothertongue = int(mothertongue)
-        qualification_id = int(qualification_id)
-        occupation_id = int(occupation_id)
-        annualincome_id = int(annualincome_id)
+        height_id = int(height_id) if height_id not in [None, ""] else None
+        weight = int(weight) if weight not in [None, ""] else None
+        mothertongue = ( int(mothertongue) if mothertongue not in [None, ""] else None )
+        qualification_id = ( int(qualification_id) if qualification_id not in [None, ""] else None )
+        occupation_id = ( int(occupation_id) if occupation_id not in [None, ""] else None )
+        annualincome_id = ( int(annualincome_id) if annualincome_id not in [None, ""] else None )
 
     except (TypeError, ValueError):
         return {
@@ -1071,177 +1068,63 @@ def new_registartion(
             # en_register
             # =================================================
             "register": {
-
-                "register_id":
-                    registration.register_id,
-
-                "profile_id":
-                    registration.profile_id,
-
-                "name":
-                    registration.name,
-
-                "dob":
-                    registration.dob,
-
-                "tob":
-                    registration.tob,
-
-                "age":
-                    registration.age,
-
-                "gender":
-                    registration.gender,
-
-                "maritialstatus":
-                    registration.maritialstatus,
-
-                "childstatus":
-                    registration.childstatus,
-
-                "religion_id":
-                    registration.religion_id,
-
-                "denomination":
-                    registration.denomination,
-
-                "caste_id":
-                    registration.caste_id,
-
-                "subcaste":
-                    registration.subcaste,
-
-                "citizenship":
-                    registration.citizenship,
-
-                "livingin":
-                    registration.livingin,
-
-                "state_id":
-                    registration.state_id,
-
-                "state_other":
-                    registration.state_other,
-
-                "hasphoto":
-                    registration.hasphoto,
-
-                "hasvideo":
-                    registration.hasvideo,
-
-                "isprotected":
-                    registration.isprotected,
-
-                "hasastro":
-                    registration.hasastro,
-
-                "datecreated":
-                    registration.datecreated,
-
-                "datemodified":
-                    registration.datemodified,
-
-                "last_visited":
-                    registration.last_visited,
-
-                "valid_upto":
-                    registration.valid_upto,
-
-                "valid_upto_time":
-                    registration.valid_upto_time,
-
-                "grace_time":
-                    registration.grace_time,
-
-                "date_deactivated":
-                    registration.date_deactivated,
-
-                "member_status":
-                    registration.member_status,
-
-                "featured_member":
-                    registration.featured_member,
-
-                "isactive":
-                    registration.isactive,
-
-                "status":
-                    registration.status,
-
-                "deleted":
-                    registration.deleted,
-
-                "expressinterest":
-                    registration.expressinterest,
-
-                "viewcount":
-                    registration.viewcount,
-
-                "date_activated":
-                    registration.date_activated,
-
-                "loginstatus":
-                    registration.loginstatus,
-
-                "view_contacts_limit":
-                    registration.view_contacts_limit,
-
-                "pm_limit":
-                    registration.pm_limit,
-
-                "registered_ip":
-                    registration.registered_ip,
-
-                "PV_status":
-                    registration.PV_status,
-
-                "register_from":
-                    registration.register_from,
-
-                "privacy_access":
-                    registration.privacy_access,
-
-                "temp_country":
-                    registration.temp_country,
-
-                "temp_state":
-                    registration.temp_state,
-
-                "temp_city":
-                    registration.temp_city,
-
-                "temp_town":
-                    registration.temp_town,
-
-                "temp_pincode":
-                    registration.temp_pincode,
-
-                "pincode":
-                    registration.pincode,
-
-                "town":
-                    registration.town,
-
-                "is_temp_perment_same":
-                    registration.is_temp_perment_same,
-
-                "referred_regid":
-                    registration.referred_regid,
-
-                "referred_Cnt":
-                    registration.referred_Cnt,
-
-                "is_consented":
-                    registration.is_consented,
-
-                "consent_date":
-                    registration.consent_date,
-
-                "assigned_to":
-                    registration.assigned_to,
-
-                "assigned_by":
-                    registration.assigned_by
+                "register_id": registration.register_id, 
+                "profile_id": registration.profile_id, 
+                "name": registration.name, 
+                "dob": registration.dob, 
+                "tob": registration.tob, 
+                "age": registration.age, 
+                "gender": registration.gender, 
+                "maritialstatus": registration.maritialstatus, 
+                "childstatus": registration.childstatus, 
+                "religion_id": registration.religion_id, 
+                "denomination": registration.denomination, 
+                "caste_id": registration.caste_id, 
+                "subcaste": registration.subcaste, 
+                "citizenship": registration.citizenship, 
+                "livingin": registration.livingin, 
+                "state_id": registration.state_id, 
+                "state_other": registration.state_other, 
+                "hasphoto": registration.hasphoto, 
+                "hasvideo": registration.hasvideo, 
+                "isprotected": registration.isprotected, 
+                "hasastro": registration.hasastro, 
+                "datecreated": registration.datecreated, 
+                "datemodified": registration.datemodified, 
+                "last_visited": registration.last_visited,
+                "valid_upto": registration.valid_upto, 
+                "valid_upto_time": registration.valid_upto_time, 
+                "grace_time": registration.grace_time, 
+                "date_deactivated": registration.date_deactivated, 
+                "member_status": registration.member_status, 
+                "featured_member": registration.featured_member, 
+                "isactive": registration.isactive, 
+                "status": registration.status, 
+                "deleted": registration.deleted, 
+                "expressinterest": registration.expressinterest, 
+                "viewcount": registration.viewcount, 
+                "date_activated": registration.date_activated, 
+                "loginstatus": registration.loginstatus, 
+                "view_contacts_limit": registration.view_contacts_limit, 
+                "pm_limit": registration.pm_limit, 
+                "registered_ip": registration.registered_ip, 
+                "PV_status": registration.PV_status, 
+                "register_from": registration.register_from, 
+                "privacy_access": registration.privacy_access, 
+                "temp_country": registration.temp_country, 
+                "temp_state": registration.temp_state, 
+                "temp_city": registration.temp_city, 
+                "temp_town": registration.temp_town, 
+                "temp_pincode": registration.temp_pincode, 
+                "pincode": registration.pincode, 
+                "town": registration.town, 
+                "is_temp_perment_same": registration.is_temp_perment_same, 
+                "referred_regid": registration.referred_regid, 
+                "referred_Cnt": registration.referred_Cnt, 
+                "is_consented": registration.is_consented, 
+                "consent_date": registration.consent_date, 
+                "assigned_to": registration.assigned_to, 
+                "assigned_by": registration.assigned_by
             },
 
             # =================================================
@@ -1249,273 +1132,95 @@ def new_registartion(
             # =================================================
 
             "profile_info": {
-
-                "profileinfo_id":
-                    profile_info.profileinfo_id,
-
-                "register_id":
-                    profile_info.register_id,
-
-                "bloodgroup":
-                    profile_info.bloodgroup,
-
-                "height_id":
-                    profile_info.height_id,
-
-                "weight":
-                    profile_info.weight,
-
-                "bodytype":
-                    profile_info.bodytype,
-
-                "physicalstatus":
-                    profile_info.physicalstatus,
-
-                "complextion":
-                    profile_info.complextion,
-
-                "mothertongue":
-                    profile_info.mothertongue,
-
-                "can_speak":
-                    profile_info.can_speak,
-
-                "can_speak_lang":
-                    profile_info.can_speak_lang,
-
-                "placeofbirth":
-                    profile_info.placeofbirth,
-
-                "diet":
-                    profile_info.diet,
-
-                "smoke":
-                    profile_info.smoke,
-
-                "drink":
-                    profile_info.drink,
-
-                "star_id":
-                    profile_info.star_id,
-
-                "raasi_id":
-                    profile_info.raasi_id,
-
-                "gothram":
-                    profile_info.gothram,
-
-                "manglik":
-                    profile_info.manglik,
-
-                "qualification_id":
-                    profile_info.qualification_id,
-
-                "discipline_id":
-                    profile_info.discipline_id,
-
-                "occupation_id":
-                    profile_info.occupation_id,
-
-                "designation":
-                    profile_info.designation,
-
-                "employed_in":
-                    profile_info.employed_in,
-
-                "employment_location":
-                    profile_info.employment_location,
-
-                "occupation_details":
-                    profile_info.occupation_details,
-
-                "qualification":
-                    profile_info.qualification,
-
-                "annualincome_id":
-                    profile_info.annualincome_id,
-
-                "annualincome":
-                    profile_info.annualincome,
-
-                "residingstatus_code":
-                    profile_info.residingstatus_code,
-
-                "email":
-                    profile_info.email,
-
-                "email_display_status":
-                    profile_info.email_display_status,
-
-                "mobile":
-                    profile_info.mobile,
-
-                "mobile_display_status":
-                    profile_info.mobile_display_status,
-
-                "countrycode":
-                    profile_info.countrycode,
-
-                "areacode":
-                    profile_info.areacode,
-
-                "phoneno":
-                    profile_info.phoneno,
-
-                "phone_display_status":
-                    profile_info.phone_display_status,
-
-                "family_values":
-                    profile_info.family_values,
-
-                "family_type":
-                    profile_info.family_type,
-
-                "family_status":
-                    profile_info.family_status,
-
-                "family_brothers_married":
-                    profile_info.family_brothers_married,
-
-                "family_brothers_unmarried":
-                    profile_info.family_brothers_unmarried,
-
-                "family_sisters_married":
-                    profile_info.family_sisters_married,
-
-                "family_sisters_unmarried":
-                    profile_info.family_sisters_unmarried,
-
-                "profile_summary":
-                    profile_info.profile_summary,
-
-                "interest_hobbies":
-                    profile_info.interest_hobbies,
-
-                "family_details":
-                    profile_info.family_details,
-
-                "desc_flag":
-                    profile_info.desc_flag,
-
-                "contact_person":
-                    profile_info.contact_person,
-
-                "contact_address":
-                    profile_info.contact_address,
-
-                "contact_relationship":
-                    profile_info.contact_relationship,
-
-                "reference1_name":
-                    profile_info.reference1_name,
-
-                "reference1_tele":
-                    profile_info.reference1_tele,
-
-                "reference1_address":
-                    profile_info.reference1_address,
-
-                "reference2_name":
-                    profile_info.reference2_name,
-
-                "reference2_tele":
-                    profile_info.reference2_tele,
-
-                "reference2_address":
-                    profile_info.reference2_address,
-
-                "registerby":
-                    profile_info.registerby,
-
-                "status":
-                    profile_info.status,
-
-                "deleted":
-                    profile_info.deleted,
-
-                "father_occupation_id":
-                    profile_info.father_occupation_id,
-
-                "mother_occupation_id":
-                    profile_info.mother_occupation_id,
-
-                "college":
-                    profile_info.college,
-
-                "university":
-                    profile_info.university,
-
-                "placeofstudy":
-                    profile_info.placeofstudy,
-
-                "yearofpassing":
-                    profile_info.yearofpassing,
-
-                "total_work_experiance":
-                    profile_info.total_work_experiance,
-
-                "family_members":
-                    profile_info.family_members,
-
-                "family_income":
-                    profile_info.family_income,
-
-                "family_hometown":
-                    profile_info.family_hometown,
-
-                "family_livingcity":
-                    profile_info.family_livingcity,
-
-                "hobbies":
-                    profile_info.hobbies,
-
-                "interests":
-                    profile_info.interests,
-
-                "assets":
-                    profile_info.assets,
-
-                "about_me":
-                    profile_info.about_me,
-
-                "interest_on_pets":
-                    profile_info.interest_on_pets,
-
-                "health_info":
-                    profile_info.health_info,
-
-                "about_physical_status":
-                    profile_info.about_physical_status,
-
-                "specialization":
-                    profile_info.specialization,
-
-                "company_name":
-                    profile_info.company_name,
-
-                "father_name":
-                    profile_info.father_name,
-
-                "mother_name":
-                    profile_info.mother_name,
-
-                "other_contact_person":
-                    profile_info.other_contact_person,
-
-                "other_contact_person_relation":
-                    profile_info.other_contact_person_relation,
-
-                "other_contact_person_phonenum":
-                    profile_info.other_contact_person_phonenum,
-
-                "other_contact_person_address":
-                    profile_info.other_contact_person_address,
-
-                "is_email_verified":
-                    profile_info.is_email_verified,
-
-                "family_incometype":
-                    profile_info.family_incometype
+                "profileinfo_id": profile_info.profileinfo_id, 
+                "register_id": profile_info.register_id, 
+                "bloodgroup": profile_info.bloodgroup, 
+                "height_id": profile_info.height_id, 
+                "weight": profile_info.weight, 
+                "bodytype": profile_info.bodytype, 
+                "physicalstatus": profile_info.physicalstatus, 
+                "complextion": profile_info.complextion, 
+                "mothertongue": profile_info.mothertongue, 
+                "can_speak": profile_info.can_speak, 
+                "can_speak_lang": profile_info.can_speak_lang, 
+                "placeofbirth": profile_info.placeofbirth, 
+                "diet": profile_info.diet, 
+                "smoke": profile_info.smoke, 
+                "drink": profile_info.drink, 
+                "star_id": profile_info.star_id, 
+                "raasi_id": profile_info.raasi_id, 
+                "gothram": profile_info.gothram, 
+                "manglik": profile_info.manglik, 
+                "qualification_id": profile_info.qualification_id, 
+                "discipline_id": profile_info.discipline_id, 
+                "occupation_id": profile_info.occupation_id, 
+                "designation": profile_info.designation, 
+                "employed_in": profile_info.employed_in, 
+                "employment_location": profile_info.employment_location, 
+                "occupation_details": profile_info.occupation_details, 
+                "qualification": profile_info.qualification, 
+                "annualincome_id": profile_info.annualincome_id, 
+                "annualincome": profile_info.annualincome, 
+                "residingstatus_code": profile_info.residingstatus_code, 
+                "email": profile_info.email, 
+                "email_display_status": profile_info.email_display_status, 
+                "mobile": profile_info.mobile, 
+                "mobile_display_status": profile_info.mobile_display_status, 
+                "countrycode": profile_info.countrycode, 
+                "areacode": profile_info.areacode, 
+                "phoneno": profile_info.phoneno, 
+                "phone_display_status": profile_info.phone_display_status, 
+                "family_values": profile_info.family_values, 
+                "family_type": profile_info.family_type, 
+                "family_status": profile_info.family_status, 
+                "family_brothers_married": profile_info.family_brothers_married, 
+                "family_brothers_unmarried": profile_info.family_brothers_unmarried, 
+                "family_sisters_married": profile_info.family_sisters_married, 
+                "family_sisters_unmarried": profile_info.family_sisters_unmarried, 
+                "profile_summary": profile_info.profile_summary, 
+                "interest_hobbies": profile_info.interest_hobbies, 
+                "family_details": profile_info.family_details, 
+                "desc_flag": profile_info.desc_flag, 
+                "contact_person": profile_info.contact_person, 
+                "contact_address": profile_info.contact_address, 
+                "contact_relationship": profile_info.contact_relationship, 
+                "reference1_name": profile_info.reference1_name, 
+                "reference1_tele": profile_info.reference1_tele, 
+                "reference1_address": profile_info.reference1_address, 
+                "reference2_name": profile_info.reference2_name, 
+                "reference2_tele": profile_info.reference2_tele, 
+                "reference2_address": profile_info.reference2_address, 
+                "registerby": profile_info.registerby, 
+                "status": profile_info.status, 
+                "deleted": profile_info.deleted, 
+                "father_occupation_id": profile_info.father_occupation_id, 
+                "mother_occupation_id": profile_info.mother_occupation_id, 
+                "college": profile_info.college, 
+                "university": profile_info.university, 
+                "placeofstudy": profile_info.placeofstudy, 
+                "yearofpassing": profile_info.yearofpassing, 
+                "total_work_experiance": profile_info.total_work_experiance, 
+                "family_members": profile_info.family_members, 
+                "family_income": profile_info.family_income, 
+                "family_hometown": profile_info.family_hometown, 
+                "family_livingcity": profile_info.family_livingcity, 
+                "hobbies": profile_info.hobbies, 
+                "interests": profile_info.interests, 
+                "assets": profile_info.assets, 
+                "about_me": profile_info.about_me, 
+                "interest_on_pets": profile_info.interest_on_pets, 
+                "health_info": profile_info.health_info, 
+                "about_physical_status": profile_info.about_physical_status, 
+                "specialization": profile_info.specialization, 
+                "company_name": profile_info.company_name, 
+                "father_name": profile_info.father_name, 
+                "mother_name": profile_info.mother_name, 
+                "other_contact_person": profile_info.other_contact_person, 
+                "other_contact_person_relation": profile_info.other_contact_person_relation, 
+                "other_contact_person_phonenum": profile_info.other_contact_person_phonenum, 
+                "other_contact_person_address": profile_info.other_contact_person_address, 
+                "is_email_verified": profile_info.is_email_verified, 
+                "family_incometype": profile_info.family_incometype
             }
         }
     }
