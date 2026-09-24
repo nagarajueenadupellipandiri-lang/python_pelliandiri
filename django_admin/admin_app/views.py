@@ -40,6 +40,87 @@ def get_registartions_data(request):
         total_registrations
     )
 
+def get_religion_list(request):
+    payload, headers = common_payload(request)
+    religion_response = requests.post(
+        f"{settings.FASTAPI_BASE_URL}/basicInfo/religion", 
+        json=payload,
+        headers=headers,
+        timeout=10
+    )
+    religions = religion_response.json()
+    return religions
+
+def get_cste_list(request):
+    payload, headers = common_payload(request)
+    religion_response = requests.post(
+        f"{settings.FASTAPI_BASE_URL}/basicInfo/caste", 
+        json=payload,
+        headers=headers,
+        timeout=10
+    )
+    castes = religion_response.json()
+    return castes
+
+# ============================================
+def get_height_list(request):
+    payload, headers = common_payload(request)
+    height_response = requests.post(
+        f"{settings.FASTAPI_BASE_URL}/basicInfo/height", 
+        json=payload,
+        headers=headers,
+        timeout=10
+    )
+    heights = height_response.json()
+    return heights
+
+
+def get_education_qualification_list(request):
+    payload, headers = common_payload(request)
+    education_qualification_response = requests.post(
+        f"{settings.FASTAPI_BASE_URL}/educationDetails/education", 
+        json=payload,
+        headers=headers,
+        timeout=10
+    )
+    educationQualifications = education_qualification_response.json()
+    return educationQualifications
+
+    Socio-Religious
+def get_raasi_list(request):
+    payload, headers = common_payload(request)
+    raasi_response = requests.post(
+        f"{settings.FASTAPI_BASE_URL}/socioReligious/raasi",
+        json = payload,
+        headers = headers,
+        timeout = 10
+    )
+    raasis = raasi_response.json()
+    return raasis
+
+def get_star_list(request):
+    payload, headers = common_payload(request)
+    star_response = requests.post(
+        f"{settings.FASTAPI_BASE_URL}/socioReligious/star",
+        json = payload,
+        headers = headers,
+        timeout = 10
+    )
+    stars = star_response.json()
+    return stars
+
+def get_county_list(request):
+    payload, headers = common_payload(request)
+    country_response = requests.post(
+        f"{settings.FASTAPI_BASE_URL}/location/country",
+        json = payload,
+        headers = headers,
+        timeout = 10
+    )
+    countries = country_response.json()
+    return countries
+# ==============================================
+
 def get_employees_data(request):
     payload, headers = common_payload(request)
 
@@ -218,9 +299,6 @@ def dashboard_view(request):
         employees = employees_response.json()
         events = events_response.json()
 
-        print("=========registers data:========", registers)
-        print("=========total registrations:=========", total_registrations)
-
     except requests.RequestException as e:
         print("FastAPI connection error:", e)
 
@@ -315,42 +393,7 @@ def logout_view(request):
 
     return redirect("login")
 
-# def user_view(request):
-
-#     payload, headers = common_payload(request)
-
-#     if payload is None or headers is None:
-#         return redirect("login")
-
-#     # --------------------------------
-#     # Call FastAPI APIs
-#     # --------------------------------
-#     try:
-#         (registers_status_code, registers, total_registrations) = get_registartions_data(request)
-
-#         print("=========registers data:========", registers)
-#         print("=========total registrations:=========", total_registrations)
-
-#     except requests.RequestException as e:
-#         print("FastAPI connection error:", e)
-
-#         return render(
-#             request,
-#             "admin_app/dashboard.html",
-#             {
-#                 "error": "Unable to connect to API server."
-#             }
-#         )
-    
-#     data = {
-#         "total_registrations": total_registrations,
-#         "registers": registers,
-#     }
-        
-#     return render( request, "admin_app/users.html", data)
-
 def user_view(request):
-
     payload, headers = common_payload(request)
 
     if payload is None or headers is None:
@@ -360,36 +403,33 @@ def user_view(request):
     # Call FastAPI API
     # --------------------------------
     try:
-
-        (
-            registers_status_code,
-            registers_response,
-            total_registrations
-        ) = get_registartions_data(request)
-
-        print(
-            "========= registers response: =========",
-            registers_response
-        )
-
-        print(
-            "========= total registrations: =========",
-            total_registrations
-        )
-
-        # Get only registration data
-        # registers = registers_response.get("data", [])
+        ( registers_status_code, registers_response, total_registrations ) = get_registartions_data(request)
         register_users = registers_response.get("data", [])
 
-        print(
-            "========= registration list: =========",
-            register_users
-        )
+        religion_response = get_religion_list(request)
+        religion_list = religion_response.get("data", [])
+
+        caste_response = get_cste_list(request)
+        caste_list = caste_response.get("data", [])
+
+        height_response = get_height_list(request)
+        height_list = height_response.get("data", [])
+
+        educationQualification_rsponse = get_education_qualification_list(request)
+        educationQualification_list = educationQualification_rsponse.get("data", [])
+
+        raasi_response = get_raasi_list(request)
+        raasi_list = raasi_response.get("data", [])
+
+        star_response = get_star_list(request)
+        star_list = star_response.get("data", [])
+
+        country_response = get_county_list(request)
+        counry_list = country_response.get("data", [])
+        # print("counry_list is", counry_list)
 
     except requests.RequestException as e:
-
         print("FastAPI connection error:", e)
-
         return render(
             request,
             "admin_app/users.html",
@@ -409,7 +449,6 @@ def user_view(request):
     # API error
     # --------------------------------
     if registers_status_code != 200:
-
         return render(
             request,
             "admin_app/users.html",
@@ -426,13 +465,14 @@ def user_view(request):
     # --------------------------------
     data = {
         "total_registrations": total_registrations,
-        # "registers": registers,
         "register_users": register_users,
+        "religion_list": religion_list,
+        "caste_list": caste_list,
+        "height_list": height_list,
+        "educationQualification_list": educationQualification_list,
+        "raasi_list": raasi_list,
+        "star_list": star_list,
+        "counry_list": counry_list,
     }
-
-    return render(
-        request,
-        "admin_app/users.html",
-        data
-    )
+    return render( request, "admin_app/users.html", data )
 
