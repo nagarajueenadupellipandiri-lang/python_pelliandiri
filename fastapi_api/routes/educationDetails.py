@@ -3,17 +3,14 @@ from sqlalchemy.orm import Session
 from database import get_db
 from models import (EnRaasiMaster, EnStarMaster, EnQualificationMaster)
 
-from core.security import (
-    validate_common_request,
-    get_current_user,
-)
+from core.security import ( validate_common_request, get_current_user, )
 
 from schemas.common import CommonRequest
 
 router = APIRouter( prefix="/educationDetails", tags=["Education Details"] )
 
-@router.post("/raasi")
-def get_qualification_list(
+@router.post("/education")
+def get_education_list(
     request: CommonRequest,
     current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)

@@ -3,10 +3,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 from models import (EnRaasiMaster, EnStarMaster)
 
-from core.security import (
-    validate_common_request,
-    get_current_user,
-)
+from core.security import ( validate_common_request, get_current_user, )
 
 from schemas.common import CommonRequest
 
