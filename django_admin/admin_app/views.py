@@ -51,6 +51,28 @@ def get_religion_list(request):
     religions = religion_response.json()
     return religions
 
+def get_christianDenomination_list(request):
+    payload, headers = common_payload(request)
+    christianDenomination_response = requests.post(
+        f"{settings.FASTAPI_BASE_URL}/basicInfo/christianDenomination", 
+        json=payload,
+        headers=headers,
+        timeout=10
+    )
+    christianDenomination = christianDenomination_response.json()
+    return christianDenomination
+
+def get_muslimSubsects_list(request):
+    payload, headers = common_payload(request)
+    muslimSubsects_response = requests.post(
+        f"{settings.FASTAPI_BASE_URL}/basicInfo/muslimSubsects", 
+        json=payload,
+        headers=headers,
+        timeout=10
+    )
+    muslimSubsects = muslimSubsects_response.json()
+    return muslimSubsects
+
 def get_cste_list(request):
     payload, headers = common_payload(request)
     religion_response = requests.post(
@@ -62,7 +84,6 @@ def get_cste_list(request):
     castes = religion_response.json()
     return castes
 
-# ============================================
 def get_height_list(request):
     payload, headers = common_payload(request)
     height_response = requests.post(
@@ -73,7 +94,6 @@ def get_height_list(request):
     )
     heights = height_response.json()
     return heights
-
 
 def get_education_qualification_list(request):
     payload, headers = common_payload(request)
@@ -86,7 +106,70 @@ def get_education_qualification_list(request):
     educationQualifications = education_qualification_response.json()
     return educationQualifications
 
-    Socio-Religious
+def en_occupation_master_head_list(request):
+    payload, headers = common_payload(request)
+    employee_occupatipon_head_response = requests.post(
+        f"{settings.FASTAPI_BASE_URL}/employmentDetails/occupationMasterHead", 
+        json=payload,
+        headers=headers,
+        timeout=10
+    )
+    employeeOccupationHead = employee_occupatipon_head_response.json()
+    return employeeOccupationHead
+
+def get_occupation_list(request):
+    payload, headers = common_payload(request)
+    employee_occupatipon_response = requests.post(
+        f"{settings.FASTAPI_BASE_URL}/employmentDetails/occupations", 
+        json=payload,
+        headers=headers,
+        timeout=10
+    )
+    employeeOccupations = employee_occupatipon_response.json()
+    return employeeOccupations
+
+def get_occupation_groups(en_occupation_master_head_list, occupation_list):
+    """
+    Combine occupation master heads and occupations
+    category-wise.
+    """
+
+    occupation_groups = []
+
+    # ---------------------------------------
+    # Create category headings
+    # ---------------------------------------
+    for category in en_occupation_master_head_list:
+
+        occupation_groups.append({
+            "cat_id": category.get("cat_id"),
+            "cat_name": category.get("cat_name"),
+            "occupations": []
+        })
+
+    # ---------------------------------------
+    # Put occupations under their category
+    # ---------------------------------------
+    for occupation in occupation_list:
+
+        occupation_category = occupation.get(
+            "occupation_category"
+        )
+
+        for category in occupation_groups:
+
+            # If occupation_category contains cat_id
+            if str(occupation_category) == str(
+                category.get("cat_id")
+            ):
+                category["occupations"].append(
+                    occupation
+                )
+
+                break
+
+    return occupation_groups
+    
 def get_raasi_list(request):
     payload, headers = common_payload(request)
     raasi_response = requests.post(
@@ -119,7 +202,6 @@ def get_county_list(request):
     )
     countries = country_response.json()
     return countries
-# ==============================================
 
 def get_employees_data(request):
     payload, headers = common_payload(request)
@@ -283,7 +365,6 @@ def login_view(request):
     )
 
 def dashboard_view(request):
-
     payload, headers = common_payload(request)
 
     if payload is None or headers is None:
@@ -409,6 +490,15 @@ def user_view(request):
         religion_response = get_religion_list(request)
         religion_list = religion_response.get("data", [])
 
+        # ==============================================
+        christianDenomination_response  = get_christianDenomination_list(request)
+        christianDenomination_list = christianDenomination_response.get("data", [])
+
+        muslimSubsects_response = get_muslimSubsects_list(request)
+        muslimSubsects_list = muslimSubsects_response.get("data", [])
+        # print(muslimSubsects_response)
+        # ==============================================
+
         caste_response = get_cste_list(request)
         caste_list = caste_response.get("data", [])
 
@@ -426,7 +516,14 @@ def user_view(request):
 
         country_response = get_county_list(request)
         counry_list = country_response.get("data", [])
-        # print("counry_list is", counry_list)
+
+        occupationMasterHead_response = en_occupation_master_head_list(request)
+        occupationMasterHead_list = occupationMasterHead_response.get("data", [])
+
+        occupation_response = get_occupation_list(request)
+        ocupation_list = occupation_response.get("data", [])
+
+        occupation_groups = get_occupation_groups( occupationMasterHead_list, ocupation_list )
 
     except requests.RequestException as e:
         print("FastAPI connection error:", e)
@@ -467,12 +564,15 @@ def user_view(request):
         "total_registrations": total_registrations,
         "register_users": register_users,
         "religion_list": religion_list,
+        "christianDenomination_list": christianDenomination_list,
+        "muslimSubsects_list": muslimSubsects_list,
         "caste_list": caste_list,
         "height_list": height_list,
         "educationQualification_list": educationQualification_list,
         "raasi_list": raasi_list,
         "star_list": star_list,
         "counry_list": counry_list,
+        "occupation_groups": occupation_groups,
     }
     return render( request, "admin_app/users.html", data )
 

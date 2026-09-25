@@ -1043,41 +1043,58 @@
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Basic Information </h1> </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Name </label>
-                    <input type="text" id="createName" placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="createName" name="createName"placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Email </label>
-                    <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
-                </div>
-                <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Date Of Birth </label>
-                    <input type="date" id="createDob" placeholder="Enter username" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
-                </div>
-                <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Phone Number </label>
-                    <input type="password" id="createPhoneNumber" placeholder="Enter phone number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="email" id="createEmail" name="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Gender </label>
-                    <select id="createGender" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="gender" name="gender" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="">--Select--</option>
-                        <option value="manager">Male</option>
-                        <option value="executive">Female</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Date Of Birth </label>
+                    <input type="date" id="dob" name="dob" placeholder="Enter username" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Phone Number </label>
+                    <input type="password" id="createPhoneNumber" name="createPhoneNumber" placeholder="Enter phone number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion </label>
-                    <select id="assignReligion" name="assignReligion" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="religion" name="religion" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="" selected>--Select Religion--</option>
                         {% for rl in religion_list %}
                         <option value="{{rl.religion_id}}">{{rl.religion_name}}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <!-- caste_list -->
-                 <div class="col-span-12 md:col-span-2">
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Christian Denominations </label>
+                    <select id="christianDenomination" name="christianDenomination" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="" selected>--Select--</option>
+                         {% for cr in christianDenomination_list %}
+                        <option value="{{cr.denomination_id}}">{{cr.denomination}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Muslim Subsects</label>
+                    <select id="muslimSubsects" name="muslimSubsects" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="" selected>--Select--</option>
+                        {% for mss in muslimSubsects_list %}
+                        <option value="{{mss.denomination_id}}">{{mss.denomination}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Caste </label>
-                    <select id="assignCaste" name="assignReligion" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="caste" name="caste" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="" selected>--Select Caste--</option>
                         {% for cl in caste_list %}
                         <option value="{{cl.caste_id}}">{{cl.caste_name}}</option>
@@ -1085,21 +1102,30 @@
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Sub Caste </label>
+                    <input type="text" id="subCaste" name="subCaste"placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Marital Status </label>
-                    <select id="createMaritalStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select Designation</option>
-                        <option value="manager">Manager</option>
-                        <option value="executive">Executive</option>
-                        <option value="associate">Associate</option>
+                    <select id="maritalStatus" name="maritalStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="0">--Select--</option>
+                        <option value="1">UnMarried</option>
+                        <option value="2">Widow/Widower</option>
+                        <option value="3">Divorcee</option>
+                        <option value="4">Awaiting Divorcee</option>
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Number Of Children </label> 
+                    <input type="text" id="num_child" name="num_child" placeholder="Enter Number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Time Of Birth </label>
-                    <input type="time" id="tob" placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="time" id="tob" name="tob" placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Height </label>
-                    <select id="assignHight" name="assignHight" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="height" name="height" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="" selected>--Select Height--</option>
                         {% for hl in height_list %}
                         <option value="{{hl.height_id}}">{{hl.height}}</option>
@@ -1108,24 +1134,34 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Registered By </label>
-                    <select id="createRegisteredBy" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select Designation</option>
-                        <option value="manager">Manager</option>
+                    <select id="createRegisteredBy" name="createRegisteredBy" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="0">--Select--</option>
+                        <option value="Self">SELF</option>
+                        <option value="Parents">PARENTS</option>
+                        <option value="Siblings">SIBLINGS</option>
+                        <option value="Relatives">RELATIVES</option>
+                        <option value="Friends">FRIENDS</option>
+                        <option value="Offline">OFFLINE</option>
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Registered Team Member </label>
-                    <select id="createRegisteredByTeamMember" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="registeredByTeamMember" name="registeredByTeamMember" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="">Select Designation</option>
                         <option value="manager">Manager</option>
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Physical Status </label>
-                    <select id="createPhysicalStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select Designation</option>
-                        <option value="manager">Manager</option>
+                    <select id="physical_status" name="physical_status" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="N">--Select--</option>
+                        <option value="N">Normal</option>
+                        <option value="D">Disabled</option>
                     </select>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Disable </label>
+                    <input type="text" id="disable" name="disable" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
             </div>
 
@@ -1162,15 +1198,15 @@
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Employment Details: </h1> </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Employment Status </label>
-                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="employmentStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="">Select</option>
                         <option value="admin">Working</option>
                         <option value="manager">Not Working</option>
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Designation </label>
-                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <label class="block text-sm font-semibold theme-dark-text mb-2">Occupation</label>
+                    <select id="occupation" name="occupation" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="">Select Role</option>
                         <option value="admin">Admin</option>
                     </select>
@@ -1196,58 +1232,70 @@
                 </div>
             </div>
 
-
             <div class="grid grid-cols-12 gap-5 mt-8">
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Family Details </h1> </div>
                 <div class="col-span-12 md:col-span-2"> 
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Father Name </label> 
-                    <input type="text" id="createName" placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" > 
+                    <input type="text" id="fatherName" name="fatherName" placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" > 
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Father Occupation </label>
-                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select Role</option>
-                        <option value="admin">Admin</option>
+                    <select id="fatherOccupation" name="fatherOccupation" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="">--Select--</option>
+                        {% for category in occupation_groups %}
+                            <optgroup label="{{ category.cat_name }}" >
+                                {% for occupation in category.occupations %}
+                                    <option value="{{ occupation.occupation_id }}" > {{ occupation.occupation }} </option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Mother Name </label>
-                    <input type="text" id="createUsername" placeholder="Enter username" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="motherName" name="motherName" placeholder="Enter username" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Mother Occupation </label>
-                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select Role</option>
-                        <option value="admin">Admin</option>
-                        <option value="manager">Manager</option>
-                        <option value="editor">Editor</option>
-                        <option value="user">User</option>
+                    <select id="motherOccupation" name="motherOccupation" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="">--Select--</option>
+                        {% for category in occupation_groups %}
+                            <optgroup label="{{ category.cat_name }}" >
+                                {% for occupation in category.occupations %}
+                                    <option value="{{ occupation.occupation_id }}" > {{ occupation.occupation }} </option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endfor %}
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Married Brothers </label> 
-                    <input type="text" id="createUsername" placeholder="Enter username" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="marriedBrothers" name="marriedBrothers" placeholder="Enter Number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> UnMarried Brothers </label> 
-                    <input type="text" id="createUsername" placeholder="Enter username" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="createUsername" placeholder="Enter Number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
                 </div>
-
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Married Sisters </label>
-                    <input type="text" id="createUsername" placeholder="Enter username" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="createUsername" placeholder="Enter Number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> UnMarried Sisters </label>
-                    <input type="text" id="createUsername" placeholder="Enter username" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="createUsername" placeholder="Enter Number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly">
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Family Current Living In </label>
-                    <input type="text" id="createName" placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" > 
+                    <select id="famlyLivingContry" name="famlyLivingContry" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="">--Select--</option>
+                        {% for  fam_livin_count in counry_list %}
+                        <option value="{{fam_livin_count.country_id}}">{{fam_livin_count.country_name}}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Family Hometown </label>
-                    <input type="text" id="createName" placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" > 
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Family HomeTown </label>
+                    <input type="text" id="famliyHomeTown" name="famliyHomeTown" placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" > 
                 </div>
             </div>
 
@@ -1314,7 +1362,6 @@
                     <input type="password" id="createPassword" placeholder="Enter password" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
             </div>
-
             <div class="grid grid-cols-12 gap-5 mt-8">
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Current Location Details </h1> </div>
                 <div class="col-span-12 md:col-span-2">
@@ -1352,32 +1399,40 @@
                     <input type="password" id="createPassword" placeholder="Enter password" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
             </div>
-
-            <div class="grid grid-cols-12 gap-5 mt-8">
-                <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Contact Information </h1>
+             <div class="grid grid-cols-12 gap-5 mt-8">
+                <div class="col-span-12"> 
+                    <h1 class="text-lg font-bold theme-dark-text"> Contact Information </h1> 
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Alternative Phone Number </label>
-                    <input type="text" id="createName" placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <label class="block text-sm font-semibold theme-dark-text mb-2 min-h-[40px]"> Alternative Phone Number </label>
+                    <input type="text" id="alternativePhoneNumber" name="alternativePhoneNumber" placeholder="Enter phone number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Family / Friends / Other contact person mobile number </label>
-                    <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <label class="block text-sm font-semibold theme-dark-text mb-2 min-h-[40px]"> Family / Friends / Other contact person mobile number </label>
+                    <input type="text" id="familyContactNumber" name="familyContactNumber" placeholder="Enter phone number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
             </div>
 
             <div class="grid grid-cols-12 gap-5 mt-8">
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Partner Preferences </h1> </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Age </label> 
-                    <input type="text" id="createName" placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <h1 class="block text-sm font-semibold theme-dark-text mb-2"> Age </h1>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            <label for="minAge" class="text-sm theme-dark-text"> <!-- Min --> </label>
+                            <select id="minAge" name="minAge" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" ><option value="">Min</option> </select>
+                        </div>
+                        <div class="flex items-center gap-1"> <label for="maxAge" class="text-sm theme-dark-text"> <!-- Max --> </label>
+                            <select id="maxAge" name="maxAge" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" ><option value="">Max</option> </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Height </label> 
                     <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Martial status </label> 
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Marital status </label> 
                     <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
@@ -1385,12 +1440,10 @@
                     <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Employmant Details </label>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Employment Details </label>
                     <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" > </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2">
-                        Annual Income
-                    </label>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Annual Income </label>
                     <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
@@ -1419,12 +1472,15 @@
                     <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Willing to Marry Other Caste or Religion </label> 
-                    <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                <label class="block text-sm font-semibold theme-dark-text mb-2"> Willing to Marry Other Caste or Religion </label>
+                    <div class="flex items-center gap-6">
+                        <label class="flex items-center gap-2 cursor-pointer"> <input type="radio" name="willing_other_caste" value="Yes" class="w-4 h-4" > <span>Yes</span> </label>
+                        <label class="flex items-center gap-2 cursor-pointer"> <input type="radio" name="willing_other_caste" value="No" class="w-4 h-4" > <span>No</span> </label>
+                    </div>
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> About Preferred Partner </label> 
-                    <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <textarea name="" id="" rows="3" cols="20" border="3" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400"></textarea> 
                 </div>
             </div>
         </div>
@@ -1433,540 +1489,501 @@
             <button type="button" onclick="closeModal('createModal')" class="px-5 py-2.5 rounded-xl theme-soft theme-primary-text font-semibold"> Cancel </button>
             <button type="button" onclick="saveSampleUser()" class="theme-primary text-white px-5 py-2.5 rounded-xl font-semibold"> Create User </button>
         </div>
-
     </div>
 </div>
 
 
 <!-- DELETE MODAL -->
-
-<!-- ====================================================== -->
-
 <div id="deleteModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
-
-<div class="theme-card w-full max-w-sm rounded-2xl shadow-2xl p-6 text-center">
-
-
-    <div class="w-14 h-14 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto text-2xl mb-4"> ! </div>
-
-
-    <h3 class="text-lg font-bold theme-dark-text"> Delete User? </h3>
-
-
-    <p class="text-sm theme-secondary-text mt-2"> Are you sure you want to delete this user? </p>
-
-
-    <div class="flex justify-center gap-3 mt-6">
-
-
-        <button type="button" onclick="closeModal('deleteModal')" class="px-5 py-2.5 rounded-xl theme-soft theme-primary-text font-semibold"> Cancel </button>
-
-
-        <button type="button" onclick="confirmDelete()" class="px-5 py-2.5 rounded-xl bg-red-500 text-white font-semibold hover:bg-red-600"> Delete </button>
-
+    <div class="theme-card w-full max-w-sm rounded-2xl shadow-2xl p-6 text-center">
+        <div class="w-14 h-14 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto text-2xl mb-4"> ! </div>
+        <h3 class="text-lg font-bold theme-dark-text"> Delete User? </h3> 
+        <p class="text-sm theme-secondary-text mt-2"> Are you sure you want to delete this user? </p>
+        <div class="flex justify-center gap-3 mt-6">
+            <button type="button" onclick="closeModal('deleteModal')" class="px-5 py-2.5 rounded-xl theme-soft theme-primary-text font-semibold"> Cancel </button>
+            <button type="button" onclick="confirmDelete()" class="px-5 py-2.5 rounded-xl bg-red-500 text-white font-semibold hover:bg-red-600"> Delete </button>
+        </div>
     </div>
-
-</div>
-
 </div>
 
 <script>
-/* ========================================= */
-/* SIDEBAR */
-/* ========================================= */
-function toggleSidebar() {
-    const sidebar = document.getElementById("sidebar"); 
-    const overlay = document.getElementById("overlay"); 
-    sidebar.classList.toggle("-translate-x-full"); overlay.classList.toggle("hidden");
-}
+    // print only numbers
+    document.querySelectorAll(".printDigitsonly").forEach(function(inputValue){
+        inputValue.addEventListener("input", function(){
+            this.value = this.value.replace(/[^0-9]/g, "");
+        })
+    }); 
 
-/* ========================================= */
-/* SEARCH + STATUS FILTER */
-/* ========================================= */
-let currentStatus = "all";
+    // partener preferernce min and max age
+    const minAge = document.getElementById("minAge");
+    const maxAge = document.getElementById("maxAge");
 
-function filterUsers() {
+    for (let age = 18; age <= 60; age++) {
+        const minOption = document.createElement("option");
+        minOption.value = age;
+        minOption.textContent = age;
+        minAge.appendChild(minOption);
 
-    const search =
-        document
-            .getElementById("userSearch")
-            .value
-            .toLowerCase()
-            .trim();
-
-
-    const rows =
-        document.querySelectorAll(".user-row");
-
-
-    let visible = 0;
-
-
-    rows.forEach(function(row) {
-
-
-        const text =
-            row.innerText.toLowerCase();
-
-
-        const status =
-            row.dataset.status;
-
-
-        const searchMatch =
-            text.includes(search);
-
-
-        const statusMatch =
-            currentStatus === "all"
-            || status === currentStatus;
-
-
-        if (searchMatch && statusMatch) {
-
-            row.style.display = "";
-
-            visible++;
-
-        }
-
-        else {
-
-            row.style.display = "none";
-
-        }
-
-    });
-
-
-    document.getElementById("visibleCount")
-        .innerText = visible;
-
-}
-
-
-
-/* ========================================= */
-/* STATUS FILTER */
-/* ========================================= */
-
-function filterStatus(status) {
-
-    currentStatus = status;
-
-
-    document
-        .querySelectorAll(".status-filter")
-        .forEach(function(button) {
-
-            button.classList.remove(
-                "theme-primary",
-                "text-white"
-            );
-
-            button.classList.add(
-                "theme-dark-text"
-            );
-
-        });
-
-
-    let activeButton;
-
-
-    if (status === "all") {
-
-        activeButton =
-            document.getElementById("filterAll");
-
+        const maxOption = document.createElement("option");
+        maxOption.value = age;
+        maxOption.textContent = age;
+        maxAge.appendChild(maxOption);
     }
 
-
-    if (status === "active") {
-
-        activeButton =
-            document.getElementById("filterActive");
-
+    /* ========================================= */
+    /* SIDEBAR */
+    /* ========================================= */
+    function toggleSidebar() {
+        const sidebar = document.getElementById("sidebar"); 
+        const overlay = document.getElementById("overlay"); 
+        sidebar.classList.toggle("-translate-x-full"); overlay.classList.toggle("hidden");
     }
 
+    /* ========================================= */
+    /* SEARCH + STATUS FILTER */
+    /* ========================================= */
+    let currentStatus = "all";
 
-    if (status === "inactive") {
+    function filterUsers() {
 
-        activeButton =
-            document.getElementById("filterInactive");
+        const search =
+            document
+                .getElementById("userSearch")
+                .value
+                .toLowerCase()
+                .trim();
 
-    }
 
+        const rows =
+            document.querySelectorAll(".user-row");
 
-    activeButton.classList.add(
-        "theme-primary",
-        "text-white"
-    );
 
+        let visible = 0;
 
-    activeButton.classList.remove(
-        "theme-dark-text"
-    );
 
+        rows.forEach(function(row) {
 
-    filterUsers();
 
-}
+            const text =
+                row.innerText.toLowerCase();
 
 
+            const status =
+                row.dataset.status;
 
-/* ========================================= */
-/* USER DATA */
-/* ========================================= */
 
-const users = {
+            const searchMatch =
+                text.includes(search);
 
-    1: {
 
-        name: "Nagaraju",
+            const statusMatch =
+                currentStatus === "all"
+                || status === currentStatus;
 
-        username: "@nagaraju",
 
-        email: "nagaraju@example.com",
+            if (searchMatch && statusMatch) {
 
-        role: "Admin",
+                row.style.display = "";
 
-        status: "Active",
+                visible++;
 
-        avatar: "NR"
+            }
 
-    },
+            else {
 
-
-    2: {
-
-        name: "Ravi Kumar",
-
-        username: "@ravi",
-
-        email: "ravi@example.com",
-
-        role: "Manager",
-
-        status: "Active",
-
-        avatar: "RK"
-
-    },
-
-
-    3: {
-
-        name: "Anil Sharma",
-
-        username: "@anil",
-
-        email: "anil@example.com",
-
-        role: "User",
-
-        status: "Inactive",
-
-        avatar: "AS"
-
-    },
-
-
-    4: {
-
-        name: "Suresh Kumar",
-
-        username: "@suresh",
-
-        email: "suresh@example.com",
-
-        role: "Editor",
-
-        status: "Active",
-
-        avatar: "SK"
-
-    }
-
-};
-
-
-
-/* ========================================= */
-/* VIEW USER */
-/* ========================================= */
-
-function viewUser(id) {
-
-    const user = users[id];
-
-
-    if (!user) {
-
-        return;
-
-    }
-
-
-    document.getElementById("viewName")
-        .innerText = user.name;
-
-
-    document.getElementById("viewUsername")
-        .innerText = user.username;
-
-
-    document.getElementById("viewEmail")
-        .innerText = user.email;
-
-
-    document.getElementById("viewRole")
-        .innerText = user.role;
-
-
-    document.getElementById("viewStatus")
-        .innerText = user.status;
-
-
-    document.getElementById("viewAvatar")
-        .innerText = user.avatar;
-
-
-    openModal("viewModal");
-
-}
-
-
-
-/* ========================================= */
-/* EDIT USER */
-/* ========================================= */
-
-function editUser(id) {
-
-    const user = users[id];
-
-
-    if (!user) {
-
-        return;
-
-    }
-
-
-    document.getElementById("createName")
-        .value = user.name;
-
-
-    document.getElementById("createEmail")
-        .value = user.email;
-
-
-    document.getElementById("createRole")
-        .value = user.role;
-
-
-    alert(
-        "Edit mode for " +
-        user.name +
-        " will be connected to API later."
-    );
-
-}
-
-
-
-/* ========================================= */
-/* DELETE USER */
-/* ========================================= */
-
-let deleteUserId = null;
-
-
-function deleteUser(id) {
-
-    deleteUserId = id;
-
-
-    openModal("deleteModal");
-
-}
-
-
-
-/* ========================================= */
-/* CONFIRM DELETE */
-/* ========================================= */
-
-function confirmDelete() {
-
-    if (!deleteUserId) {
-
-        return;
-
-    }
-
-
-    alert(
-        "Delete user ID: " +
-        deleteUserId +
-        " - API connection will be added later."
-    );
-
-
-    closeModal("deleteModal");
-
-
-    deleteUserId = null;
-
-}
-
-
-
-/* ========================================= */
-/* CREATE MODAL */
-/* ========================================= */
-
-function openCreateModal() {
-
-    document.getElementById("createName")
-        .value = "";
-
-
-    document.getElementById("createEmail")
-        .value = "";
-
-
-    document.getElementById("createRole")
-        .value = "Admin";
-
-
-    openModal("createModal");
-
-}
-
-
-
-/* ========================================= */
-/* SAVE SAMPLE USER */
-/* ========================================= */
-
-function saveSampleUser() {
-
-    const name =
-        document.getElementById("createName")
-            .value
-            .trim();
-
-
-    const email =
-        document.getElementById("createEmail")
-            .value
-            .trim();
-
-
-    const role =
-        document.getElementById("createRole")
-            .value;
-
-
-    if (!name || !email) {
-
-        alert("Please enter name and email.");
-
-        return;
-
-    }
-
-
-    alert(
-        "User created successfully!\n\n" +
-        "Name: " + name +
-        "\nEmail: " + email +
-        "\nRole: " + role
-    );
-
-
-    closeModal("createModal");
-
-}
-
-
-
-/* ========================================= */
-/* MODAL OPEN */
-/* ========================================= */
-
-function openModal(id) {
-
-    const modal =
-        document.getElementById(id);
-
-
-    modal.classList.remove("hidden");
-
-    modal.classList.add("flex");
-
-}
-
-
-
-/* ========================================= */
-/* MODAL CLOSE */
-/* ========================================= */
-
-function closeModal(id) {
-
-    const modal =
-        document.getElementById(id);
-
-
-    modal.classList.add("hidden");
-
-    modal.classList.remove("flex");
-
-}
-
-
-
-/* ========================================= */
-/* CLOSE MODAL WHEN CLICK OUTSIDE */
-/* ========================================= */
-
-document.addEventListener(
-    "click",
-    function(event) {
-
-
-        const modals =
-            [
-                "viewModal",
-                "createModal",
-                "deleteModal"
-            ];
-
-
-        modals.forEach(function(id) {
-
-
-            const modal =
-                document.getElementById(id);
-
-
-            if (
-                event.target === modal
-            ) {
-
-                closeModal(id);
+                row.style.display = "none";
 
             }
 
         });
 
+
+        document.getElementById("visibleCount")
+            .innerText = visible;
+
     }
-);
 
 
+
+    /* ========================================= */
+    /* STATUS FILTER */
+    /* ========================================= */
+
+    function filterStatus(status) {
+
+        currentStatus = status;
+
+
+        document
+            .querySelectorAll(".status-filter")
+            .forEach(function(button) {
+
+                button.classList.remove(
+                    "theme-primary",
+                    "text-white"
+                );
+
+                button.classList.add(
+                    "theme-dark-text"
+                );
+
+            });
+
+
+        let activeButton;
+
+
+        if (status === "all") {
+
+            activeButton =
+                document.getElementById("filterAll");
+
+        }
+
+
+        if (status === "active") {
+
+            activeButton =
+                document.getElementById("filterActive");
+
+        }
+
+
+        if (status === "inactive") {
+
+            activeButton =
+                document.getElementById("filterInactive");
+
+        }
+
+
+        activeButton.classList.add(
+            "theme-primary",
+            "text-white"
+        );
+
+
+        activeButton.classList.remove(
+            "theme-dark-text"
+        );
+
+
+        filterUsers();
+
+    }
+
+
+
+    /* ========================================= */
+    /* USER DATA */
+    /* ========================================= */
+
+    const users = {
+
+        1: {
+
+            name: "Nagaraju",
+
+            username: "@nagaraju",
+
+            email: "nagaraju@example.com",
+
+            role: "Admin",
+
+            status: "Active",
+
+            avatar: "NR"
+
+        },
+
+
+        2: {
+
+            name: "Ravi Kumar",
+
+            username: "@ravi",
+
+            email: "ravi@example.com",
+
+            role: "Manager",
+
+            status: "Active",
+
+            avatar: "RK"
+
+        }
+    };
+
+
+
+    /* ========================================= */
+    /* VIEW USER */
+    /* ========================================= */
+
+    function viewUser(id) {
+        const user = users[id];
+        if (!user) {
+            return;
+        }
+
+
+        document.getElementById("viewName")
+            .innerText = user.name;
+
+
+        document.getElementById("viewUsername")
+            .innerText = user.username;
+
+
+        document.getElementById("viewEmail")
+            .innerText = user.email;
+
+
+        document.getElementById("viewRole")
+            .innerText = user.role;
+
+
+        document.getElementById("viewStatus")
+            .innerText = user.status;
+
+
+        document.getElementById("viewAvatar")
+            .innerText = user.avatar;
+
+
+        openModal("viewModal");
+
+    }
+
+
+
+    /* ========================================= */
+    /* EDIT USER */
+    /* ========================================= */
+
+    function editUser(id) {
+
+        const user = users[id];
+
+
+        if (!user) {
+
+            return;
+
+        }
+
+
+        document.getElementById("createName")
+            .value = user.name;
+
+
+        document.getElementById("createEmail")
+            .value = user.email;
+
+
+        document.getElementById("createRole")
+            .value = user.role;
+
+
+        alert(
+            "Edit mode for " +
+            user.name +
+            " will be connected to API later."
+        );
+
+    }
+
+
+
+    /* ========================================= */
+    /* DELETE USER */
+    /* ========================================= */
+
+    let deleteUserId = null;
+
+
+    function deleteUser(id) {
+
+        deleteUserId = id;
+
+
+        openModal("deleteModal");
+
+    }
+
+
+
+    /* ========================================= */
+    /* CONFIRM DELETE */
+    /* ========================================= */
+
+    function confirmDelete() {
+
+        if (!deleteUserId) {
+
+            return;
+
+        }
+
+
+        alert(
+            "Delete user ID: " +
+            deleteUserId +
+            " - API connection will be added later."
+        );
+
+
+        closeModal("deleteModal");
+
+
+        deleteUserId = null;
+
+    }
+
+
+
+    /* ========================================= */
+    /* CREATE MODAL */
+    /* ========================================= */
+
+    function openCreateModal() {
+
+        document.getElementById("createName")
+            .value = "";
+
+
+        document.getElementById("createEmail")
+            .value = "";
+
+
+        document.getElementById("createRole")
+            .value = "Admin";
+
+
+        openModal("createModal");
+
+    }
+
+
+
+    /* ========================================= */
+    /* SAVE SAMPLE USER */
+    /* ========================================= */
+
+    function saveSampleUser() {
+
+        const name =
+            document.getElementById("createName")
+                .value
+                .trim();
+
+
+        const email =
+            document.getElementById("createEmail")
+                .value
+                .trim();
+
+
+        const role =
+            document.getElementById("createRole")
+                .value;
+
+
+        if (!name || !email) {
+
+            alert("Please enter name and email.");
+
+            return;
+
+        }
+
+
+        alert(
+            "User created successfully!\n\n" +
+            "Name: " + name +
+            "\nEmail: " + email +
+            "\nRole: " + role
+        );
+
+
+        closeModal("createModal");
+
+    }
+
+
+
+    /* ========================================= */
+    /* MODAL OPEN */
+    /* ========================================= */
+
+    function openModal(id) {
+
+        const modal =
+            document.getElementById(id);
+
+
+        modal.classList.remove("hidden");
+
+        modal.classList.add("flex");
+
+    }
+
+
+
+    /* ========================================= */
+    /* MODAL CLOSE */
+    /* ========================================= */
+
+    function closeModal(id) {
+
+        const modal =
+            document.getElementById(id);
+
+
+        modal.classList.add("hidden");
+
+        modal.classList.remove("flex");
+
+    }
+
+
+
+    /* ========================================= */
+    /* CLOSE MODAL WHEN CLICK OUTSIDE */
+    /* ========================================= */
+
+    document.addEventListener(
+        "click",
+        function(event) {
+
+
+            const modals =
+                [
+                    "viewModal",
+                    "createModal",
+                    "deleteModal"
+                ];
+
+
+            modals.forEach(function(id) {
+
+
+                const modal =
+                    document.getElementById(id);
+
+
+                if (
+                    event.target === modal
+                ) {
+
+                    closeModal(id);
+
+                }
+
+            });
+
+        }
+    );
 </script>
 
 </body>
