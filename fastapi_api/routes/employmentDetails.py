@@ -12,7 +12,7 @@ from schemas.common import CommonRequest
 
 router = APIRouter( prefix="/employmentDetails", tags=["Employment-Details"] )
 
-@router.post("/occuopationMasterHead")
+@router.post("/occupationMasterHead")
 def get_occupationMasterHead_list(
     request: CommonRequest,
     current_user: dict = Depends(get_current_user),
@@ -33,28 +33,35 @@ def get_occupationMasterHead_list(
         ]
     }
 
-
-@router.post("/occuopations")
+@router.post("/occupations")
 def get_occupation_list(
     request: CommonRequest,
     current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-
     validate_common_request(request, "login")
-    ocupationMaster = db.query(EnOccupationMaster).all()
+
+    occupations = (
+        db.query(EnOccupationMaster)
+        .filter(EnOccupationMaster.deleted == 0)
+        .order_by(
+            EnOccupationMaster.occupation_category,
+            EnOccupationMaster.occupation
+        )
+        .all()
+    )
+
     return {
         "status": True,
-        "message": "Occuopations fetched successfully",
+        "message": "Occupations fetched successfully",
         "data": [
             {
-                "occupation_id": occu_mast.occupation_id,
-                "occupation": occu_mast.occupation,
-                "occupation_category": occu_mast.occupation_category,
-                "status": occu_mast.status,
-                "deleted": occu_mast.deleted,
+                "occupation_id": occupation.occupation_id,
+                "occupation": occupation.occupation,
+                "occupation_category": occupation.occupation_category,
+                "status": occupation.status,
+                "deleted": occupation.deleted,
             }
-            for occu_mast in ocupationMaster
+            for occupation in occupations
         ]
     }
-
