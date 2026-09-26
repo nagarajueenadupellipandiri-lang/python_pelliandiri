@@ -50,7 +50,7 @@ class EnProfileInfo(Base):
 
     residingstatus_code = Column(CHAR(1), nullable=False)
 
-    email = Column(String(100), nullable=False, index=True)
+    email = Column(String(100), nullable=True, index=True)
     email_display_status = Column(Integer, nullable=False, default=0)
 
     mobile = Column(String(20), nullable=False, index=True)
