@@ -208,17 +208,6 @@ def get_county_list(request):
     countries = country_response.json()
     return countries
 
-# ============================
-# def get_state_list(request):
-#     payload, headers = common_payload(request)
-#     country_response = requests.post(
-#         f"{settings.FASTAPI_BASE_URL}/location/state",
-#         json = payload,
-#         headers = headers,
-#         timeout = 10
-#     )
-#     states = country_response.json()
-#     return states
 def get_indianState_list(request):
     payload, headers = common_payload(request)
     indianState_response = requests.post(
@@ -228,8 +217,20 @@ def get_indianState_list(request):
         timeout = 10
     )
     indianStates = indianState_response.json()
-    return indianStates
-# ============================
+    return indianStates 
+
+def get_teluguCities_list(request):
+    payload, headers = common_payload(request)
+    teluguCities_response = requests.post(
+        f"{settings.FASTAPI_BASE_URL}/location/telugCities",
+        json = payload,
+        headers = headers,
+        timeout = 10
+    )
+    telugCities = teluguCities_response.json()
+    return telugCities 
+
+
 def get_employees_data(request):
     payload, headers = common_payload(request)
 
@@ -764,7 +765,9 @@ def user_view(request):
 
         indianStates_response = get_indianState_list(request)
         inadian_states_list = indianStates_response.get("data", [])
-        print("type is ", inadian_states_list)
+
+        teluguCities_response = get_teluguCities_list(request)
+        teluguCities_list = teluguCities_response.get("data", [])
 
         occupationMasterHead_response = get_occupation_master_head_list(request)
         occupationMasterHead_list = occupationMasterHead_response.get("data", [])
@@ -827,6 +830,7 @@ def user_view(request):
         "educationQualification_list": educationQualification_list,
         "raasi_list": raasi_list,
         "star_list": star_list,
+        "teluguCities_list": teluguCities_list,
         "counry_list": counry_list,
         "inadian_states_list": inadian_states_list,
         "occupation_groups": occupation_groups,
