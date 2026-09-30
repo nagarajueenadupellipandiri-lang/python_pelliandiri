@@ -14,7 +14,7 @@ class EnProfileInfo(Base):
     )
     bloodgroup = Column(String(10), nullable=True)
     height_id = Column(Integer, nullable=False, index=True)
-    weight = Column(Integer, nullable=False)
+    weight = Column(Integer, nullable=True)
     bodytype = Column(String(20), nullable=False)
     physicalstatus = Column(CHAR(1), nullable=False)
     complextion = Column(String(15), nullable=False)

@@ -2,6 +2,9 @@ import requests
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib import messages
+import json
+from django.http import JsonResponse
+from django.conf import settings
 
 def common_payload(request):
     access_token = request.session.get("access_token")
@@ -106,7 +109,7 @@ def get_education_qualification_list(request):
     educationQualifications = education_qualification_response.json()
     return educationQualifications
 
-def en_occupation_master_head_list(request):
+def get_occupation_master_head_list(request):
     payload, headers = common_payload(request)
     employee_occupatipon_head_response = requests.post(
         f"{settings.FASTAPI_BASE_URL}/employmentDetails/occupationMasterHead", 
@@ -128,19 +131,25 @@ def get_occupation_list(request):
     employeeOccupations = employee_occupatipon_response.json()
     return employeeOccupations
 
-def get_occupation_groups(en_occupation_master_head_list, occupation_list):
-    """
-    Combine occupation master heads and occupations
-    category-wise.
-    """
+def get_income_list(request):
+    payload, headers = common_payload(request)
+    employee_income_response = requests.post(
+        f"{settings.FASTAPI_BASE_URL}/employmentDetails/incomes", 
+        json=payload,
+        headers=headers,
+        timeout=10
+    )
+    employeeOccupations = employee_income_response.json()
+    return employeeOccupations
+
+def get_occupation_groups(get_occupation_master_head_list, occupation_list):
 
     occupation_groups = []
 
     # ---------------------------------------
     # Create category headings
     # ---------------------------------------
-    for category in en_occupation_master_head_list:
-
+    for category in get_occupation_master_head_list:
         occupation_groups.append({
             "cat_id": category.get("cat_id"),
             "cat_name": category.get("cat_name"),
@@ -151,11 +160,7 @@ def get_occupation_groups(en_occupation_master_head_list, occupation_list):
     # Put occupations under their category
     # ---------------------------------------
     for occupation in occupation_list:
-
-        occupation_category = occupation.get(
-            "occupation_category"
-        )
-
+        occupation_category = occupation.get( "occupation_category" )
         for category in occupation_groups:
 
             # If occupation_category contains cat_id
@@ -203,6 +208,28 @@ def get_county_list(request):
     countries = country_response.json()
     return countries
 
+# ============================
+# def get_state_list(request):
+#     payload, headers = common_payload(request)
+#     country_response = requests.post(
+#         f"{settings.FASTAPI_BASE_URL}/location/state",
+#         json = payload,
+#         headers = headers,
+#         timeout = 10
+#     )
+#     states = country_response.json()
+#     return states
+def get_indianState_list(request):
+    payload, headers = common_payload(request)
+    indianState_response = requests.post(
+        f"{settings.FASTAPI_BASE_URL}/location/indianStates",
+        json = payload,
+        headers = headers,
+        timeout = 10
+    )
+    indianStates = indianState_response.json()
+    return indianStates
+# ============================
 def get_employees_data(request):
     payload, headers = common_payload(request)
 
@@ -213,6 +240,227 @@ def get_employees_data(request):
             timeout=10
         )
     return employees_response
+
+def occupations_as_working(request):
+    if request.method != "POST":
+        return JsonResponse(
+            {
+                "status": False,
+                "message": "Only POST method allowed"
+            },
+            status=405
+        )
+
+    # --------------------------------
+    # Authentication
+    # --------------------------------
+    payload, headers = common_payload(request)
+
+    if payload is None or headers is None:
+        return JsonResponse(
+            {
+                "status": False,
+                "message": "Authentication required"
+            },
+            status=401
+        )
+        
+    try:
+        # --------------------------------
+        # Get JavaScript data
+        # --------------------------------
+        data = json.loads(request.body)
+        employee_status_id = data.get( "employee_status_id" )
+
+        # --------------------------------
+        # Only Working
+        # --------------------------------
+        if employee_status_id != "working":
+            return JsonResponse({
+                "status": False,
+                "message": "Employee is not working",
+                "data": []
+            })
+
+        # ==================================================
+        # 1. Get Occupation Master Head
+        # ==================================================
+        occupation_head_response = requests.post(
+            f"{settings.FASTAPI_BASE_URL}/employmentDetails/occupationMasterHead",
+            json=payload,
+            headers=headers,
+            timeout=10
+        )
+
+        # --------------------------------
+        # Check authentication
+        # --------------------------------
+        if occupation_head_response.status_code == 401:
+            request.session.flush()
+            return JsonResponse(
+                {
+                    "status": False,
+                    "message": "Session expired"
+                },
+                status=401
+            )
+
+        # --------------------------------
+        # Get head data
+        # --------------------------------
+        occupation_head_data = ( occupation_head_response.json() )
+        occupation_master_head_list = ( occupation_head_data.get( "data", [] ) )
+
+        # ==================================================
+        # 2. Get Occupations / Sub List
+        # ==================================================
+        occupation_response = requests.post(
+            f"{settings.FASTAPI_BASE_URL}/employmentDetails/occupations",
+            json=payload,
+            headers=headers,
+            timeout=10
+        )
+
+        # --------------------------------
+        # Check authentication
+        # --------------------------------
+        if occupation_response.status_code == 401:
+            request.session.flush()
+            return JsonResponse(
+                {
+                    "status": False,
+                    "message": "Session expired"
+                },
+                status=401
+            )
+
+        # --------------------------------
+        # Get occupation data
+        # --------------------------------
+        occupation_data = ( occupation_response.json() )
+        occupation_list = ( occupation_data.get( "data", [] ) )
+
+        # ==================================================
+        # 3. Combine Head + Sub List
+        # ==================================================
+        occupation_groups = get_occupation_groups( occupation_master_head_list, occupation_list )
+
+        # ==================================================
+        # 4. Return Combined Data
+        # ==================================================
+        return JsonResponse({
+            "status": True,
+            "message": "Occupation groups fetched successfully",
+            "data": occupation_groups
+        })
+
+    except requests.RequestException as e:
+        print( "FastAPI connection error:", e )
+        return JsonResponse(
+            {
+                "status": False,
+                "message": "Unable to connect to FastAPI"
+            },
+            status=500
+        )
+
+    except json.JSONDecodeError:
+        return JsonResponse(
+            {
+                "status": False,
+                "message": "Invalid JSON request"
+            },
+            status=400
+        )
+
+def occupations_as_not_working(request):
+    if request.method != "POST":
+        return JsonResponse(
+            {
+                "status": False,
+                "message": "Only POST method allowed"
+            },
+            status=405
+        )
+
+    payload, headers = common_payload(request)
+
+    if payload is None or headers is None:
+        return JsonResponse(
+            {
+                "status": False,
+                "message": "Authentication required"
+            },
+            status=401
+        )
+
+    try:
+        data = json.loads(request.body)
+        employee_status_id = data.get("employee_status_id")
+
+        # ==========================================
+        # Only NOT WORKING
+        # ==========================================
+        if employee_status_id != "notworking":
+            return JsonResponse({
+                "status": False,
+                "message": "Invalid employment status",
+                "data": []
+            })
+
+        # ==========================================
+        # Get ONLY Not Working Occupations
+        # ==========================================
+        occupation_response = requests.post(
+            f"{settings.FASTAPI_BASE_URL}/employmentDetails/occupationsAsNotWorking",
+            json=payload,
+            headers=headers,
+            timeout=10
+        )
+
+        if occupation_response.status_code == 401:
+            request.session.flush()
+            return JsonResponse(
+                {
+                    "status": False,
+                    "message": "Session expired"
+                },
+                status=401
+            )
+
+        occupation_data = occupation_response.json()
+        occupation_groups = occupation_data.get(
+            "data",
+            []
+        )
+
+        # ==========================================
+        # Return
+        # ==========================================
+        return JsonResponse({
+            "status": True,
+            "message": "Not working occupations fetched successfully",
+            "data": occupation_groups
+        })
+
+    except requests.RequestException as e:
+        print( "FastAPI connection error:", e )
+        return JsonResponse(
+            {
+                "status": False,
+                "message": "Unable to connect to FastAPI"
+            },
+            status=500
+        )
+
+    except json.JSONDecodeError:
+        return JsonResponse(
+            {
+                "status": False,
+                "message": "Invalid JSON request"
+            },
+            status=400
+        )
 
 def get_events_data(request):
     payload, headers = common_payload(request)
@@ -490,14 +738,11 @@ def user_view(request):
         religion_response = get_religion_list(request)
         religion_list = religion_response.get("data", [])
 
-        # ==============================================
         christianDenomination_response  = get_christianDenomination_list(request)
         christianDenomination_list = christianDenomination_response.get("data", [])
 
         muslimSubsects_response = get_muslimSubsects_list(request)
         muslimSubsects_list = muslimSubsects_response.get("data", [])
-        # print(muslimSubsects_response)
-        # ==============================================
 
         caste_response = get_cste_list(request)
         caste_list = caste_response.get("data", [])
@@ -517,13 +762,24 @@ def user_view(request):
         country_response = get_county_list(request)
         counry_list = country_response.get("data", [])
 
-        occupationMasterHead_response = en_occupation_master_head_list(request)
+        indianStates_response = get_indianState_list(request)
+        inadian_states_list = indianStates_response.get("data", [])
+        print("type is ", inadian_states_list)
+
+        occupationMasterHead_response = get_occupation_master_head_list(request)
         occupationMasterHead_list = occupationMasterHead_response.get("data", [])
 
         occupation_response = get_occupation_list(request)
         ocupation_list = occupation_response.get("data", [])
 
         occupation_groups = get_occupation_groups( occupationMasterHead_list, ocupation_list )
+
+        income_response = get_income_list(request)
+        income_list = income_response.get("data", [])
+
+        employees_response = get_employees_data(request)
+        employee_response_data= employees_response.json()
+        employee_list = employee_response_data.get("data", [])
 
     except requests.RequestException as e:
         print("FastAPI connection error:", e)
@@ -572,7 +828,11 @@ def user_view(request):
         "raasi_list": raasi_list,
         "star_list": star_list,
         "counry_list": counry_list,
+        "inadian_states_list": inadian_states_list,
         "occupation_groups": occupation_groups,
+        "income_list": income_list,
+        "employee_list": employee_list,
     }
+
     return render( request, "admin_app/users.html", data )
 

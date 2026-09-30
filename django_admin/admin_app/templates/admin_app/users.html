@@ -1063,14 +1063,14 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion </label>
-                    <select id="religion" name="religion" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="religion" name="religion" onchange="religionSelect(this.value)" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none">
                         <option value="" selected>--Select Religion--</option>
                         {% for rl in religion_list %}
                         <option value="{{rl.religion_id}}">{{rl.religion_name}}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-span-12 md:col-span-2">
+                <div class="col-span-12 md:col-span-2" id="christianDenominationDiv" style="display: none;">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Christian Denominations </label>
                     <select id="christianDenomination" name="christianDenomination" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="" selected>--Select--</option>
@@ -1079,7 +1079,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-span-12 md:col-span-2">
+                <div class="col-span-12 md:col-span-2" id="muslimSubsectsDiv"style="display: none;">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Muslim Subsects</label>
                     <select id="muslimSubsects" name="muslimSubsects" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="" selected>--Select--</option>
@@ -1088,7 +1088,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-span-12 md:col-span-2">
+                <div class="col-span-12 md:col-span-2" id="casteDiv">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Caste </label>
                     <select id="caste" name="caste" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="" selected>--Select Caste--</option>
@@ -1097,13 +1097,19 @@
                         {% endfor %}
                     </select>
                 </div>
+                <!-- ======================================================================================================================================================================= -->
+                <div class="col-span-12 md:col-span-2" id="otherCasteDiv" style="display:none;">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Other Caste </label>
+                    <input type="text" id="otherCaste" name="otherCaste"placeholder="Enter otherCaste nme" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                </div>
+                <!-- ================================================================================================================================ -->
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Sub Caste </label>
                     <input type="text" id="subCaste" name="subCaste"placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Marital Status </label>
-                    <select id="maritalStatus" name="maritalStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="maritalStatus" name="maritalStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none"  onchange="maritalStatusSelect(this.value)">
                         <option value="0">--Select--</option>
                         <option value="1">UnMarried</option>
                         <option value="2">Widow/Widower</option>
@@ -1111,8 +1117,8 @@
                         <option value="4">Awaiting Divorcee</option>
                     </select>
                 </div>
-                <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Number Of Children </label> 
+                <div class="col-span-12 md:col-span-2" id="num_child_div" style="display:none;">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Number Of Children(If any) </label> 
                     <input type="text" id="num_child" name="num_child" placeholder="Enter Number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
@@ -1147,21 +1153,24 @@
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Registered Team Member </label>
                     <select id="registeredByTeamMember" name="registeredByTeamMember" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select Designation</option>
-                        <option value="manager">Manager</option>
+                        <option value="">--Select--</option>
+                        {% for el in employee_list %}
+                            <option value="{{ el.emp_id }}"> {{ el.username }} </option>
+                        {% endfor %}
                     </select>
                 </div>
+
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Physical Status </label>
-                    <select id="physical_status" name="physical_status" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="physical_status" name="physical_status" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="physicalStatusSelect(this.value)">
                         <option value="N">--Select--</option>
                         <option value="N">Normal</option>
                         <option value="D">Disabled</option>
                     </select>
                 </div>
-                <div class="col-span-12 md:col-span-2">
+                <div class="col-span-12 md:col-span-2" id="about_physical_status_div" style="display:none;">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Disable </label>
-                    <input type="text" id="disable" name="disable" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="about_physical_status" name="about_physical_status" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
             </div>
 
@@ -1178,11 +1187,11 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Qualification </label>
-                    <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="email" id="qualification" placeholder="Enter qualification" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Specialization </label>
-                    <input type="text" id="createUsername" placeholder="Enter username" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="specialization" placeholder="Enter specialization" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Place of Study </label>
@@ -1198,17 +1207,16 @@
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Employment Details: </h1> </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Employment Status </label>
-                    <select id="employmentStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="employmentStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="employeeStatusSelect(this.value)">
                         <option value="">Select</option>
-                        <option value="admin">Working</option>
-                        <option value="manager">Not Working</option>
+                        <option value="working">Working</option>
+                        <option value="notworking">Not Working</option>
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2">Occupation</label>
-                    <select id="occupation" name="occupation" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select Role</option>
-                        <option value="admin">Admin</option>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2">Designation</label>
+                    <select id="designation" name="designation" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="">Select Designation</option>
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
@@ -1224,11 +1232,28 @@
                     <input type="password" id="createPassword" placeholder="Enter password" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Annual Income </label>
-                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select Role</option>
-                        <option value="admin">Admin</option>
-                    </select>
+                    <h1 class="block text-sm font-semibold theme-dark-text mb-2">Annual Income</h1>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            <label for="minHeight" class="text-sm theme-dark-text"></label>
+                            <select id="minHeight" name="minHeight" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                                <option value="0">Currency</option>
+                                <option value="1">INR</option>
+                                <option value="2">USD</option>
+                                <option value="3">EURO</option>
+                                <option value="4">POUNDS</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <label for="maxHeight" class="text-sm theme-dark-text"></label>
+                            <select id="maxHeight" name="maxHeight" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                                <option value="">Income</option>
+                                {% for income in income_list %}
+                                <option value="{{ income.income_id }}"> {{ income.income }} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1286,12 +1311,7 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Family Current Living In </label>
-                    <select id="famlyLivingContry" name="famlyLivingContry" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">--Select--</option>
-                        {% for  fam_livin_count in counry_list %}
-                        <option value="{{fam_livin_count.country_id}}">{{fam_livin_count.country_name}}</option>
-                        {% endfor %}
-                    </select>
+                    <input type="text" id="createUsername" placeholder="Enter Number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400">
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Family HomeTown </label>
@@ -1303,8 +1323,8 @@
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Socio-Religious </h1> </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Raasi </label>
-                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select Raasi</option>
+                    <select id="raasi" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="">Select</option>
                         {% for rsl in raasi_list %}
                         <option value="{{rsl.raasi_id}}">{{rsl.raasi}}</option>
                         {% endfor %}
@@ -1312,8 +1332,8 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Star </label>
-                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select Raasi</option>
+                    <select id="star" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="">Select</option>
                         {% for stl in star_list %}
                         <option value="{{stl.star_id}}">{{stl.star}}</option>
                         {% endfor %}
@@ -1330,31 +1350,27 @@
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Permanent Location Details </h1> </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Country </label>
-                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" id="permanentCountry" name="permanentCountry" onchange="permanentCountrySelect(this.value)">
                         <option value="">Select Country</option>
                         {% for cl in counry_list %}
                         <option value="{{cl.country_id}}">{{cl.country_name}}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-span-12 md:col-span-2">
+                <div class="col-span-12 md:col-span-2" id="permanentStateDiv">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> State </label>
-                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select Role</option>
-                        <option value="admin">Admin</option>
-                        <option value="manager">Manager</option>
-                        <option value="editor">Editor</option>
-                        <option value="user">User</option>
+                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" id="permanentState" name="permanentState" onchange="permanentStateSelect(this.value)">
+                        <option value="">Select</option>
+                        {% for islt in inadian_states_list %}
+                        <option value="{{ islt.state_id}}">{{ islt.state_name}}</option>
+                        {% endfor %}
                     </select>
                 </div>
-                <div class="col-span-12 md:col-span-2">
+                <div class="col-span-12 md:col-span-2" id="districtDiv">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> City / District </label>
-                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" id="district" name="district">
                         <option value="">Select Role</option>
                         <option value="admin">Admin</option>
-                        <option value="manager">Manager</option>
-                        <option value="editor">Editor</option>
-                        <option value="user">User</option>
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
@@ -1428,23 +1444,83 @@
                     </div>
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Height </label> 
-                    <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <h1 class="block text-sm font-semibold theme-dark-text mb-2"> Height </h1>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            <label for="minHeight" class="text-sm theme-dark-text"></label>
+                            <select id="minHeight" name="minHeight" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                                <option value="">Min</option>
+                                {% for minHeight in height_list %}
+                                    <option value="{{ minHeight.height_id }}"> {{ minHeight.height }} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <label for="maxHeight" class="text-sm theme-dark-text"></label>
+                            <select id="maxHeight" name="maxHeight" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                                <option value="">Max</option>
+                                {% for maxHeight in height_list %}
+                                    <option value="{{ maxHeight.height_id }}"> {{ maxHeight.height }} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Marital status </label> 
-                    <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Marital Status </label>
+                    <select id="maritalStatus" name="maritalStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="0">--Select--</option>
+                        <option value="1">UnMarried</option>
+                        <option value="2">Widow/Widower</option>
+                        <option value="3">Divorcee</option>
+                        <option value="4">Awaiting Divorcee</option>
+                    </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Education </label> 
-                    <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <select id="educationQualification_list" name="educationQualification_list" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="" selected>--Select--</option>
+                        {% for qul in educationQualification_list %}
+                        <option value="{{qul.qualification_id}}">{{qul.qualification}}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Employment Details </label>
-                    <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" > </div>
-                <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Annual Income </label>
-                    <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <select id="fatherOccupation" name="fatherOccupation" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="">--Select--</option>
+                        {% for category in occupation_groups %}
+                            <optgroup label="{{ category.cat_name }}" >
+                                {% for occupation in category.occupations %}
+                                    <option value="{{ occupation.occupation_id }}" > {{ occupation.occupation }} </option>
+                                {% endfor %}
+                            </optgroup>
+                        {% endfor %}
+                    </select>
+                </div>
+                 <div class="col-span-12 md:col-span-2">
+                    <h1 class="block text-sm font-semibold theme-dark-text mb-2">Annual Income</h1>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            <label for="minHeight" class="text-sm theme-dark-text"></label>
+                            <select id="minHeight" name="minHeight" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                                <option value="0">Currency</option>
+                                <option value="1">INR</option>
+                                <option value="2">USD</option>
+                                <option value="3">EURO</option>
+                                <option value="4">POUNDS</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <label for="maxHeight" class="text-sm theme-dark-text"></label>
+                            <select id="maxHeight" name="maxHeight" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                                <option value="">Income</option>
+                                {% for income in income_list %}
+                                <option value="{{ income.income_id }}"> {{ income.income }} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Country </label>
@@ -1465,17 +1541,27 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion </label>
-                    <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <select id="religion" name="religion" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="" selected>--Select Religion--</option>
+                        {% for rl in religion_list %}
+                        <option value="{{rl.religion_id}}">{{rl.religion_name}}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Caste </label> 
-                    <input type="email" id="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Caste </label>
+                    <select id="caste" name="caste" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="" selected>--Select Caste--</option>
+                        {% for cl in caste_list %}
+                        <option value="{{cl.caste_id}}">{{cl.caste_name}}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
                 <label class="block text-sm font-semibold theme-dark-text mb-2"> Willing to Marry Other Caste or Religion </label>
                     <div class="flex items-center gap-6">
                         <label class="flex items-center gap-2 cursor-pointer"> <input type="radio" name="willing_other_caste" value="Yes" class="w-4 h-4" > <span>Yes</span> </label>
-                        <label class="flex items-center gap-2 cursor-pointer"> <input type="radio" name="willing_other_caste" value="No" class="w-4 h-4" > <span>No</span> </label>
+                        <label class="flex items-center gap-2 cursor-pointer"> <input type="radio" name="willing_other_caste" value="No" class="w-4 h-4" checked> <span>No</span> </label>
                     </div>
                 </div>
                 <div class="col-span-12 md:col-span-2">
@@ -1492,7 +1578,6 @@
     </div>
 </div>
 
-
 <!-- DELETE MODAL -->
 <div id="deleteModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
     <div class="theme-card w-full max-w-sm rounded-2xl shadow-2xl p-6 text-center">
@@ -1507,29 +1592,6 @@
 </div>
 
 <script>
-    // print only numbers
-    document.querySelectorAll(".printDigitsonly").forEach(function(inputValue){
-        inputValue.addEventListener("input", function(){
-            this.value = this.value.replace(/[^0-9]/g, "");
-        })
-    }); 
-
-    // partener preferernce min and max age
-    const minAge = document.getElementById("minAge");
-    const maxAge = document.getElementById("maxAge");
-
-    for (let age = 18; age <= 60; age++) {
-        const minOption = document.createElement("option");
-        minOption.value = age;
-        minOption.textContent = age;
-        minAge.appendChild(minOption);
-
-        const maxOption = document.createElement("option");
-        maxOption.value = age;
-        maxOption.textContent = age;
-        maxAge.appendChild(maxOption);
-    }
-
     /* ========================================= */
     /* SIDEBAR */
     /* ========================================= */
@@ -1546,130 +1608,58 @@
 
     function filterUsers() {
 
-        const search =
-            document
-                .getElementById("userSearch")
-                .value
-                .toLowerCase()
-                .trim();
+        const search = document .getElementById("userSearch") .value .toLowerCase() .trim();
 
-
-        const rows =
-            document.querySelectorAll(".user-row");
-
+        const rows = document.querySelectorAll(".user-row");
 
         let visible = 0;
 
-
         rows.forEach(function(row) {
-
-
-            const text =
-                row.innerText.toLowerCase();
-
-
-            const status =
-                row.dataset.status;
-
-
-            const searchMatch =
-                text.includes(search);
-
-
-            const statusMatch =
-                currentStatus === "all"
-                || status === currentStatus;
-
+            const text = row.innerText.toLowerCase();
+            const status = row.dataset.status;
+            const searchMatch = text.includes(search);
+            const statusMatch = currentStatus === "all" || status === currentStatus;
 
             if (searchMatch && statusMatch) {
-
                 row.style.display = "";
-
                 visible++;
-
             }
-
             else {
-
                 row.style.display = "none";
-
             }
-
         });
-
-
-        document.getElementById("visibleCount")
-            .innerText = visible;
-
+        document.getElementById("visibleCount") .innerText = visible;
     }
-
-
 
     /* ========================================= */
     /* STATUS FILTER */
     /* ========================================= */
-
     function filterStatus(status) {
-
         currentStatus = status;
-
-
         document
             .querySelectorAll(".status-filter")
             .forEach(function(button) {
-
-                button.classList.remove(
-                    "theme-primary",
-                    "text-white"
-                );
-
-                button.classList.add(
-                    "theme-dark-text"
-                );
-
+                button.classList.remove( "theme-primary", "text-white" );
+                button.classList.add( "theme-dark-text" );
             });
-
 
         let activeButton;
 
-
-        if (status === "all") {
-
-            activeButton =
-                document.getElementById("filterAll");
-
+        if (status === "all") { 
+            activeButton = document.getElementById("filterAll"); 
         }
-
 
         if (status === "active") {
-
-            activeButton =
-                document.getElementById("filterActive");
-
+            activeButton = document.getElementById("filterActive");
         }
-
 
         if (status === "inactive") {
-
-            activeButton =
-                document.getElementById("filterInactive");
-
+            activeButton = document.getElementById("filterInactive"); 
         }
 
-
-        activeButton.classList.add(
-            "theme-primary",
-            "text-white"
-        );
-
-
-        activeButton.classList.remove(
-            "theme-dark-text"
-        );
-
-
+        activeButton.classList.add( "theme-primary", "text-white" );
+        activeButton.classList.remove( "theme-dark-text" );
         filterUsers();
-
     }
 
 
@@ -1883,11 +1873,9 @@
                 .value
                 .trim();
 
-
         const role =
             document.getElementById("createRole")
                 .value;
-
 
         if (!name || !email) {
 
@@ -1897,17 +1885,13 @@
 
         }
 
-
         alert(
             "User created successfully!\n\n" +
             "Name: " + name +
             "\nEmail: " + email +
             "\nRole: " + role
         );
-
-
         closeModal("createModal");
-
     }
 
 
@@ -1967,7 +1951,6 @@
 
             modals.forEach(function(id) {
 
-
                 const modal =
                     document.getElementById(id);
 
@@ -1984,6 +1967,245 @@
 
         }
     );
+</script>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    /* ========================================= */
+    /* print only numbers */
+    /* ========================================= */
+    document.querySelectorAll(".printDigitsonly").forEach(function(inputValue){
+        inputValue.addEventListener("input", function(){
+            this.value = this.value.replace(/[^0-9]/g, "");
+        })
+    }); 
+
+    /* ========================================= */
+    /* partener preferernce min and max age */
+    /* ========================================= */
+    const minAge = document.getElementById("minAge");
+    const maxAge = document.getElementById("maxAge");
+
+    for (let age = 18; age <= 60; age++) {
+        const minOption = document.createElement("option");
+        minOption.value = age;
+        minOption.textContent = age;
+        minAge.appendChild(minOption);
+
+        const maxOption = document.createElement("option");
+        maxOption.value = age;
+        maxOption.textContent = age;
+        maxAge.appendChild(maxOption);
+    }
+
+    /* ========================================= */
+    /* relogion select */
+    /* ========================================= */
+    function religionSelect(religion_id) {
+        $("#muslimSubsectsDiv, #christianDenominationDiv, #otherCasteDiv").hide();
+        if(religion_id == 1) {
+            alert("Hindu")
+        }
+        if(religion_id == 2) {
+            $("#muslimSubsectsDiv").show();
+        }
+        if(religion_id == 3) {
+            $("#christianDenominationDiv").show();
+        }
+        if(religion_id == 20) {
+            $("#otherCasteDiv").show();
+            $("#casteDiv").hide();
+        }
+    }    
+
+    function physicalStatusSelect(physical_status_id) {
+        if(physical_status_id == 'D') { $("#about_physical_status_div").show() }
+        else { $("#about_physical_status_div").hide() }
+    }
+
+    function maritalStatusSelect(marital_status_id) {
+        if(marital_status_id != 1) { $("#num_child_div").show()}
+        else { $("#num_child_div").hide()}
+    }
+
+    function employeeStatusSelect(employee_status_id) {
+        const designation = document.getElementById("designation");
+        designation.innerHTML = ` <option value=""> Select Role </option> `;
+
+        // ==========================================
+        // NOT WORKING
+        // ==========================================
+        if(employee_status_id === "notworking") {
+            fetch("/occupationsAsNotWorking/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken":
+                        getCookie("csrftoken")
+                },
+                body: JSON.stringify({
+                    employee_status_id: employee_status_id
+                })
+            })
+
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error( "HTTP error: " + response.status );
+                }
+                return response.json();
+            })
+
+            .then(data => {
+                console.log( "Occupation Groups:", data );
+
+                // --------------------------------
+                // API success
+                // --------------------------------
+                if (data.status !== true) {
+                    console.log( data.message || "Unable to load occupations" );
+                    return;
+                }
+
+                // --------------------------------
+                // Head + Sub List
+                // --------------------------------
+                const occupationGroups = data.data || [];
+
+                // --------------------------------
+                // Loop categories
+                // --------------------------------
+                occupationGroups.forEach(
+                    function(category) {
+
+                        // Create optgroup
+                        const optgroup = document.createElement( "optgroup" );
+                        optgroup.label = category.cat_name;
+
+                        // --------------------------------
+                        // Sub occupations
+                        // --------------------------------
+                        const occupations = category.occupations || [];
+                        occupations.forEach(
+                            function(occupation) {
+                                const option = document.createElement( "option" );
+                                option.value = occupation.occupation_id;
+                                option.textContent = occupation.occupation;
+                                optgroup.appendChild( option );
+                            }
+                        );
+
+                        // Add category to dropdown
+                        designation.appendChild( optgroup );
+                    }
+                );
+            })
+            .catch(error => {
+                console.error( "Employee status API error:", error );
+            });
+        }
+
+        if(employee_status_id === "working") {
+            fetch("/OccupationAsWorking/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken":
+                        getCookie("csrftoken")
+                },
+                body: JSON.stringify({
+                    employee_status_id: employee_status_id
+                })
+            })
+
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error( "HTTP error: " + response.status );
+                }
+                return response.json();
+            })
+
+            .then(data => {
+                console.log( "Occupation Groups:", data );
+
+                // --------------------------------
+                // API success
+                // --------------------------------
+                if (data.status !== true) {
+                    console.log( data.message || "Unable to load occupations" );
+                    return;
+                }
+
+                // --------------------------------
+                // Head + Sub List
+                // --------------------------------
+                const occupationGroups = data.data || [];
+
+                // --------------------------------
+                // Loop categories
+                // --------------------------------
+                occupationGroups.forEach(
+                    function(category) {
+
+                        // Create optgroup
+                        const optgroup = document.createElement( "optgroup" );
+                        optgroup.label = category.cat_name;
+
+                        // --------------------------------
+                        // Sub occupations
+                        // --------------------------------
+                        const occupations = category.occupations || [];
+                        occupations.forEach(
+                            function(occupation) {
+                                const option = document.createElement( "option" );
+                                option.value = occupation.occupation_id;
+                                option.textContent = occupation.occupation;
+                                optgroup.appendChild( option );
+                            }
+                        );
+
+                        // Add category to dropdown
+                        designation.appendChild( optgroup );
+                    }
+                );
+            })
+            .catch(error => {
+                console.error( "Employee status API error:", error );
+            });
+        }
+    }
+
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+            const cookies = document.cookie.split(";");
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
+                if ( cookie.substring(0, name.length + 1) === (name + "=") ) {
+                    cookieValue = decodeURIComponent( cookie.substring(name.length + 1) );
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function permanentCountrySelect(permanent_country_id){
+        if(permanent_country_id == 1) {
+            alert(permanent_country_id)
+            $("#permanentStateDiv").show();
+        }
+        else {
+            alert(permanent_country_id)
+            $("#permanentStateDiv").hide();
+        }
+    }
+
+    function permanentStateSelect(permanent_state_id) {
+        alert(permanent_state_id)
+        if(permanent_state_id == 2 || permanent_state_id == 3193) {
+
+        }
+    }
 </script>
 
 </body>
