@@ -36,28 +36,28 @@ def get_country_list(
         ]
     }
 
-@router.post("/state")
-def get_state_list(
+@router.post("/indianStates")
+def get_indianStates_list(
     request: CommonRequest,
     current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
 
     validate_common_request(request, "login")
-    states = db.query(EnStateMaster).all()
+    indianStates = db.query(EnStateMaster).filter(EnStateMaster.country_id == 1).all()
     return {
         "status": True,
         "message": "States fetched successfully",
         "data": [
             {
-                "state_id": st.state_id,
-                "state_name": st.state_name,
-                "country_id_old": st.country_id_old,
-                "country_id": st.country_id,
-                "status":st.status,
-                "deleted": st.deleted,
+                "state_id": ist.state_id,
+                "state_name": ist.state_name,
+                "country_id_old": ist.country_id_old,
+                "country_id": ist.country_id,
+                "status": ist.status,
+                "deleted": ist.deleted,
             }
-            for st in states
+            for ist in indianStates
         ]
     }
 

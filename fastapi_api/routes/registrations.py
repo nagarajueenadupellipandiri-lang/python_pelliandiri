@@ -162,7 +162,7 @@ def get_registrations(
 
             "bloodgroup": profile.bloodgroup if profile else None,
             "height_id": profile.height_id if profile else None,
-            "weight": profile.weight if profile else None,
+            # "weight": profile.weight if profile else None,
             "bodytype": profile.bodytype if profile else None,
             "physicalstatus": profile.physicalstatus if profile else None,
             "complextion": profile.complextion if profile else None,
@@ -579,11 +579,11 @@ def new_registartion(
             else None
         )
 
-        weight = (
-            int(weight)
-            if weight not in [None, ""]
-            else None
-        )
+        # weight = (
+        #     int(weight)
+        #     if weight not in [None, ""]
+        #     else None
+        # )
 
         bodytype = (
             int(bodytype)
@@ -688,7 +688,6 @@ def new_registartion(
         )
 
     except (TypeError, ValueError):
-
         return {
             "status": False,
             "message": "Invalid optional numeric value"
@@ -709,7 +708,6 @@ def new_registartion(
     existing_email = None
 
     if email:
-
         existing_email = (
             db.query(EnProfileInfo)
             .filter(
@@ -719,7 +717,6 @@ def new_registartion(
         )
 
         if existing_email:
-
             return {
                 "status": False,
                 "message": "Email already exists"
@@ -728,7 +725,6 @@ def new_registartion(
     # =========================================================
     # 15. MOBILE DUPLICATE CHECK
     # =========================================================
-
     existing_mobile = None
 
     print("====================================")
@@ -736,7 +732,6 @@ def new_registartion(
     print("DB URL:", db.bind.url)
     print("====================================")
     if mobile:
-
         existing_mobile = (
             db.query(EnProfileInfo)
             .filter(
@@ -746,7 +741,6 @@ def new_registartion(
         )
 
         if existing_mobile:
-
             return {
                 "status": False,
                 "message": "Mobile already exists"
@@ -767,15 +761,12 @@ def new_registartion(
     # =========================================================
     # 17. DATABASE INSERT
     # =========================================================
-
     try:
 
         registration = EngRegister(
 
             profile_id=temporary_profile_id,
-
             name=name,
-
             password="",
             photopassword="",
             generated_password="",
@@ -1286,7 +1277,7 @@ def new_registartion(
 
                 "height_id": profile_info.height_id,
 
-                "weight": profile_info.weight,
+                # "weight": profile_info.weight,
 
                 "bodytype": profile_info.bodytype,
 
