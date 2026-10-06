@@ -11,37 +11,21 @@
 <!-- ========================================= -->
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
-
     tailwind.config = {
-
         theme: {
-
             extend: {
-
                 colors: {
-
                     brand: {
-
                         sky: '#0284c7',
-
                         blue: '#0369a1',
-
                         light: '#e0f2fe',
-
                         soft: '#f0f9ff'
-
                     }
-
                 }
-
             }
-
         }
-
     }
-
 </script>
-
 
 <!-- ========================================= -->
 <!-- DYNAMIC THEME CSS -->
@@ -55,15 +39,12 @@
 </head>
 
 <body class="theme-page theme-dark-text">
-
 <div class="min-h-screen flex">
-
 <!-- ========================================= -->
 <!-- MOBILE OVERLAY -->
 <!-- ========================================= -->
 
 <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden"> </div>
-
 <!-- ========================================= -->
 <!-- SIDEBAR -->
 <!-- ========================================= -->
@@ -72,239 +53,44 @@
 <!-- ========================================= -->
 <!-- MAIN CONTENT -->
 <!-- ========================================= -->
-
 <div class="flex-1 lg:ml-72 min-w-0">
-
-
     <!-- ===================================== -->
     <!-- TOPBAR -->
     <!-- ===================================== -->
-
     <header class="h-20 theme-card border-b theme-border px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         <!-- LEFT -->
         <div class="flex items-center gap-4">
-
             <!-- MOBILE MENU -->
-
             <button type="button" onclick="toggleSidebar()" class="lg:hidden w-10 h-10 rounded-xl theme-soft theme-primary-text text-xl"> ☰ </button>
 
-
             <!-- HEADING -->
-
             <div>
-
-                <h2 class="text-xl
-                           sm:text-2xl
-                           font-bold
-                           theme-dark-text">
-
-                    Dashboard
-
-                </h2>
-
-
-                <p class="text-xs
-                          sm:text-sm
-                          theme-secondary-text">
-
-                    Welcome back, Administrator
-
-                </p>
-
+                <h2 class="text-xl sm:text-2xl font-bold theme-dark-text"> Dashboard </h2>
+                <p class="text-xs sm:text-sm theme-secondary-text"> Welcome back, Administrator </p>
             </div>
-
         </div>
-
-
 
         <!-- RIGHT -->
 
-        <div class="flex
-                    items-center
-                    gap-3">
-
-
+        <div class="flex items-center gap-3">
             <!-- ================================= -->
             <!-- THEME -->
             <!-- ================================= -->
-
             <div class="relative">
-
-
-                <button
-
-                    id="themeButton"
-
-                    type="button"
-
-                    onclick="toggleThemeMenu()"
-
-                    class="flex
-                           items-center
-                           gap-2
-                           px-3
-                           sm:px-4
-                           py-2
-                           rounded-lg
-                           border
-                           theme-border
-                           theme-card
-                           theme-primary-text
-                           hover:shadow
-                           transition">
-
-                    <span class="text-lg">
-
-                        🎨
-
-                    </span>
-
-
-                    <span class="hidden
-                                 sm:block
-                                 font-medium">
-
-                        Theme
-
-                    </span>
-
-                </button>
-
-
+                <button id="themeButton" type="button" onclick="toggleThemeMenu()" class="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg border theme-border theme-card theme-primary-text hover:shadow transition"> <span class="text-lg"> 🎨 </span> <span class="hidden sm:block font-medium"> Theme </span> </button>
 
                 <!-- THEME MENU -->
-
-                <div
-
-                    id="themeMenu"
-
-                    class="theme-menu
-                           hidden
-                           absolute
-                           right-0
-                           mt-2
-                           w-48
-                           rounded-xl
-                           shadow-xl
-                           overflow-hidden
-                           z-50">
-
-
-                    <button
-                        type="button"
-                        onclick="setTheme('sky')"
-                        class="theme-menu-item
-                               w-full
-                               text-left
-                               px-4
-                               py-3
-                               flex
-                               items-center
-                               gap-3">
-
-                        🔵
-                        <span>Sky Blue</span>
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        onclick="setTheme('green')"
-                        class="theme-menu-item
-                               w-full
-                               text-left
-                               px-4
-                               py-3
-                               flex
-                               items-center
-                               gap-3">
-
-                        🟢
-                        <span>Green</span>
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        onclick="setTheme('purple')"
-                        class="theme-menu-item
-                               w-full
-                               text-left
-                               px-4
-                               py-3
-                               flex
-                               items-center
-                               gap-3">
-
-                        🟣
-                        <span>Purple</span>
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        onclick="setTheme('orange')"
-                        class="theme-menu-item
-                               w-full
-                               text-left
-                               px-4
-                               py-3
-                               flex
-                               items-center
-                               gap-3">
-
-                        🟠
-                        <span>Orange</span>
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        onclick="setTheme('red')"
-                        class="theme-menu-item
-                               w-full
-                               text-left
-                               px-4
-                               py-3
-                               flex
-                               items-center
-                               gap-3">
-
-                        🔴
-                        <span>Red</span>
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        onclick="setTheme('dark')"
-                        class="theme-menu-item
-                               w-full
-                               text-left
-                               px-4
-                               py-3
-                               flex
-                               items-center
-                               gap-3">
-
-                        🌙
-                        <span>Dark</span>
-
-                    </button>
-
+                <div id="themeMenu" class="theme-menu hidden absolute right-0 mt-2 w-48 rounded-xl shadow-xl overflow-hidden z-50">
+                    <button type="button" onclick="setTheme('sky')" class="theme-menu-item w-full text-left px-4 py-3 flex items-center gap-3"> 🔵 <span>Sky Blue</span> </button>
+                    <button type="button" onclick="setTheme('green')" class="theme-menu-item w-full text-left px-4 py-3 flex items-center gap-3"> 🟢 <span>Green</span> </button>
+                    <button type="button" onclick="setTheme('purple')" class="theme-menu-item w-full text-left px-4 py-3 flex items-center gap-3"> 🟣 <span>Purple</span> </button>
+                    <button type="button" onclick="setTheme('orange')" class="theme-menu-item w-full text-left px-4 py-3 flex items-center gap-3"> 🟠 <span>Orange</span> </button>
+                    <button type="button" onclick="setTheme('red')" class="theme-menu-item w-full text-left px-4 py-3 flex items-center gap-3"> 🔴 <span>Red</span> </button>
+                    <button type="button" onclick="setTheme('dark')" class="theme-menu-item w-full text-left px-4 py-3 flex items-center gap-3"> 🌙 <span>Dark</span> </button>
                 </div>
-
             </div>
 
-
-
             <!-- PROFILE -->
-
             <div class="flex
                         items-center
                         gap-3">
@@ -1000,7 +786,6 @@
                     <h4 id="viewName" class="text-xl font-bold theme-dark-text"> Nagaraju </h4>
                     <p id="viewUsername" class="text-sm theme-secondary-text"> @nagaraju </p>
                 </div>
-
             </div>
             <div class="space-y-4">
                 <div class="flex justify-between border-b theme-border pb-3">
@@ -1027,7 +812,6 @@
 <!-- ====================================================== -->
 <!-- CREATE USER MODAL -->
 <!-- ====================================================== -->
-
 <div id="createModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
     <div class="theme-card w-full max-w-7xl max-h-[95vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
         <div class="p-5 border-b theme-border flex items-center justify-between"> 
@@ -1060,7 +844,7 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Phone Number<span id="mandatoryField">*</span></label>
-                    <input type="password" id="phoneNumber" name="phoneNumber" placeholder="Enter phone number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="phoneNumber" name="phoneNumber" placeholder="Enter phone number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion <span id="mandatoryField">*</span></label>
@@ -1154,15 +938,14 @@
                     <select id="registeredByTeamMember" name="registeredByTeamMember" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="">--Select--</option>
                         {% for el in employee_list %}
-                            <option value="{{ el.emp_id }}"> {{ el.username }} </option>
+                        <option value="{{ el.emp_id }}"> {{ el.username }} </option>
                         {% endfor %}
                     </select>
                 </div>
-
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Physical Status </label>
                     <select id="physical_status" name="physical_status" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="physicalStatusSelect(this.value)">
-                        <option value="N">--Select--</option>
+                        <option value="N">Select</option>
                         <option value="N">Normal</option>
                         <option value="D">Disabled</option>
                     </select>
@@ -1268,9 +1051,9 @@
                         <option value="">--Select--</option>
                         {% for category in occupation_groups %}
                             <optgroup label="{{ category.cat_name }}" >
-                                {% for occupation in category.occupations %}
-                                <option value="{{ occupation.occupation_id }}">{{ occupation.occupation }}</option>
-                                {% endfor %}
+                            {% for occupation in category.occupations %}
+                            <option value="{{ occupation.occupation_id }}">{{ occupation.occupation }}</option>
+                            {% endfor %}
                             </optgroup>
                         {% endfor %}
                     </select>
@@ -1285,9 +1068,9 @@
                         <option value="">Select</option>
                         {% for category in occupation_groups %}
                             <optgroup label="{{ category.cat_name }}" >
-                                {% for occupation in category.occupations %}
-                                <option value="{{ occupation.occupation_id }}">{{ occupation.occupation }}</option>
-                                {% endfor %}
+                            {% for occupation in category.occupations %}
+                            <option value="{{ occupation.occupation_id }}">{{ occupation.occupation }}</option>
+                            {% endfor %}
                             </optgroup>
                         {% endfor %}
                     </select>
@@ -1349,7 +1132,7 @@
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Permanent Location Details </h1> </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Country<span id="mandatoryField">*</span></label>
-                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" id="permanentCountry" name="permanentCountry" onchange="permanentCountrySelect(this.value)">
+                    <select class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" id="permanentCountry" name="permanentCountry" onchange="permanentCountrySelect(this.value)">
                         <option value="">Select Country</option>
                         {% for cl in counry_list %}
                         <option value="{{cl.country_id}}">{{cl.country_name}}</option>
@@ -1358,7 +1141,7 @@
                 </div>
                 <div class="col-span-12 md:col-span-2" id="permanentStateDiv" style="display:none;">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> State </label>
-                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" id="permanentState" name="permanentState" onchange="permanentStateSelect(this.value)">
+                    <select class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" id="permanentState" name="permanentState" onchange="permanentStateSelect(this.value)">
                         <option value="">Select</option>
                         {% for ind_stl in inadian_states_list %}
                         <option value="{{ ind_stl.state_id}}">{{ ind_stl.state_name}}</option>
@@ -1369,14 +1152,14 @@
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> City/District </label>
                     <select id="permanentTeluguCities_list" name="permanentTeluguCities_list" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="permanentDistrictSelect(this.value)">
                         <option value="">Select</option>
-                         {% for city in teluguCities_list %}
-                            <option value="{{ city.city_id }}" data-state="{{ city.state_id }}" style="display:none;" > {{ city.city_name }} </option>
+                        {% for city in teluguCities_list %}
+                        <option value="{{ city.city_id }}" data-state="{{ city.state_id }}" style="display:none;" > {{ city.city_name }} </option>
                         {% endfor %}
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2" id="permanentVillageDiv" style="display:none;">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Town / Village </label> 
-                    <input type="text" id="permanentVillage" name="permanentVillage" placeholder="Enter Village" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="permanentVillage" name="permanentVillage" placeholder="Enter town/village" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
             </div>
 
@@ -1384,7 +1167,7 @@
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Current Location Details </h1> </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Country<span id="mandatoryField">*</span></label>
-                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="">Select Cuntry</option>
                         {% for cl in counry_list %}
                         <option value="{{cl.country_id}}">{{cl.country_name}}</option>
@@ -1394,7 +1177,7 @@
 
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> State </label>
-                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="">Select Role</option>
                         <option value="admin">Admin</option>
                         <option value="manager">Manager</option>
@@ -1414,18 +1197,18 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Town / Village </label> 
-                    <input type="password" id="createPassword" placeholder="Enter password" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="password" id="createPassword" placeholder="Enter town/village" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
             </div>
              <div class="grid grid-cols-12 gap-5 mt-8">
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Contact Information </h1> </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2 min-h-[40px]"> Alternative Phone Number </label>
-                    <input type="text" id="alternativePhoneNumber" name="alternativePhoneNumber" placeholder="Enter phone number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="alternativePhoneNumber" name="alternativePhoneNumber" placeholder="Enter phone number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2 min-h-[40px]"> Family / Friends / Other contact person mobile number </label>
-                    <input type="text" id="familyContactNumber" name="familyContactNumber" placeholder="Enter phone number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="familyContactNumber" name="familyContactNumber" placeholder="Enter phone number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
                 </div>
             </div>
 
@@ -1491,9 +1274,9 @@
                         <option value="">--Select--</option>
                         {% for category in occupation_groups %}
                             <optgroup label="{{ category.cat_name }}" >
-                                {% for occupation in category.occupations %}
-                                    <option value="{{ occupation.occupation_id }}" > {{ occupation.occupation }} </option>
-                                {% endfor %}
+                            {% for occupation in category.occupations %}
+                            <option value="{{ occupation.occupation_id }}" > {{ occupation.occupation }} </option>
+                            {% endfor %}
                             </optgroup>
                         {% endfor %}
                     </select>
@@ -1522,62 +1305,134 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Country </label>
-                    <select id="preference_country" name="preference_country" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select Country</option>
-                        {% for cl in counry_list %}
-                        <option value="{{cl.country_id}}">{{cl.country_name}}</option>
-                        {% endfor %}
-                    </select>
-                </div> -->
+
+                <!-- ================================= -->
+                <!-- PREFERENCE COUNTRY -->
+                <!-- ============================= -->
+
                 <div class="col-span-12 md:col-span-2 relative">
+
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Country </label>
+                    <div id="preference_countryDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleCountryDropdown()" > <span id="countrySelectedText"> Select Country </span> </div>
 
-                    <!-- Selected countries display -->
-                    <div id="countryDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="toggleCountryDropdown()" > <span id="countrySelectedText">Select Country</span> </div>
+                    <div id="preference_countryDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto" >
+                        <!-- ANY -->
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> 
+                            <input type="checkbox" name="preference_country[]" value="any" data-name="Any" class="preference_country-checkbox" onchange="preferenceCountryChanged(this)" > <span>Any</span> 
+                        </label>
 
-                    <!-- Checkbox dropdown -->
-                    <div id="countryDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto" >
-
-                        <!-- Any -->
-                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> <input type="checkbox" value="any" class="country-checkbox" onchange="countryChanged(this)" > <span>Any</span> </label>
+                        <!-- COUNTRIES -->
                         {% for cl in counry_list %}
                         <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
-                        <input type="checkbox" name="preference_country[]" value="{{ cl.country_id }}" data-name="{{ cl.country_name }}" class="country-checkbox" onchange="countryChanged(this)" > <span>{{ cl.country_name }}</span> </label>
+                            <input type="checkbox" name="preference_country[]" value="{{ cl.country_id }}" data-name="{{ cl.country_name }}" class="preference_country-checkbox" onchange="preferenceCountryChanged(this)" >
+                            <span>{{ cl.country_name }}</span>
+                        </label>
                         {% endfor %}
+                    </div>
+                </div>
 
+                <!-- ============================= -->
+                <!-- STATE -->
+                <!-- ============================= -->
+                <div class="col-span-12 md:col-span-2 relative" id="preference_state_div" style="display:none;" >
+
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> State </label>
+
+                    <!-- State dropdown button -->
+                    <div id="preference_stateDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleStateDropdown()" >
+                        <span id="preference_stateSelectedText"> Select State </span>
                     </div>
 
+
+                    <!-- State dropdown -->
+                    <div id="preference_stateDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto" >
+
+                        <!-- Any -->
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
+                            <input type="checkbox" name="preference_state[]" value="any" data-name="Any" class="preference_state-checkbox" onchange="preferenceStateChanged(this)" >
+                            <span>Any</span>
+                        </label>
+
+
+                        <!-- Dynamic States -->
+                        {% for ind_stl in inadian_states_list %}
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
+                            <input type="checkbox" name="preference_state[]" value="{{ ind_stl.state_id }}" data-name="{{ ind_stl.state_name }}" class="preference_state-checkbox" onchange="preferenceStateChanged(this)" >
+                            <span> {{ ind_stl.state_name }} </span>
+                        </label>
+
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- ============================= -->
+                <!-- DISTRICT -->
+                <!-- ============================= -->
+                <div class="col-span-12 md:col-span-2 relative" id="preferenceDistrictDiv" style="display:none;" >
+
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> City / District </label>
+
+
+                    <div id="preference_districtDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleDistrictDropdown()" >
+                        <span id="preference_districtSelectedText"> Select District </span>
+                    </div>
+
+
+                    <div id="preference_districtDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto" >
+
+                        <!-- Any -->
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
+                            <input type="checkbox" name="preference_city[]" value="any" data-name="Any" class="preference_district-checkbox" onchange="preferenceDistrictChanged(this)" >
+                            <span>Any</span>
+                        </label>
+
+                        <!-- Dynamic Districts -->
+                        {% for city in teluguCities_list %}
+                        <label class="preference-district-option flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100" data-state="{{ city.state_id }}" style="display:none;" >
+                            <input type="checkbox" name="preference_city[]" value="{{ city.city_id }}" data-name="{{ city.city_name }}" data-state="{{ city.state_id }}" class="preference_district-checkbox" onchange="preferenceDistrictChanged(this)" >
+                            <span> {{ city.city_name }} </span>
+                        </label>
+                        {% endfor %}
+                    </div>
                 </div>
 
-                <!-- ======================================= -->
-                <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> State </label>
-                    <input type="email" id="preference_state" name="preference_state" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
-                </div>
-                <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> City/District </label> 
-                    <input type="email" id="preference_city" name="preference_state" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
-                </div>
+                 <!-- ===================================== -->
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion </label>
                     <select id="preference_religion" name="preference_religion" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="" selected>--Select Religion--</option>
+                        <option value="" selected>Select Religion</option>
                         {% for rl in religion_list %}
                         <option value="{{rl.religion_id}}">{{rl.religion_name}}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-span-12 md:col-span-2">
+                <div class="col-span-12 md:col-span-2 relative">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Caste </label>
-                    <select id="preference_caste" name="preference_caste" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="" selected>--Select Caste--</option>
-                        {% for cl in caste_list %}
-                        <option value="{{cl.caste_id}}">{{cl.caste_name}}</option>
-                        {% endfor %}
-                    </select>
+                    <!-- Selected Caste Display -->
+                    <div id="preference_casteDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleCasteDropdown()" >
+                    <span id="preference_casteSelectedText"> Select Caste </span>
                 </div>
+
+                <!-- Caste Dropdown -->
+                <div id="preference_casteDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto" >
+
+                    <!-- Any -->
+                    <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
+                        <input type="checkbox" name="preference_caste[]" value="any" data-name="Any" class="preference_caste-checkbox" onchange="preferenceCasteChanged(this)" >
+                        <span>Any</span>
+                    </label>
+
+                    <!-- Dynamic Castes -->
+                    {% for cl in caste_list %}
+                    <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
+                        <input type="checkbox" name="preference_caste[]" value="{{ cl.caste_id }}" data-name="{{ cl.caste_name }}" class="preference_caste-checkbox" onchange="preferenceCasteChanged(this)" >
+                        <span> {{ cl.caste_name }} </span>
+                    </label>
+                    {% endfor %}
+                </div>
+
+            </div>
+
+                <!-- ======================== -->
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Willing to Marry Other Caste or Religion </label>
                     <div class="flex items-center gap-6">
@@ -1996,6 +1851,14 @@
         })
     }); 
 
+    document.querySelectorAll(".insertMobileNumber").forEach(function(inputValue) {
+        inputValue.addEventListener("input", function() {
+            this.value = this.value
+                .replace(/[^0-9]/g, "")
+                .slice(0, 10);
+        });
+    });
+
     /* ========================================= */
     /* partener preferernce min and max age */
     /* ========================================= */
@@ -2266,53 +2129,391 @@
         }
 
         // Show incomes belonging to selected currency
-        incomeSelect
-            .find('option[data-currency="' + currency_id + '"]')
-            .show();
-    }
-</script>
-<script>
-    function toggleCountryDropdown() {
-        $("#countryDropdown").toggleClass("hidden");
+        incomeSelect .find('option[data-currency="' + currency_id + '"]') .show();
     }
 
-    function countryChanged(checkbox) {
-        const value = checkbox.value;
+    /* =========================================================
+    COUNTRY DROPDOWN
+    ========================================================= */
 
-        // If Any selected
-        if (value === "any" && checkbox.checked) {
-            // Uncheck all other countries
-            $(".country-checkbox")
+    function preferenceToggleCountryDropdown() {
+        $("#preference_countryDropdown") .toggleClass("hidden");
+    }
+
+
+    /* =========================================================
+    COUNTRY CHANGE
+    ========================================================= */
+    function preferenceCountryChanged(checkbox) {
+        const $checkbox = $(checkbox);
+        const value = $checkbox.val();
+
+        /* =========================================
+        ANY COUNTRY SELECTED
+        ========================================= */
+        if ( value === "any" && $checkbox.is(":checked") ) {
+            // Uncheck all countries
+            $(".preference_country-checkbox")
+                .not('[value="any"]')
+                .prop("checked", false);
+
+            // Hide State + District
+            hidePreferenceStateAndDistrict();
+            updatePreferenceCountryText();
+            return;
+        }
+
+
+        /* =========================================
+        SPECIFIC COUNTRY SELECTED
+        ========================================= */
+
+        if ( value !== "any" && $checkbox.is(":checked") ) {
+            // Uncheck Any
+            $('.preference_country-checkbox[value="any"]') .prop("checked", false);
+        }
+
+        /* =========================================
+        UPDATE COUNTRY TEXT
+        ========================================= */
+        updatePreferenceCountryText();
+
+        /* =========================================
+        GET SELECTED COUNTRIES
+        ========================================= */
+        const selectedCountries = $(".preference_country-checkbox:checked");
+
+        /* =========================================
+        NOTHING SELECTED
+        ========================================= */
+        if (selectedCountries.length === 0) {
+            hidePreferenceStateAndDistrict();
+            return;
+        }
+
+
+        /* =========================================
+        IMPORTANT:
+        INDIA MUST BE THE ONLY COUNTRY
+        ========================================= */
+        if (selectedCountries.length === 1) {
+            const selectedCountryId = selectedCountries.first().val();
+
+            /* =====================================
+            INDIA = 1
+            ===================================== */
+            if (selectedCountryId == "1") {
+                // Only India selected
+                // Show State
+                showPreferenceState();
+                return;
+            }
+        }
+        /* =========================================
+        INDIA + OTHER COUNTRY
+        OR
+        OTHER COUNTRY
+        ========================================= */
+        hidePreferenceStateAndDistrict();
+
+    }
+
+
+    /* =========================================================
+    COUNTRY TEXT
+    ========================================================= */
+
+    function updatePreferenceCountryText() {
+        const selected = [];
+        $(".preference_country-checkbox:checked")
+            .each(function () {
+                selected.push( $(this).data("name") );
+            });
+
+        if (selected.length === 0) {
+            $("#countrySelectedText") .text("Select Country");
+        }
+        else {
+            $("#countrySelectedText") .text(selected.join(", "));
+        }
+
+    }
+
+
+    /* =========================================================
+    SHOW STATE
+    ========================================================= */
+    function showPreferenceState() {
+        $("#preference_state_div") .show();
+    }
+
+
+    /* =========================================================
+    HIDE STATE + DISTRICT
+    ========================================================= */
+    function hidePreferenceStateAndDistrict() {
+        $("#preference_state_div") .hide();
+        $("#preferenceDistrictDiv") .hide();
+        $(".preference_state-checkbox") .prop("checked", false);
+        $(".preference_district-checkbox") .prop("checked", false);
+        $("#preference_stateSelectedText") .text("Select State");
+        $("#preference_districtSelectedText") .text("Select District");
+    }
+
+
+    /* =========================================================
+    STATE DROPDOWN
+    ========================================================= */
+    function preferenceToggleStateDropdown() {
+        $("#preference_stateDropdown") .toggleClass("hidden");
+    }
+
+
+    /* =========================================================
+    STATE CHANGE
+    ========================================================= */
+    function preferenceStateChanged(checkbox) {
+        const $checkbox = $(checkbox);
+        const value = $checkbox.val();
+        /* -----------------------------------------------------
+        ANY STATE
+        ----------------------------------------------------- */
+        if ( value === "any" && $checkbox.is(":checked") ) {
+            $(".preference_state-checkbox")
+                .not('[value="any"]')
+                .prop("checked", false);
+            hidePreferenceDistrict();
+            updatePreferenceStateText();
+            return;
+        }
+
+
+        /* -----------------------------------------------------
+        SPECIFIC STATE
+        ----------------------------------------------------- */
+        if ( value !== "any" && $checkbox.is(":checked") ) {
+            $('.preference_state-checkbox[value="any"]') .prop("checked", false);
+        }
+        updatePreferenceStateText();
+
+        /* -----------------------------------------------------
+        SELECTED STATES
+        ----------------------------------------------------- */
+        const selectedStates = $(".preference_state-checkbox:checked");
+
+
+        /* Nothing selected */
+        if (selectedStates.length === 0) {
+            hidePreferenceDistrict();
+            return;
+        }
+
+
+        /* Any selected */
+        if ( selectedStates.filter('[value="any"]').length > 0 ) {
+            hidePreferenceDistrict();
+            return;
+        }
+
+
+        /* -----------------------------------------------------
+        GET STATE IDs
+        ----------------------------------------------------- */
+        const stateIds = [];
+        selectedStates.each(function () {
+            stateIds.push( String($(this).val()) );
+        });
+
+        /*
+        * IMPORTANT
+        *
+        * AP     = 2
+        * TG     = 3193
+        *
+        * Districts should ONLY appear when:
+        *
+        * AP
+        * TG
+        * AP + TG
+        *
+        * No other state combination.
+        */
+        const onlyAllowedStates = stateIds.every(function (id) {
+                return id === "2" || id === "3193";
+            });
+
+        if (!onlyAllowedStates) {
+            hidePreferenceDistrict();
+            return;
+        }
+        /* -----------------------------------------------------
+        AP / TG / AP + TG
+        SHOW RELATED DISTRICTS
+        ----------------------------------------------------- */
+        showPreferenceDistricts(stateIds);
+    }
+
+
+    /* =========================================================
+    STATE TEXT
+    ========================================================= */
+    function updatePreferenceStateText() {
+        const selected = [];
+        $(".preference_state-checkbox:checked")
+            .each(function () {
+                selected.push( $(this).data("name") );
+            });
+
+        if (selected.length === 0) {
+            $("#preference_stateSelectedText") .text("Select State");
+        }
+        else {
+            $("#preference_stateSelectedText") .text(selected.join(", "));
+        }
+
+    }
+
+
+    /* =========================================================
+    SHOW DISTRICTS
+    ========================================================= */
+    function showPreferenceDistricts(stateIds) {
+        const $districtDiv = $("#preferenceDistrictDiv");
+        const $districtOptions = $(".preference-district-option");
+
+        /*
+        * Reset district selection
+        */
+        $(".preference_district-checkbox") .prop("checked", false);
+        $("#preference_districtSelectedText") .text("Select District");
+
+
+        /*
+        * Hide ALL districts first
+        */
+
+        $districtOptions.hide();
+
+
+        /*
+        * Show districts belonging
+        * to selected states
+        */
+
+        stateIds.forEach(function (stateId) {
+            $districtOptions .filter( '[data-state="' + stateId + '"]' ) .show();
+        });
+
+        /*
+        * Show district dropdown
+        */
+        $districtDiv.show();
+    }
+
+
+    /* =========================================================
+    HIDE DISTRICT
+    ========================================================= */
+    function hidePreferenceDistrict() {
+        $("#preferenceDistrictDiv") .hide();
+        $(".preference_district-checkbox") .prop("checked", false);
+        $("#preference_districtSelectedText") .text("Select District");
+        $(".preference-district-option") .hide();
+    }
+
+    /* =========================================================
+    DISTRICT DROPDOWN
+    ========================================================= */
+    function preferenceToggleDistrictDropdown() {
+        $("#preferJence_districtDropdown")
+            .toggleClass("hidden");
+    }
+
+    /* =========================================================
+    DISTRICT CHANGE
+    ========================================================= */
+    function preferenceDistrictChanged(checkbox) {
+        const $checkbox = $(checkbox);
+        const value = $checkbox.val();
+        /* -----------------------------------------------------
+        ANY DISTRICT
+        ----------------------------------------------------- */
+        if ( value === "any" && $checkbox.is(":checked") ) {
+            $(".preference_district-checkbox")
                 .not('[value="any"]')
                 .prop("checked", false);
         }
 
-        // If any country selected
-        if (value !== "any" && checkbox.checked) {
-            // Uncheck Any
-            $('.country-checkbox[value="any"]')
-                .prop("checked", false);
+        /* -----------------------------------------------------
+        SPECIFIC DISTRICT
+        ----------------------------------------------------- */
+        if ( value !== "any" && $checkbox.is(":checked") ) {
+            $('.preference_district-checkbox[value="any"]') .prop("checked", false);
         }
-        updateCountryText();
+        updatePreferenceDistrictText();
     }
-
-    function updateCountryText() {
+    /* =========================================================
+    DISTRICT TEXT
+    ========================================================= */
+    function updatePreferenceDistrictText() {
         const selected = [];
-        $(".country-checkbox:checked").each(function () {
-            if ($(this).val() === "any") {
-                selected.push("Any");
-            } else {
-                selected.push($(this).data("name"));
-            }
-        });
+        $(".preference_district-checkbox:checked")
+            .each(function () {
+                selected.push( $(this).data("name") );
+            });
 
         if (selected.length === 0) {
-            $("#countrySelectedText").text("Select Country");
-        } else {
-            $("#countrySelectedText").text(selected.join(", "));
+            $("#preference_districtSelectedText") .text("Select District");
+        }
+        else {
+            $("#preference_districtSelectedText") .text(selected.join(", "));
         }
     }
+
+    function preferenceToggleCasteDropdown() {
+        $("#preference_casteDropdown") .toggleClass("hidden");
+    }
+
+    function preferenceCasteChanged(checkbox) {
+        const $checkbox = $(checkbox);
+        const value = $checkbox.val();
+
+        /* =========================================
+        ANY SELECTED
+        ========================================= */
+        if ( value === "any" && $checkbox.is(":checked") ) {
+            $(".preference_caste-checkbox")
+                .not('[value="any"]')
+                .prop("checked", false);
+        }
+
+        /* =========================================
+        SPECIFIC CASTE SELECTED
+        ========================================= */
+        if ( value !== "any" && $checkbox.is(":checked") ) {
+            $('.preference_caste-checkbox[value="any"]') .prop("checked", false);
+        }
+        updatePreferenceCasteText();
+    }
+
+
+    function updatePreferenceCasteText() {
+        const selected = [];
+        $(".preference_caste-checkbox:checked")
+            .each(function () {
+                selected.push( $(this).data("name") );
+            });
+
+        if (selected.length === 0) {
+            $("#preference_casteSelectedText") .text("Select Caste");
+        }
+        else {
+            $("#preference_casteSelectedText") .text(selected.join(", "));
+        }
+
+    }
 </script>
+
 <style>
     #mandatoryField{
         color:red;
