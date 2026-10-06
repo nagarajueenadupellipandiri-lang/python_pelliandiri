@@ -15,6 +15,7 @@ from .en_occupation_master_head import EnOccupationMasterHead
 from .en_occupation_master import EnOccupationMaster
 from .en_income_master import EnIncomeMaster
 from .en_profileinfo import EnProfileInfo
+from .en_defineprofile import EnDefineProfile
 from .en_muslim_subsects import EnMuslimSubsects
 from .en_christian_denomination import EnChristianDenomination
 
