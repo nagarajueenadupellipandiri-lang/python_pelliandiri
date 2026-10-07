@@ -25,6 +25,7 @@ urlpatterns = [
     path( "dashboard/", views.dashboard_view, name="dashboard" ), 
     path( "logout/", views.logout_view, name="logout" ), 
     path( "users/", views.user_view, name="users"), 
-    path( "OccupationAsWorking/", views.occupations_as_working, name="OccupationAsWorking" ),
+    path( "occupationAsWorking/", views.occupations_as_working, name="occupationAsWorking" ),
     path( "occupationsAsNotWorking/", views.occupations_as_not_working, name="occupationsAsNotWorking" ),
+    path( "createUser/", views.createUser, name="createUser"),
 ]
