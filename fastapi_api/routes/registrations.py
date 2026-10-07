@@ -1,4 +1,5 @@
-from datetime import datetime, date
+from datetime import datetime, date, timezone
+from zoneinfo import ZoneInfo
 from fastapi import APIRouter, Depends
 from hashlib import md5
 from sqlalchemy.orm import Session
@@ -68,7 +69,6 @@ def get_registrations(
     # -----------------------------------------
     if search:
         search_value = f"%{search}%"
-
         query = query.filter(
             or_(
                 EngRegister.profile_id.ilike(search_value),
@@ -81,12 +81,65 @@ def get_registrations(
     # -----------------------------------------
     # Total count
     # -----------------------------------------
-
     total_registrations = query.with_entities(
         func.count(EngRegister.register_id)
     ).scalar()
 
     total_registrations = total_registrations or 0
+
+    today_start = int(
+        datetime.combine(
+            date.today(),
+            datetime.min.time()
+        ).timestamp()
+    )
+
+    tomorrow_start = today_start + 86400
+
+    today_registrations = query.filter(
+        EngRegister.datecreated >= today_start,
+        EngRegister.datecreated < tomorrow_start
+    ).with_entities(
+        func.count(EngRegister.register_id)
+    ).scalar() or 0
+
+    today_registrations = today_registrations or 0
+
+    # ========================================================
+    ist = ZoneInfo("Asia/Kolkata")
+
+    now = datetime.now(ist)
+
+    month_start = now.replace(
+        day=1,
+        hour=0,
+        minute=0,
+        second=0,
+        microsecond=0
+    )
+
+    if now.month == 12:
+        next_month = month_start.replace(
+            year=now.year + 1,
+            month=1
+        )
+    else:
+        next_month = month_start.replace(
+            month=now.month + 1
+        )
+
+    month_start_timestamp = int(month_start.timestamp())
+    next_month_timestamp = int(next_month.timestamp())
+
+    this_month_registrations = query.filter(
+        EngRegister.datecreated >= month_start_timestamp,
+        EngRegister.datecreated < next_month_timestamp
+    ).with_entities(
+        func.count(EngRegister.register_id)
+    ).scalar() or 0
+
+    this_month_registrations = this_month_registrations
+    # ============================================================
 
     total_pages = (
         (total_registrations + limit - 1) // limit
@@ -244,6 +297,8 @@ def get_registrations(
             "total_pages": total_pages,
         },
         "search": search,
+        "today_registrations": today_registrations,
+        "this_month_registrations": this_month_registrations,
         "data": data,
     }
 

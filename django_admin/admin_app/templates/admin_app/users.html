@@ -43,294 +43,65 @@
 <!-- ========================================= -->
 <!-- MOBILE OVERLAY -->
 <!-- ========================================= -->
+    <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden"> </div>
+    {% include "admin_app/includes/side_navBar.html" %}
+    <div class="flex-1 lg:ml-72 min-w-0">
+        {% include "admin_app/includes/header.html" %}
+        <main class="p-4 sm:p-6 lg:p-8">
+            {% include "admin_app/includes/welcomeBanner.html" %}
 
-<div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden"> </div>
-<!-- ========================================= -->
-<!-- SIDEBAR -->
-<!-- ========================================= -->
-{% include "admin_app/includes/side_navBar.html" %}
-
-<!-- ========================================= -->
-<!-- MAIN CONTENT -->
-<!-- ========================================= -->
-<div class="flex-1 lg:ml-72 min-w-0">
-    <!-- ===================================== -->
-    <!-- TOPBAR -->
-    <!-- ===================================== -->
-    <header class="h-20 theme-card border-b theme-border px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        <!-- LEFT -->
-        <div class="flex items-center gap-4">
-            <!-- MOBILE MENU -->
-            <button type="button" onclick="toggleSidebar()" class="lg:hidden w-10 h-10 rounded-xl theme-soft theme-primary-text text-xl"> ☰ </button>
-
-            <!-- HEADING -->
-            <div>
-                <h2 class="text-xl sm:text-2xl font-bold theme-dark-text"> Dashboard </h2>
-                <p class="text-xs sm:text-sm theme-secondary-text"> Welcome back, Administrator </p>
-            </div>
-        </div>
-
-        <!-- RIGHT -->
-
-        <div class="flex items-center gap-3">
-            <!-- ================================= -->
-            <!-- THEME -->
-            <!-- ================================= -->
-            <div class="relative">
-                <button id="themeButton" type="button" onclick="toggleThemeMenu()" class="flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg border theme-border theme-card theme-primary-text hover:shadow transition"> <span class="text-lg"> 🎨 </span> <span class="hidden sm:block font-medium"> Theme </span> </button>
-
-                <!-- THEME MENU -->
-                <div id="themeMenu" class="theme-menu hidden absolute right-0 mt-2 w-48 rounded-xl shadow-xl overflow-hidden z-50">
-                    <button type="button" onclick="setTheme('sky')" class="theme-menu-item w-full text-left px-4 py-3 flex items-center gap-3"> 🔵 <span>Sky Blue</span> </button>
-                    <button type="button" onclick="setTheme('green')" class="theme-menu-item w-full text-left px-4 py-3 flex items-center gap-3"> 🟢 <span>Green</span> </button>
-                    <button type="button" onclick="setTheme('purple')" class="theme-menu-item w-full text-left px-4 py-3 flex items-center gap-3"> 🟣 <span>Purple</span> </button>
-                    <button type="button" onclick="setTheme('orange')" class="theme-menu-item w-full text-left px-4 py-3 flex items-center gap-3"> 🟠 <span>Orange</span> </button>
-                    <button type="button" onclick="setTheme('red')" class="theme-menu-item w-full text-left px-4 py-3 flex items-center gap-3"> 🔴 <span>Red</span> </button>
-                    <button type="button" onclick="setTheme('dark')" class="theme-menu-item w-full text-left px-4 py-3 flex items-center gap-3"> 🌙 <span>Dark</span> </button>
+            <!-- ===================================== -->
+            <!-- STATISTICS -->
+            <!-- ===================================== -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
+                <!-- USERS -->
+                <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-12 h-12 rounded-xl theme-soft flex items-center justify-center theme-primary-text text-xl"> 👥 </div>
+                        <span class="text-xs font-semibold theme-primary-text theme-soft px-2 py-1 rounded-full"> +12% </span>
+                    </div>
+                    <p class="theme-secondary-text text-sm mt-5"> Total Users </p> 
+                    <h3 class="text-3xl font-bold theme-dark-text mt-1"> {{ total_registrations }} </h3>
                 </div>
-            </div>
 
-            <!-- PROFILE -->
-            <div class="flex
-                        items-center
-                        gap-3">
+                <!-- EMPLOYEES -->
+                <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-12 h-12 rounded-xl theme-soft flex items-center justify-center theme-primary-text text-xl"> 👨‍💼 </div>
+                        <span class="text-xs font-semibold theme-primary-text theme-soft px-2 py-1 rounded-full"> Active </span>
+                    </div>
+                    <p class="theme-secondary-text text-sm mt-5"> Today Users </p>
+                    <h3 class="text-3xl font-bold theme-dark-text mt-1"> {{ today_registrations }} </h3>
+                </div>
 
-
-                <div class="hidden
-                            sm:block
-                            text-right">
-
-                    <p class="font-semibold
-                              text-sm
-                              theme-dark-text">
-
-                        Super Admin
-
-                    </p>
-
-                    <p class="text-xs
-                              theme-secondary-text">
-
-                        Administrator
-
-                    </p>
-
+                <!-- EVENTS -->
+                <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-12 h-12 rounded-xl theme-soft flex items-center justify-center theme-primary-text text-xl"> 📅 </div>
+                        <span class="text-xs font-semibold theme-primary-text theme-soft px-2 py-1 rounded-full"> Upcoming </span>
+                    </div>
+                    <p class="theme-secondary-text text-sm mt-5"> This Month Users </p>
+                    <h3 class="text-3xl font-bold theme-dark-text mt-1"> {{ this_month_registrations }} </h3>
                 </div>
 
 
-                <div class="w-11
-                            h-11
-                            rounded-full
-                            theme-primary
-                            flex
-                            items-center
-                            justify-center
-                            text-white
-                            font-bold
-                            shadow-md">
 
-                    SA
+                <!-- REPORTS -->
+                <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between">
 
-                </div>
+                        <div class="w-12 h-12 rounded-xl theme-soft flex items-center justify-center theme-primary-text text-xl"> 📊 </div>
 
-            </div>
 
-        </div>
-
-    </header>
-
-
-
-    <!-- ========================================= -->
-    <!-- PAGE CONTENT -->
-    <!-- ========================================= -->
-
-    <main class="p-4
-                 sm:p-6
-                 lg:p-8">
-
-
-        <!-- ===================================== -->
-        <!-- WELCOME BANNER -->
-        <!-- ===================================== -->
-
-        <div class="relative
-                    overflow-hidden
-                    theme-sidebar
-                    rounded-2xl
-                    p-6
-                    sm:p-8
-                    text-white
-                    mb-8
-                    shadow-lg">
-
-
-            <div class="relative z-10">
-
-                <p class="text-white/70
-                          text-sm
-                          font-medium">
-
-                    ADMINISTRATION
-
-                </p>
-
-
-                <h1 class="text-2xl
-                           sm:text-3xl
-                           font-bold
-                           mt-2">
-
-                    Welcome to your dashboard!
-
-                </h1>
-
-
-                <p class="text-white/75
-                          mt-2
-                          max-w-xl">
-
-                    Manage your users, employees, events and
-                    application settings from one place.
-
-                </p>
-
-            </div>
-
-
-            <div class="absolute
-                        -right-12
-                        -top-16
-                        w-64
-                        h-64
-                        rounded-full
-                        bg-white/10">
-
-            </div>
-
-
-            <div class="absolute
-                        right-16
-                        -bottom-24
-                        w-48
-                        h-48
-                        rounded-full
-                        bg-white/10">
-
-            </div>
-
-        </div>
-
-
-
-        <!-- ===================================== -->
-        <!-- STATISTICS -->
-        <!-- ===================================== -->
-
-        <div class="grid
-                    grid-cols-1
-                    sm:grid-cols-2
-                    xl:grid-cols-4
-                    gap-5
-                    mb-8">
-
-
-            <!-- USERS -->
-
-            <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
-                <div class="flex items-center justify-between">
-                    <div class="w-12 h-12 rounded-xl theme-soft flex items-center justify-center theme-primary-text text-xl"> 👥 </div>
-                    <span class="text-xs font-semibold theme-primary-text theme-soft px-2 py-1 rounded-full"> +12% </span>
-                </div>
-                <p class="theme-secondary-text text-sm mt-5"> Total Users </p> 
-                <h3 class="text-3xl font-bold theme-dark-text mt-1"> {{ total_registrations }} </h3>
-            </div>
-
-            <!-- EMPLOYEES -->
-            <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
-                <div class="flex items-center justify-between">
-                    <div class="w-12 h-12 rounded-xl theme-soft flex items-center justify-center theme-primary-text text-xl"> 👨‍💼 </div>
-                    <span class="text-xs font-semibold theme-primary-text theme-soft px-2 py-1 rounded-full"> Active </span>
-                </div>
-                <p class="theme-secondary-text text-sm mt-5"> Employees </p>
-                <h3 class="text-3xl font-bold theme-dark-text mt-1"> {{ total_employees }} </h3>
-            </div>
-
-            <!-- EVENTS -->
-            <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
-
-
-                <div class="flex items-center justify-between">
-
-                    <div class="w-12 h-12 rounded-xl theme-soft flex items-center justify-center theme-primary-text text-xl"> 📅 </div>
-
-
-                    <span class="text-xs font-semibold theme-primary-text theme-soft px-2 py-1 rounded-full"> Upcoming </span>
-
-                </div>
-
-
-                <p class="theme-secondary-text text-sm mt-5"> Total Events </p>
-
-
-                <h3 class="text-3xl font-bold theme-dark-text mt-1"> {{ total_events }} </h3>
-
-            </div>
-
-
-
-            <!-- REPORTS -->
-
-            <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
-
-
-                <div class="flex items-center justify-between">
-
-                    <div class="w-12 h-12 rounded-xl theme-soft flex items-center justify-center theme-primary-text text-xl"> 📊 </div>
-
-
-                    <span class="text-xs font-semibold theme-primary-text theme-soft px-2 py-1 rounded-full"> This Month </span>
-
-                </div>
-
-
-                <p class="theme-secondary-text text-sm mt-5"> Reports </p>
-
-
-                <h3 class="text-3xl font-bold theme-dark-text mt-1"> 156 </h3>
-
-            </div>
-
-        </div>
-
-
-
-        <!-- ================================================= -->
-        <!-- SAMPLE USERS TABLE -->
-        <!-- ================================================= -->
-
-        <div class="theme-card rounded-2xl border shadow-sm mb-8">
-
-
-            <!-- TABLE HEADER -->
-
-            <div class="p-5 sm:p-6 border-b theme-border">
-
-
-                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"> <div>
-
-                        <h3 class="text-lg font-bold theme-dark-text">Users </h3>
-
-
-                        <p class="text-sm theme-secondary-text mt-1"> Manage sample users and their status </p>
+                        <span class="text-xs font-semibold theme-primary-text theme-soft px-2 py-1 rounded-full"> This Month </span>
 
                     </div>
 
 
+                    <p class="theme-secondary-text text-sm mt-5"> Reports </p>
 
-                    <!-- CREATE -->
 
-                    <button type="button" onclick="openCreateModal()" class="theme-primary text-white px-4 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-90 transition flex items-center justify-center gap-2"> <span class="text-lg"> + </span> Create User </button>
+                    <h3 class="text-3xl font-bold theme-dark-text mt-1"> 156 </h3>
 
                 </div>
 
@@ -338,314 +109,452 @@
 
 
 
-            <!-- SEARCH + FILTER -->
+            <!-- ================================================= -->
+            <!-- SAMPLE USERS TABLE -->
+            <!-- ================================================= -->
 
-            <div class="p-5
-                        sm:p-6">
-
-
-                <div class="flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
+            <div class="theme-card rounded-2xl border shadow-sm mb-8">
 
 
-                    <!-- SEARCH -->
+                <!-- TABLE HEADER -->
 
-                    <div class="relative w-full md:max-w-md">
-
-
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2 theme-secondary-text"> 🔍 </span>
+                <div class="p-5 sm:p-6 border-b theme-border">
 
 
-                        <input type="text" id="userSearch" onkeyup="filterUsers()" placeholder="Search users..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"> <div>
 
-                    </div>
-
-
-
-                    <!-- STATUS FILTER -->
-
-                    <div class="flex items-center gap-1 theme-soft p-1 rounded-xl w-fit">
+                            <h3 class="text-lg font-bold theme-dark-text">Users </h3>
 
 
-                        <button type="button" onclick="filterStatus('all')" id="filterAll" class="status-filter px-4 py-2 rounded-lg text-sm font-semibold theme-primary text-white transition"> All </button>
+                            <p class="text-sm theme-secondary-text mt-1"> Manage sample users and their status </p>
+
+                        </div>
 
 
-                        <button type="button" onclick="filterStatus('active')" id="filterActive" class="status-filter px-4 py-2 rounded-lg text-sm font-semibold theme-dark-text transition"> Active </button>
 
+                        <!-- CREATE -->
 
-                        <button type="button" onclick="filterStatus('inactive')" id="filterInactive" class="status-filter px-4 py-2 rounded-lg text-sm font-semibold theme-dark-text transition"> Inactive </button>
+                        <button type="button" onclick="openCreateModal()" class="theme-primary text-white px-4 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-90 transition flex items-center justify-center gap-2"> <span class="text-lg"> + </span> Create User </button>
 
                     </div>
 
                 </div>
 
+
+
+                <!-- SEARCH + FILTER -->
+
+                <div class="p-5
+                            sm:p-6">
+
+
+                    <div class="flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
+
+
+                        <!-- SEARCH -->
+
+                        <div class="relative w-full md:max-w-md">
+
+
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 theme-secondary-text"> 🔍 </span>
+
+
+                            <input type="text" id="userSearch" onkeyup="filterUsers()" placeholder="Search users..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400">
+
+                        </div>
+
+
+
+                        <!-- STATUS FILTER -->
+
+                        <div class="flex items-center gap-1 theme-soft p-1 rounded-xl w-fit">
+
+
+                            <button type="button" onclick="filterStatus('all')" id="filterAll" class="status-filter px-4 py-2 rounded-lg text-sm font-semibold theme-primary text-white transition"> All </button>
+
+
+                            <button type="button" onclick="filterStatus('active')" id="filterActive" class="status-filter px-4 py-2 rounded-lg text-sm font-semibold theme-dark-text transition"> Active </button>
+
+
+                            <button type="button" onclick="filterStatus('inactive')" id="filterInactive" class="status-filter px-4 py-2 rounded-lg text-sm font-semibold theme-dark-text transition"> Inactive </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+                
+                <div class="overflow-x-auto">
+                    <table class="w-full min-w-[850px] text-sm">
+                        <thead>
+                            <tr class="theme-soft border-y theme-border">
+                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> # </th>
+                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Name </th>
+                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> ProfileId </th>
+                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Mobile </th>
+                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Date Of Birth </th>
+                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Gender </th>
+                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Martisal Status </th>
+                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Religion </th>
+                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Caste </th>
+                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Status </th>
+                                <th class="px-6 py-4 text-right font-semibold theme-dark-text"> Action </th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody" class="divide-y theme-border">
+                            {% for user in register_users %}
+                            <tr class="user-row" data-status="active">
+                                <td class="px-6 py-4 theme-secondary-text"> 1 </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-10 h-10 rounded-full theme-primary text-white flex items-center justify-center font-bold"> NR </div>
+                                        <div> <p class="font-semibold theme-dark-text"> {{ user.name }} </p> </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">{{ user.profile_id }}</td>
+                                <td class="px-6 py-4">{{user.mobile}}</td>
+                                <td class="px-6 py-4">{{user.dob}}</td>
+                                <td class="px-6 py-4">{{user.gender}}</td>
+                                <td class="px-6 py-4">{{user.maritialstatus}}</td>
+                                <td class="px-6 py-4">{{user.religion_id}}</td>
+                                <td class="px-6 py-4">{{user.caste_id}}</td>
+                                <td class="px-6 py-4"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700"> <span class="w-2 h-2 rounded-full bg-green-500"> </span> Active </span> </td>
+                                <td class="px-6 py-4 text-right whitespace-nowrap">
+                                    <button type="button" onclick="viewUser(1)" class="theme-primary-text hover:underline font-semibold mr-3">View</button>
+                                    <button type="button" onclick="editUser(1)" class="theme-primary-text hover:underline font-semibold mr-3">Edit</button>
+                                    <button type="button" onclick="deleteUser(1)" class="text-red-500 hover:text-red-700 font-semibold"> Delete </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TABLE FOOTER -->
+                <div class="px-6 py-4 border-t theme-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <p class="text-sm theme-secondary-text"> Showing <span id="visibleCount" class="font-semibold theme-dark-text"> 4 </span> users </p>
+                    <div class="text-sm theme-secondary-text"> Sample Data </div>
+                </div>
             </div>
-            
-            <div class="overflow-x-auto">
-                <table class="w-full min-w-[850px] text-sm">
-                    <thead>
-                        <tr class="theme-soft border-y theme-border">
-                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> # </th>
-                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Name </th>
-                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> ProfileId </th>
-                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Mobile </th>
-                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Date Of Birth </th>
-                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Gender </th>
-                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Martisal Status </th>
-                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Religion </th>
-                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Caste </th>
-                            <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Status </th>
-                            <th class="px-6 py-4 text-right font-semibold theme-dark-text"> Action </th>
-                        </tr>
-                    </thead>
-                    <tbody id="userTableBody" class="divide-y theme-border">
-                        {% for user in register_users %}
-                        <tr class="user-row" data-status="active">
-                            <td class="px-6 py-4 theme-secondary-text"> 1 </td>
-                            <td class="px-6 py-4">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full theme-primary text-white flex items-center justify-center font-bold"> NR </div>
-                                    <div> <p class="font-semibold theme-dark-text"> {{ user.name }} </p> </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4">{{ user.profile_id }}</td>
-                            <td class="px-6 py-4">{{user.mobile}}</td>
-                            <td class="px-6 py-4">{{user.dob}}</td>
-                            <td class="px-6 py-4">{{user.gender}}</td>
-                            <td class="px-6 py-4">{{user.maritialstatus}}</td>
-                            <td class="px-6 py-4">{{user.religion_id}}</td>
-                            <td class="px-6 py-4">{{user.caste_id}}</td>
-                            <td class="px-6 py-4"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700"> <span class="w-2 h-2 rounded-full bg-green-500"> </span> Active </span> </td>
-                            <td class="px-6 py-4 text-right whitespace-nowrap">
-                                <button type="button" onclick="viewUser(1)" class="theme-primary-text hover:underline font-semibold mr-3">View</button>
-                                <button type="button" onclick="editUser(1)" class="theme-primary-text hover:underline font-semibold mr-3">Edit</button>
-                                <button type="button" onclick="deleteUser(1)" class="text-red-500 hover:text-red-700 font-semibold"> Delete </button>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- TABLE FOOTER -->
-            <div class="px-6 py-4 border-t theme-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <p class="text-sm theme-secondary-text"> Showing <span id="visibleCount" class="font-semibold theme-dark-text"> 4 </span> users </p>
-                <div class="text-sm theme-secondary-text"> Sample Data </div>
-            </div>
-        </div>
 
 
 
-        <!-- ========================================= -->
-        <!-- LOWER SECTION -->
-        <!-- ========================================= -->
+            <!-- ========================================= -->
+            <!-- LOWER SECTION -->
+            <!-- ========================================= -->
 
-        <div class="grid
-                    grid-cols-1
-                    xl:grid-cols-3
-                    gap-6">
-
-
-            <!-- RECENT ACTIVITY -->
-
-            <div class="xl:col-span-2
-                        theme-card
-                        rounded-2xl
-                        border
-                        shadow-sm">
+            <div class="grid
+                        grid-cols-1
+                        xl:grid-cols-3
+                        gap-6">
 
 
-                <div class="p-6
-                            border-b
-                            theme-border
-                            flex
-                            items-center
-                            justify-between">
+                <!-- RECENT ACTIVITY -->
+
+                <div class="xl:col-span-2
+                            theme-card
+                            rounded-2xl
+                            border
+                            shadow-sm">
+
+
+                    <div class="p-6
+                                border-b
+                                theme-border
+                                flex
+                                items-center
+                                justify-between">
+
+
+                        <h3 class="font-bold
+                                text-lg
+                                theme-dark-text">
+
+                            Recent Activity
+
+                        </h3>
+
+
+                        <button
+                            type="button"
+                            class="theme-primary-text
+                                text-sm
+                                font-semibold">
+
+                            View All
+
+                        </button>
+
+                    </div>
+
+
+
+                    <div class="divide-y
+                                theme-border">
+
+
+                        <div class="p-5
+                                    flex
+                                    items-center
+                                    gap-4">
+
+
+                            <div class="w-10
+                                        h-10
+                                        rounded-full
+                                        theme-soft
+                                        flex
+                                        items-center
+                                        justify-center">
+
+                                👤
+
+                            </div>
+
+
+                            <div class="flex-1
+                                        min-w-0">
+
+
+                                <p class="font-semibold
+                                        text-sm
+                                        theme-dark-text">
+
+                                    New user registered
+
+                                </p>
+
+
+                                <p class="text-xs
+                                        theme-secondary-text
+                                        mt-1">
+
+                                    A new user joined the system
+
+                                </p>
+
+                            </div>
+
+
+                            <span class="text-xs
+                                        theme-secondary-text">
+
+                                2 min ago
+
+                            </span>
+
+                        </div>
+
+
+
+                        <div class="p-5
+                                    flex
+                                    items-center
+                                    gap-4">
+
+
+                            <div class="w-10
+                                        h-10
+                                        rounded-full
+                                        theme-soft
+                                        flex
+                                        items-center
+                                        justify-center">
+
+                                📅
+
+                            </div>
+
+
+                            <div class="flex-1
+                                        min-w-0">
+
+
+                                <p class="font-semibold
+                                        text-sm
+                                        theme-dark-text">
+
+                                    New event created
+
+                                </p>
+
+
+                                <p class="text-xs
+                                        theme-secondary-text
+                                        mt-1">
+
+                                    An event was added
+
+                                </p>
+
+                            </div>
+
+
+                            <span class="text-xs
+                                        theme-secondary-text">
+
+                                15 min ago
+
+                            </span>
+
+                        </div>
+
+
+
+                        <div class="p-5
+                                    flex
+                                    items-center
+                                    gap-4">
+
+
+                            <div class="w-10
+                                        h-10
+                                        rounded-full
+                                        theme-soft
+                                        flex
+                                        items-center
+                                        justify-center">
+
+                                ✓
+
+                            </div>
+
+
+                            <div class="flex-1
+                                        min-w-0">
+
+
+                                <p class="font-semibold
+                                        text-sm
+                                        theme-dark-text">
+
+                                    System login successful
+
+                                </p>
+
+
+                                <p class="text-xs
+                                        theme-secondary-text
+                                        mt-1">
+
+                                    Super Admin logged in
+
+                                </p>
+
+                            </div>
+
+
+                            <span class="text-xs
+                                        theme-secondary-text">
+
+                                1 hour ago
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- QUICK ACTIONS -->
+
+                <div class="theme-card
+                            rounded-2xl
+                            border
+                            shadow-sm
+                            p-6">
 
 
                     <h3 class="font-bold
-                               text-lg
-                               theme-dark-text">
+                            text-lg
+                            theme-dark-text
+                            mb-5">
 
-                        Recent Activity
+                        Quick Actions
 
                     </h3>
 
 
-                    <button
-                        type="button"
-                        class="theme-primary-text
-                               text-sm
-                               font-semibold">
-
-                        View All
-
-                    </button>
-
-                </div>
+                    <div class="space-y-3">
 
 
-
-                <div class="divide-y
-                            theme-border">
-
-
-                    <div class="p-5
+                        <button
+                            type="button"
+                            onclick="openCreateModal()"
+                            class="w-full
                                 flex
                                 items-center
-                                gap-4">
+                                gap-3
+                                px-4
+                                py-3
+                                rounded-xl
+                                theme-soft
+                                theme-primary-text
+                                hover:opacity-80
+                                transition">
+
+                            <span class="text-xl">
+
+                                +
+
+                            </span>
+
+                            Add New User
+
+                        </button>
 
 
-                        <div class="w-10
-                                    h-10
-                                    rounded-full
-                                    theme-soft
-                                    flex
-                                    items-center
-                                    justify-center">
-
-                            👤
-
-                        </div>
-
-
-                        <div class="flex-1
-                                    min-w-0">
-
-
-                            <p class="font-semibold
-                                      text-sm
-                                      theme-dark-text">
-
-                                New user registered
-
-                            </p>
-
-
-                            <p class="text-xs
-                                      theme-secondary-text
-                                      mt-1">
-
-                                A new user joined the system
-
-                            </p>
-
-                        </div>
-
-
-                        <span class="text-xs
-                                     theme-secondary-text">
-
-                            2 min ago
-
-                        </span>
-
-                    </div>
-
-
-
-                    <div class="p-5
+                        <button
+                            type="button"
+                            class="w-full
                                 flex
                                 items-center
-                                gap-4">
+                                gap-3
+                                px-4
+                                py-3
+                                rounded-xl
+                                theme-soft
+                                theme-primary-text
+                                hover:opacity-80
+                                transition">
+
+                            <span class="text-xl">
+
+                                +
+
+                            </span>
+
+                            Create Event
+
+                        </button>
 
 
-                        <div class="w-10
-                                    h-10
-                                    rounded-full
-                                    theme-soft
-                                    flex
-                                    items-center
-                                    justify-center">
-
-                            📅
-
-                        </div>
-
-
-                        <div class="flex-1
-                                    min-w-0">
-
-
-                            <p class="font-semibold
-                                      text-sm
-                                      theme-dark-text">
-
-                                New event created
-
-                            </p>
-
-
-                            <p class="text-xs
-                                      theme-secondary-text
-                                      mt-1">
-
-                                An event was added
-
-                            </p>
-
-                        </div>
-
-
-                        <span class="text-xs
-                                     theme-secondary-text">
-
-                            15 min ago
-
-                        </span>
-
-                    </div>
-
-
-
-                    <div class="p-5
+                        <button
+                            type="button"
+                            class="w-full
                                 flex
                                 items-center
-                                gap-4">
+                                gap-3
+                                px-4
+                                py-3
+                                rounded-xl
+                                theme-soft
+                                theme-primary-text
+                                hover:opacity-80
+                                transition">
 
+                            <span>
 
-                        <div class="w-10
-                                    h-10
-                                    rounded-full
-                                    theme-soft
-                                    flex
-                                    items-center
-                                    justify-center">
+                                ▤
 
-                            ✓
+                            </span>
 
-                        </div>
+                            View Reports
 
-
-                        <div class="flex-1
-                                    min-w-0">
-
-
-                            <p class="font-semibold
-                                      text-sm
-                                      theme-dark-text">
-
-                                System login successful
-
-                            </p>
-
-
-                            <p class="text-xs
-                                      theme-secondary-text
-                                      mt-1">
-
-                                Super Admin logged in
-
-                            </p>
-
-                        </div>
-
-
-                        <span class="text-xs
-                                     theme-secondary-text">
-
-                            1 hour ago
-
-                        </span>
+                        </button>
 
                     </div>
 
@@ -653,115 +562,9 @@
 
             </div>
 
-
-
-            <!-- QUICK ACTIONS -->
-
-            <div class="theme-card
-                        rounded-2xl
-                        border
-                        shadow-sm
-                        p-6">
-
-
-                <h3 class="font-bold
-                           text-lg
-                           theme-dark-text
-                           mb-5">
-
-                    Quick Actions
-
-                </h3>
-
-
-                <div class="space-y-3">
-
-
-                    <button
-                        type="button"
-                        onclick="openCreateModal()"
-                        class="w-full
-                               flex
-                               items-center
-                               gap-3
-                               px-4
-                               py-3
-                               rounded-xl
-                               theme-soft
-                               theme-primary-text
-                               hover:opacity-80
-                               transition">
-
-                        <span class="text-xl">
-
-                            +
-
-                        </span>
-
-                        Add New User
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="w-full
-                               flex
-                               items-center
-                               gap-3
-                               px-4
-                               py-3
-                               rounded-xl
-                               theme-soft
-                               theme-primary-text
-                               hover:opacity-80
-                               transition">
-
-                        <span class="text-xl">
-
-                            +
-
-                        </span>
-
-                        Create Event
-
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="w-full
-                               flex
-                               items-center
-                               gap-3
-                               px-4
-                               py-3
-                               rounded-xl
-                               theme-soft
-                               theme-primary-text
-                               hover:opacity-80
-                               transition">
-
-                        <span>
-
-                            ▤
-
-                        </span>
-
-                        View Reports
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </main>
-
-</div>
-
+        </main>
+        
+    </div>
 </div>
 
 <!-- ====================================================== -->
@@ -812,6 +615,7 @@
 <!-- ====================================================== -->
 <!-- CREATE USER MODAL -->
 <!-- ====================================================== -->
+<form id="createUserForm" method="post" action="{% url 'createUser' %}">
 <div id="createModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
     <div class="theme-card w-full max-w-7xl max-h-[95vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
         <div class="p-5 border-b theme-border flex items-center justify-between"> 
@@ -823,16 +627,16 @@
 
         <div class="p-6 w-full overflow-y-auto flex-1">
             <!-- Create User Form -->
+            {% csrf_token %} 
             <div class="grid grid-cols-12 gap-5">
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Basic Information </h1> </div>
                 <div class="col-span-12 md:col-span-2">
-                    <!-- <label class="block text-sm font-semibold theme-dark-text mb-2"> Name </label> -->
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Name<span id="mandatoryField">*</span></label>
-                    <input type="text" id="createName" name="createName"placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="createName" name="createName" placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" required>
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Gender <span id="mandatoryField">*</span></label>
-                    <select id="gender" name="gender" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="gender" name="gender" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
                         <option value="">--Select--</option>
                         <option value="M">Male</option>
                         <option value="F">Female</option>
@@ -840,15 +644,15 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Date Of Birth <span id="mandatoryField">*</span></label>
-                    <input type="date" id="dob" name="dob" placeholder="Enter username" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="date" id="dob" name="dob" placeholder="Enter username" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" required>
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Phone Number<span id="mandatoryField">*</span></label>
-                    <input type="text" id="phoneNumber" name="phoneNumber" placeholder="Enter phone number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
+                    <input type="text" id="phoneNumber" name="phoneNumber" placeholder="Enter phone number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber" required>
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion <span id="mandatoryField">*</span></label>
-                    <select id="religion" name="religion" onchange="religionSelect(this.value)" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none">
+                    <select id="religion" name="religion" onchange="religionSelect(this.value)" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
                         <option value="" selected>--Select--</option>
                         {% for rl in religion_list %}
                         <option value="{{rl.religion_id}}">{{rl.religion_name}}</option>
@@ -875,7 +679,7 @@
                 </div>
                 <div class="col-span-12 md:col-span-2" id="casteDiv">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Caste <span id="mandatoryField">*</span></label>
-                    <select id="caste" name="caste" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="caste" name="caste" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
                         <option value="" selected>--Select--</option>
                         {% for cl in caste_list %}
                         <option value="{{cl.caste_id}}">{{cl.caste_name}}</option>
@@ -892,7 +696,7 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Marital Status <span id="mandatoryField">*</span></label>
-                    <select id="maritalStatus" name="maritalStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none"  onchange="maritalStatusSelect(this.value)">
+                    <select id="maritalStatus" name="maritalStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none"  onchange="maritalStatusSelect(this.value)" required>
                         <option value="0">--Select--</option>
                         <option value="1">UnMarried</option>
                         <option value="2">Widow/Widower</option>
@@ -945,7 +749,7 @@
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Physical Status </label>
                     <select id="physical_status" name="physical_status" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="physicalStatusSelect(this.value)">
-                        <option value="N">Select</option>
+                        <option value="N">--Select--</option>
                         <option value="N">Normal</option>
                         <option value="D">Disabled</option>
                     </select>
@@ -990,7 +794,7 @@
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Employment Status </label>
                     <select id="employmentStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="employeeStatusSelect(this.value)">
-                        <option value="">Select</option>
+                        <option value="">--Select--</option>
                         <option value="working">Working</option>
                         <option value="notworking">Not Working</option>
                     </select>
@@ -998,12 +802,12 @@
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2">Designation</label>
                     <select id="designation" name="designation" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select</option>
+                        <option value="">--Select--</option>
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Company Name </label>
-                    <input type="text" id="company" name="company" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="company" name="company" placeholder="Enter company name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Experience </label>
@@ -1065,7 +869,7 @@
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Mother Occupation </label>
                     <select id="motherOccupation" name="motherOccupation" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select</option>
+                        <option value="">--Select--</option>
                         {% for category in occupation_groups %}
                             <optgroup label="{{ category.cat_name }}" >
                             {% for occupation in category.occupations %}
@@ -1106,7 +910,7 @@
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Raasi </label>
                     <select id="raasi" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select</option>
+                        <option value="">--Select--</option>
                         {% for rsl in raasi_list %}
                         <option value="{{rsl.raasi_id}}">{{rsl.raasi}}</option>
                         {% endfor %}
@@ -1115,7 +919,7 @@
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Star </label>
                     <select id="star" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select</option>
+                        <option value="">--Select--</option>
                         {% for stl in star_list %}
                         <option value="{{stl.star_id}}">{{stl.star}}</option>
                         {% endfor %}
@@ -1132,8 +936,8 @@
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Permanent Location Details </h1> </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Country<span id="mandatoryField">*</span></label>
-                    <select class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" id="permanentCountry" name="permanentCountry" onchange="permanentCountrySelect(this.value)">
-                        <option value="">Select Country</option>
+                    <select class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" id="permanentCountry" name="permanentCountry" onchange="permanentCountrySelect(this.value)" required>
+                        <option value="">--Select--</option>
                         {% for cl in counry_list %}
                         <option value="{{cl.country_id}}">{{cl.country_name}}</option>
                         {% endfor %}
@@ -1167,8 +971,8 @@
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Current Location Details </h1> </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Country<span id="mandatoryField">*</span></label>
-                    <select id="" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select Cuntry</option>
+                    <select id="" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" mandatoryField>
+                        <option value="">--Select--</option>
                         {% for cl in counry_list %}
                         <option value="{{cl.country_id}}">{{cl.country_name}}</option>
                         {% endfor %}
@@ -1178,7 +982,7 @@
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> State </label>
                     <select id="" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select Role</option>
+                        <option value="">--Select--</option>
                         <option value="admin">Admin</option>
                         <option value="manager">Manager</option>
                         <option value="editor">Editor</option>
@@ -1188,7 +992,7 @@
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> City / District </label>
                     <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">Select Role</option>
+                        <option value="">--Select--</option>
                         <option value="admin">Admin</option>
                         <option value="manager">Manager</option>
                         <option value="editor">Editor</option>
@@ -1200,7 +1004,7 @@
                     <input type="password" id="createPassword" placeholder="Enter town/village" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
             </div>
-             <div class="grid grid-cols-12 gap-5 mt-8">
+            <div class="grid grid-cols-12 gap-5 mt-8">
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Contact Information </h1> </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2 min-h-[40px]"> Alternative Phone Number </label>
@@ -1211,9 +1015,8 @@
                     <input type="text" id="familyContactNumber" name="familyContactNumber" placeholder="Enter phone number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
                 </div>
             </div>
-
             <div class="grid grid-cols-12 gap-5 mt-8">
-                <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Partner Preferences </h1> </div>
+                <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Partner Preferences </h1></div>
                 <div class="col-span-12 md:col-span-2">
                     <h1 class="block text-sm font-semibold theme-dark-text mb-2"> Age </h1>
                     <div class="flex items-center gap-3">
@@ -1249,24 +1052,36 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-span-12 md:col-span-2">
+                <div class="col-span-12 md:col-span-2 relative">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Marital Status </label>
-                    <select id="maritalStatus" name="maritalStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="0">--Select--</option>
-                        <option value="1">UnMarried</option>
-                        <option value="2">Widow/Widower</option>
-                        <option value="3">Divorcee</option>
-                        <option value="4">Awaiting Divorcee</option>
-                    </select>
+                    <div id="preference_maritalStatusDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleMaritalStatusDropdown()"> <span id="maritalStatusSelectedText">--Select--</span> </div>
+                    
+                    <div id="preference_maritalStatusDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto">
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> <input type="checkbox" name="preference_marital_status[]" value="any" data-name="Any" class="preference_marital_status-checkbox" onchange="preferenceMaritalStatusChanged(this)"> <span>Any</span> </label>
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> <input type="checkbox" name="preference_marital_status[]" value="1" data-name="UnMarried" class="preference_marital_status-checkbox" onchange="preferenceMaritalStatusChanged(this)"> <span>UnMarried</span> </label>
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> <input type="checkbox" name="preference_marital_status[]" value="2" data-name="Widow/Widower" class="preference_marital_status-checkbox" onchange="preferenceMaritalStatusChanged(this)"> <span>Widow/Widower</span> </label>
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> <input type="checkbox" name="preference_marital_status[]" value="3" data-name="Divorcee" class="preference_marital_status-checkbox" onchange="preferenceMaritalStatusChanged(this)"> <span>Divorcee</span> </label>
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> <input type="checkbox" name="preference_marital_status[]" value="4" data-name="Awaiting Divorcee" class="preference_marital_status-checkbox" onchange="preferenceMaritalStatusChanged(this)"> <span>Awaiting Divorcee</span> </label>
+                    </div>
                 </div>
-                <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Education </label> 
-                    <select id="preference_educationQualification" name="preference_educationQualification" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="" selected>--Select--</option>
+                <div class="col-span-12 md:col-span-2 relative">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Education </label>
+                    <div id="preference_educationDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleEducationDropdown()"> <span id="educationSelectedText">--Select--</span> </div>
+                    <div id="preference_educationDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto">
+                        <!-- ANY -->
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> 
+                            <input type="checkbox" name="preference_education[]" value="any" data-name="Any" class="preference_education-checkbox" onchange="preferenceEducationChanged(this)"> 
+                            <span>Any</span> 
+                        </label>
+                        
+                        <!-- EDUCATION QUALIFICATIONS -->
                         {% for qul in educationQualification_list %}
-                        <option value="{{qul.qualification_id}}">{{qul.qualification}}</option>
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
+                            <input type="checkbox" name="preference_education[]" value="{{qul.qualification_id}}" data-name="{{qul.qualification}}" class="preference_education-checkbox" onchange="preferenceEducationChanged(this)">
+                            <span>{{qul.qualification}}</span>
+                        </label>
                         {% endfor %}
-                    </select>
+                    </div>
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Employment Details </label>
@@ -1281,7 +1096,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                 <div class="col-span-12 md:col-span-2">
+                <div class="col-span-12 md:col-span-2">
                     <h1 class="block text-sm font-semibold theme-dark-text mb-2">Annual Income</h1>
                     <div class="flex items-center gap-3">
                         <div class="flex items-center gap-1">
@@ -1305,15 +1120,9 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- ================================= -->
-                <!-- PREFERENCE COUNTRY -->
-                <!-- ============================= -->
-
                 <div class="col-span-12 md:col-span-2 relative">
-
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Country </label>
-                    <div id="preference_countryDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleCountryDropdown()" > <span id="countrySelectedText"> Select Country </span> </div>
+                    <div id="preference_countryDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleCountryDropdown()" > <span id="countrySelectedText">--Select--</span> </div>
 
                     <div id="preference_countryDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto" >
                         <!-- ANY -->
@@ -1330,29 +1139,22 @@
                         {% endfor %}
                     </div>
                 </div>
-
-                <!-- ============================= -->
-                <!-- STATE -->
-                <!-- ============================= -->
                 <div class="col-span-12 md:col-span-2 relative" id="preference_state_div" style="display:none;" >
 
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> State </label>
 
                     <!-- State dropdown button -->
                     <div id="preference_stateDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleStateDropdown()" >
-                        <span id="preference_stateSelectedText"> Select State </span>
+                        <span id="preference_stateSelectedText">--Select--</span>
                     </div>
-
 
                     <!-- State dropdown -->
                     <div id="preference_stateDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto" >
-
                         <!-- Any -->
                         <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
                             <input type="checkbox" name="preference_state[]" value="any" data-name="Any" class="preference_state-checkbox" onchange="preferenceStateChanged(this)" >
                             <span>Any</span>
                         </label>
-
 
                         <!-- Dynamic States -->
                         {% for ind_stl in inadian_states_list %}
@@ -1360,25 +1162,15 @@
                             <input type="checkbox" name="preference_state[]" value="{{ ind_stl.state_id }}" data-name="{{ ind_stl.state_name }}" class="preference_state-checkbox" onchange="preferenceStateChanged(this)" >
                             <span> {{ ind_stl.state_name }} </span>
                         </label>
-
                         {% endfor %}
                     </div>
                 </div>
-                <!-- ============================= -->
-                <!-- DISTRICT -->
-                <!-- ============================= -->
                 <div class="col-span-12 md:col-span-2 relative" id="preferenceDistrictDiv" style="display:none;" >
-
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> City / District </label>
-
-
                     <div id="preference_districtDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleDistrictDropdown()" >
-                        <span id="preference_districtSelectedText"> Select District </span>
+                        <span id="preference_districtSelectedText">--Select--</span>
                     </div>
-
-
                     <div id="preference_districtDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto" >
-
                         <!-- Any -->
                         <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
                             <input type="checkbox" name="preference_city[]" value="any" data-name="Any" class="preference_district-checkbox" onchange="preferenceDistrictChanged(this)" >
@@ -1394,12 +1186,10 @@
                         {% endfor %}
                     </div>
                 </div>
-
-                 <!-- ===================================== -->
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion </label>
                     <select id="preference_religion" name="preference_religion" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="" selected>Select Religion</option>
+                        <option value="" selected>--Select--</option>
                         {% for rl in religion_list %}
                         <option value="{{rl.religion_id}}">{{rl.religion_name}}</option>
                         {% endfor %}
@@ -1408,31 +1198,22 @@
                 <div class="col-span-12 md:col-span-2 relative">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Caste </label>
                     <!-- Selected Caste Display -->
-                    <div id="preference_casteDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleCasteDropdown()" >
-                    <span id="preference_casteSelectedText"> Select Caste </span>
+                    <div id="preference_casteDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleCasteDropdown()" > 
+                        <span id="preference_casteSelectedText">--Select--</span> 
+                    </div>
+
+                    <div id="preference_casteDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto" >
+                        <!-- Any -->
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> <input type="checkbox" name="preference_caste[]" value="any" data-name="Any" class="preference_caste-checkbox" onchange="preferenceCasteChanged(this)" > <span>Any</span> </label>
+                        <!-- Dynamic Castes -->
+                        {% for cl in caste_list %}
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
+                            <input type="checkbox" name="preference_caste[]" value="{{ cl.caste_id }}" data-name="{{ cl.caste_name }}" class="preference_caste-checkbox" onchange="preferenceCasteChanged(this)" >
+                            <span> {{ cl.caste_name }} </span>
+                        </label>
+                        {% endfor %}
+                    </div>
                 </div>
-
-                <!-- Caste Dropdown -->
-                <div id="preference_casteDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto" >
-
-                    <!-- Any -->
-                    <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
-                        <input type="checkbox" name="preference_caste[]" value="any" data-name="Any" class="preference_caste-checkbox" onchange="preferenceCasteChanged(this)" >
-                        <span>Any</span>
-                    </label>
-
-                    <!-- Dynamic Castes -->
-                    {% for cl in caste_list %}
-                    <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
-                        <input type="checkbox" name="preference_caste[]" value="{{ cl.caste_id }}" data-name="{{ cl.caste_name }}" class="preference_caste-checkbox" onchange="preferenceCasteChanged(this)" >
-                        <span> {{ cl.caste_name }} </span>
-                    </label>
-                    {% endfor %}
-                </div>
-
-            </div>
-
-                <!-- ======================== -->
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Willing to Marry Other Caste or Religion </label>
                     <div class="flex items-center gap-6">
@@ -1440,7 +1221,6 @@
                         <label class="flex items-center gap-2 cursor-pointer"> <input type="radio" name="willing_other_caste" value="No" class="w-4 h-4" checked> <span>No</span> </label>
                     </div>
                 </div>
-                <!-- <div class="col-span-12 md:col-span-2"> -->
                 <div class="col-span-12 md:col-span-4">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> About Preferred Partner </label> 
                     <textarea name="preference_partner" id="preference_partner" rows="3" cols="20" border="3" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400"></textarea> 
@@ -1450,10 +1230,12 @@
 
         <div class="p-5 border-t theme-border flex justify-end gap-3">
             <button type="button" onclick="closeModal('createModal')" class="px-5 py-2.5 rounded-xl theme-soft theme-primary-text font-semibold"> Cancel </button>
-            <button type="button" onclick="saveSampleUser()" class="theme-primary text-white px-5 py-2.5 rounded-xl font-semibold"> Create User </button>
+            <!-- <button type="button" onclick="saveSampleUser()" class="theme-primary text-white px-5 py-2.5 rounded-xl font-semibold"> Create User </button> -->
+            <button type="submit" class="theme-primary text-white px-5 py-2.5 rounded-xl font-semibold"> Create User </button>
         </div>
     </div>
 </div>
+</form>
 
 <!-- DELETE MODAL -->
 <div id="deleteModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
@@ -1732,30 +1514,13 @@
     /* ========================================= */
 
     function saveSampleUser() {
-
-        const name =
-            document.getElementById("createName")
-                .value
-                .trim();
-
-
-        const email =
-            document.getElementById("createEmail")
-                .value
-                .trim();
-
-        const role =
-            document.getElementById("createRole")
-                .value;
-
+        const name = document.getElementById("createName") .value .trim();
+        const email = document.getElementById("createEmail") .value .trim();
+        const role = document.getElementById("createRole") .value;
         if (!name || !email) {
-
             alert("Please enter name and email.");
-
             return;
-
         }
-
         alert(
             "User created successfully!\n\n" +
             "Name: " + name +
@@ -1764,8 +1529,6 @@
         );
         closeModal("createModal");
     }
-
-
 
     /* ========================================= */
     /* MODAL OPEN */
@@ -1839,7 +1602,6 @@
         }
     );
 </script>
-
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
     /* ========================================= */
@@ -1898,8 +1660,11 @@
     }    
 
     function physicalStatusSelect(physical_status_id) {
-        if(physical_status_id == 'D') { $("#about_physical_status_div").show() }
-        else { $("#about_physical_status_div").hide() }
+        if(physical_status_id == 'D') { 
+            $("#about_physical_status_div").show() 
+        } else { 
+            $("#about_physical_status_div").hide() 
+        }
     }
 
     function maritalStatusSelect(marital_status_id) {
@@ -1984,7 +1749,7 @@
         }
 
         if(employee_status_id === "working") {
-            fetch("/OccupationAsWorking/", {
+            fetch("/occupationAsWorking/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -2135,11 +1900,9 @@
     /* =========================================================
     COUNTRY DROPDOWN
     ========================================================= */
-
     function preferenceToggleCountryDropdown() {
         $("#preference_countryDropdown") .toggleClass("hidden");
     }
-
 
     /* =========================================================
     COUNTRY CHANGE
@@ -2163,11 +1926,9 @@
             return;
         }
 
-
         /* =========================================
         SPECIFIC COUNTRY SELECTED
         ========================================= */
-
         if ( value !== "any" && $checkbox.is(":checked") ) {
             // Uncheck Any
             $('.preference_country-checkbox[value="any"]') .prop("checked", false);
@@ -2190,7 +1951,6 @@
             hidePreferenceStateAndDistrict();
             return;
         }
-
 
         /* =========================================
         IMPORTANT:
@@ -2215,14 +1975,11 @@
         OTHER COUNTRY
         ========================================= */
         hidePreferenceStateAndDistrict();
-
     }
-
 
     /* =========================================================
     COUNTRY TEXT
     ========================================================= */
-
     function updatePreferenceCountryText() {
         const selected = [];
         $(".preference_country-checkbox:checked")
@@ -2236,9 +1993,7 @@
         else {
             $("#countrySelectedText") .text(selected.join(", "));
         }
-
     }
-
 
     /* =========================================================
     SHOW STATE
@@ -2246,7 +2001,6 @@
     function showPreferenceState() {
         $("#preference_state_div") .show();
     }
-
 
     /* =========================================================
     HIDE STATE + DISTRICT
@@ -2260,14 +2014,12 @@
         $("#preference_districtSelectedText") .text("Select District");
     }
 
-
     /* =========================================================
     STATE DROPDOWN
     ========================================================= */
     function preferenceToggleStateDropdown() {
         $("#preference_stateDropdown") .toggleClass("hidden");
     }
-
 
     /* =========================================================
     STATE CHANGE
@@ -2301,13 +2053,11 @@
         ----------------------------------------------------- */
         const selectedStates = $(".preference_state-checkbox:checked");
 
-
         /* Nothing selected */
         if (selectedStates.length === 0) {
             hidePreferenceDistrict();
             return;
         }
-
 
         /* Any selected */
         if ( selectedStates.filter('[value="any"]').length > 0 ) {
@@ -2326,16 +2076,11 @@
 
         /*
         * IMPORTANT
-        *
-        * AP     = 2
-        * TG     = 3193
-        *
+        * AP     = 2, TG     = 3193
         * Districts should ONLY appear when:
-        *
         * AP
         * TG
         * AP + TG
-        *
         * No other state combination.
         */
         const onlyAllowedStates = stateIds.every(function (id) {
@@ -2353,7 +2098,6 @@
         showPreferenceDistricts(stateIds);
     }
 
-
     /* =========================================================
     STATE TEXT
     ========================================================= */
@@ -2370,7 +2114,6 @@
         else {
             $("#preference_stateSelectedText") .text(selected.join(", "));
         }
-
     }
 
 
@@ -2425,7 +2168,7 @@
     DISTRICT DROPDOWN
     ========================================================= */
     function preferenceToggleDistrictDropdown() {
-        $("#preferJence_districtDropdown")
+        $("#preference_districtDropdown")
             .toggleClass("hidden");
     }
 
@@ -2452,6 +2195,7 @@
         }
         updatePreferenceDistrictText();
     }
+    
     /* =========================================================
     DISTRICT TEXT
     ========================================================= */
@@ -2477,7 +2221,6 @@
     function preferenceCasteChanged(checkbox) {
         const $checkbox = $(checkbox);
         const value = $checkbox.val();
-
         /* =========================================
         ANY SELECTED
         ========================================= */
@@ -2510,7 +2253,75 @@
         else {
             $("#preference_casteSelectedText") .text(selected.join(", "));
         }
+    }
 
+    function preferenceToggleMaritalStatusDropdown() {
+        $("#preference_maritalStatusDropdown").toggleClass("hidden");
+    }
+
+    function preferenceMaritalStatusChanged(element) {
+        // If "Any" is selected
+        if (element.value === "any" && element.checked) {
+            // Uncheck all other options
+            $(".preference_marital_status-checkbox")
+                .not('[value="any"]')
+                .prop("checked", false);
+        }
+
+        // If any other option is selected
+        if (element.value !== "any" && element.checked) {
+            // Uncheck "Any"
+            $('.preference_marital_status-checkbox[value="any"]')
+                .prop("checked", false);
+        }
+
+        // Get selected values
+        let selected = $(".preference_marital_status-checkbox:checked")
+            .map(function () {
+                return $(this).data("name");
+            })
+            .get();
+
+        // Update selected text
+        if (selected.length > 0) {
+            $("#maritalStatusSelectedText").text(selected.join(", "));
+        } else {
+            $("#maritalStatusSelectedText").text("Select Marital Status");
+        }
+    }
+
+    function preferenceToggleEducationDropdown() {
+        $("#preference_educationDropdown").toggleClass("hidden");
+    }
+
+    function preferenceEducationChanged(element) {
+        // If "Any" is selected
+        if (element.value === "any" && element.checked) {
+            // Uncheck all other education options
+            $(".preference_education-checkbox")
+                .not('[value="any"]')
+                .prop("checked", false);
+        }
+
+        // If any specific education is selected
+        if (element.value !== "any" && element.checked) {
+            // Uncheck "Any"
+            $('.preference_education-checkbox[value="any"]') .prop("checked", false);
+        }
+
+        // Get selected education names
+        let selected = $(".preference_education-checkbox:checked")
+            .map(function () {
+                return $(this).data("name");
+            })
+            .get();
+
+        // Update selected text
+        if (selected.length > 0) {
+            $("#educationSelectedText").text(selected.join(", "));
+        } else {
+            $("#educationSelectedText").text("Select Education");
+        }
     }
 </script>
 

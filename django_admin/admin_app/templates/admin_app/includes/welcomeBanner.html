@@ -1,0 +1,15 @@
+<div class="relative overflow-hidden theme-sidebar rounded-2xl p-6 sm:p-8 text-white mb-8 shadow-lg">
+    <div class="relative z-10">
+        <p class="text-white/70 text-sm font-medium"> ADMINISTRATION </p>
+        {% if template == 'users' %}
+        <h1 class="text-2xl sm:text-3xl font-bold mt-2"> Welcome to your Users Page </h1>
+        {% elif template == 'dashboard' %}
+        <h1 class="text-2xl sm:text-3xl font-bold mt-2"> Welcome to your dashboard! </h1>
+        <p class="text-white/75 mt-2 max-w-xl"> Manage your users, employees, events and application settings from one place. </p>
+        {% endif %}
+    </div>
+
+    <!-- Decorative Circle -->
+    <div class="absolute -right-12 -top-16 w-64 h-64 rounded-full bg-white/10"> </div>
+    <div class="absolute right-16 -bottom-24 w-48 h-48 rounded-full bg-white/10"> </div>
+</div>

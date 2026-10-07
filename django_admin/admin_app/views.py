@@ -36,11 +36,15 @@ def get_registartions_data(request):
 
     registers = registers_response.json()
     total_registrations = registers.get( "pagination", {} ) .get( "total_registrations", 0 )
+    today_registrations = registers.get("today_registrations")
+    this_month_registrations = registers.get("this_month_registrations")
 
     return (
         registers_response.status_code, 
         registers, 
-        total_registrations
+        total_registrations,
+        today_registrations,
+        this_month_registrations,
     )
 
 def get_religion_list(request):
@@ -625,7 +629,7 @@ def dashboard_view(request):
     try:
         events_response = get_events_data(request)
         employees_response = get_employees_data(request)
-        registers_status_code, registers, total_registrations = get_registartions_data(request)
+        registers_status_code, registers, total_registrations, today_registrations, this_month_registrations  = get_registartions_data(request)
         employees = employees_response.json()
         events = events_response.json()
 
@@ -683,6 +687,7 @@ def dashboard_view(request):
         "total_events": total_events,
         "total_registrations": total_registrations,
         "user": request.session.get( "user", {} ),
+        "template":"dashboard",
     }
 
     return render( request, "admin_app/dashboard.html", data )
@@ -733,7 +738,8 @@ def user_view(request):
     # Call FastAPI API
     # --------------------------------
     try:
-        ( registers_status_code, registers_response, total_registrations ) = get_registartions_data(request)
+        ( registers_status_code, registers_response, total_registrations, today_registrations, this_month_registrations ) = get_registartions_data(request)
+
         register_users = registers_response.get("data", [])
 
         religion_response = get_religion_list(request)
@@ -821,6 +827,8 @@ def user_view(request):
     # --------------------------------
     data = {
         "total_registrations": total_registrations,
+        "today_registrations": today_registrations,
+        "this_month_registrations": this_month_registrations,
         "register_users": register_users,
         "religion_list": religion_list,
         "christianDenomination_list": christianDenomination_list,
@@ -836,7 +844,48 @@ def user_view(request):
         "occupation_groups": occupation_groups,
         "income_list": income_list,
         "employee_list": employee_list,
+        "template":"users",
     }
-
     return render( request, "admin_app/users.html", data )
 
+def createUser(request):
+
+    if request.method != "POST":
+        return JsonResponse({
+            "success": False,
+            "message": "Only POST method is allowed"
+        }, status=405)
+
+    try:
+        payload, headers = common_payload(request)
+
+        # Form data
+        data = request.POST
+
+        payload.update({
+            "name": data.get("createName"),
+            "email": data.get("createEmail"),
+            "gender": data.get("gender"),
+            "dob": data.get("dob"),
+            "phoneNumber": data.get("phoneNumber"),
+        })
+
+        response = requests.post(
+            f"{settings.FASTAPI_BASE_URL}/registrations/createRegistartion",
+            json=payload,
+            headers=headers,
+            timeout=10
+        )
+
+        return JsonResponse(
+            response.json(),
+            status=response.status_code
+        )
+
+    except Exception as e:
+        print("CREATE USER ERROR:", e)
+
+        return JsonResponse({
+            "success": False,
+            "message": str(e)
+        }, status=500)
