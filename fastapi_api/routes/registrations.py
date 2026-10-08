@@ -302,18 +302,17 @@ def get_registrations(
         "data": data,
     }
 
+
 @router.post("/createRegistartion")
 def new_registartion(
     request: CommonRequest,
     current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-
     # =========================================================
     # 1. VALIDATE COMMON REQUEST
     # =========================================================
     validate_common_request(request, "login")
-
     params = request.params or {}
 
     # =========================================================
@@ -329,41 +328,36 @@ def new_registartion(
     livingin = params.get("livingin")
     state_id = params.get("state_id")
 
+
+
+
     # =========================================================
     # 3. OPTIONAL REGISTRATION FIELDS
     # =========================================================
     tob = params.get("tob")
     childstatus = params.get("childstatus")
     denomination = params.get("denomination", 0)
-
     subcaste = params.get("subcaste")
     state_other = params.get("state_other", "")
-
     registerby = params.get("registerby")
+    offline_empid=params.get( "offline_empid" )
 
     # =========================================================
     # PARTNER PREFERENCE FIELDS
     # =========================================================
     minage = params.get("minage")
     maxage = params.get("maxage")
-
     minheight_id = params.get("minheight_id")
     maxheight_id = params.get("maxheight_id")
-
     minweight = params.get("minweight")
     maxweight = params.get("maxweight")
-
     partner_qualification = params.get("partner_qualification", "")
     partner_diet = params.get("partnerdiet")
     partner_smoke = params.get("partnersmoke")
     partner_drink = params.get("partnerdrink", 0)
-
     religiousvalue = params.get("religiousvalue")
-
     partner_family_type = params.get("partner_family_type")
-
     willing_tomarryothres_cast = params.get( "willing_tomarryothres_cast" )
-
     partner_hobbiles = params.get("partner_hobbiles")
     partner_interests = params.get("partner_interests")
     partner_interests_pets = params.get( "partner_interests_pets" )
@@ -371,7 +365,6 @@ def new_registartion(
 
     lifestyle = params.get("lifestyle")
     otherinfo = params.get("otherinfo", "")
-
 
     # =========================================================
     # 4. REQUIRED FIELD VALIDATION
@@ -396,7 +389,6 @@ def new_registartion(
             }
 
     try:
-
         birth_date = datetime.strptime(
             str(dob),
             "%Y-%m-%d"
@@ -434,7 +426,6 @@ def new_registartion(
     # =========================================================
     # 6. VALIDATE GENDER
     # =========================================================
-
     gender = str(gender).upper().strip()
     if gender not in ["M", "F"]:
         return {
@@ -479,6 +470,7 @@ def new_registartion(
             
     bodytype = params.get("bodytype")
     physicalstatus = params.get("physicalstatus")
+    about_physical_status = params.get("about_physical_status")
     complextion = params.get("complextion")
 
     mothertongue = params.get("mothertongue")
@@ -510,6 +502,8 @@ def new_registartion(
     email = params.get("email")
     mobile = params.get("mobile")
     countrycode = params.get("countrycode")
+    areacode = params.get("areacode")
+
 
     # =========================================================
     # 9. OPTIONAL FAMILY FIELDS
@@ -542,9 +536,7 @@ def new_registartion(
     # =========================================================
     # 11. OPTIONAL CONTACT FIELDS
     # =========================================================
-
     other_contact_person = params.get( "other_contact_person" )
-
     other_contact_person_relation = params.get( "other_contact_person_relation" )
     other_contact_person_phonenum = params.get( "other_contact_person_phonenum" ) 
     other_contact_person_address = params.get( "other_contact_person_address" )
@@ -862,8 +854,7 @@ def new_registartion(
             agent_emp_date=None,
             enrolled_by=None,
             register_from="WEB",
-            offline_empid=None,
-            offline_empname=params.get( "offline_empname" ),
+            offline_empid=offline_empid,
             offline_empremarks=None,
             facebiik_link=None,
             linkedin_link=None,
@@ -900,164 +891,80 @@ def new_registartion(
         # =====================================================
 
         profile_info = EnProfileInfo(
-
-            register_id=register_id,
-
-            height_id=height_id,
-
-            weight=weight,
-
-            bodytype=bodytype,
-
-            physicalstatus=physicalstatus,
-
-            complextion=complextion,
-
-            mothertongue=mothertongue,
-
-            can_speak=can_speak,
-
-            can_speak_lang=can_speak_lang,
-
-            placeofbirth=placeofbirth,
-
-            star_id=star_id,
-
-            raasi_id=raasi_id,
-
-            gothram=gothram,
-
-            qualification_id=qualification_id,
-
-            discipline_id=discipline_id,
-
-            occupation_id=occupation_id,
-
-            designation=designation,
-
-            employed_in=employed_in,
-
-            employment_location=employment_location,
-
-            occupation_details=occupation_details,
-
-            qualification=qualification,
-
-            annualincome_id=annualincome_id,
-
-            annualincome=annualincome,
-
-            residingstatus_code=residingstatus_code,
-
-            email=email,
-
-            email_display_status=0,
-
-            mobile=mobile,
-
-            mobile_display_status=0,
-
-            countrycode=countrycode,
-
-            areacode=None,
-
-            phoneno=None,
-
-            phone_display_status=0,
-
-            family_values=None,
-
-            family_type=None,
-
-            family_status=None,
-
-            family_brothers_married=family_brothers_married,
-
-            family_brothers_unmarried=family_brothers_unmarried,
-
-            family_sisters_married=family_sisters_married,
-
-            family_sisters_unmarried=family_sisters_unmarried,
-
-            profile_summary=None,
-
-            interest_hobbies="",
-
-            family_details="",
-
-            desc_flag=0,
-
+            register_id=register_id, 
+            height_id=height_id, 
+            weight=weight, 
+            bodytype=bodytype, 
+            physicalstatus=physicalstatus, 
+            complextion=complextion, 
+            mothertongue=mothertongue, 
+            can_speak=can_speak, 
+            can_speak_lang=can_speak_lang, 
+            placeofbirth=placeofbirth, 
+            star_id=star_id, 
+            raasi_id=raasi_id, 
+            gothram=gothram, 
+            qualification_id=qualification_id, 
+            discipline_id=discipline_id, 
+            occupation_id=occupation_id, 
+            designation=designation, 
+            employed_in=employed_in, 
+            employment_location=employment_location, 
+            occupation_details=occupation_details, 
+            qualification=qualification, 
+            annualincome_id=annualincome_id, 
+            annualincome=annualincome, 
+            residingstatus_code=residingstatus_code, 
+            email=email, 
+            email_display_status=0, 
+            mobile=mobile, 
+            mobile_display_status=0, 
+            countrycode=countrycode, 
+            areacode=areacode, 
+            phoneno=None, 
+            phone_display_status=0, 
+            family_values=None, 
+            family_type=None, 
+            family_status=None, 
+            family_brothers_married=family_brothers_married, 
+            family_brothers_unmarried=family_brothers_unmarried, 
+            family_sisters_married=family_sisters_married, 
+            family_sisters_unmarried=family_sisters_unmarried, 
+            profile_summary=None, 
+            interest_hobbies="", 
+            family_details="", 
+            desc_flag=0, 
             contact_person="",
-
-            contact_address="",
-
-            contact_relationship=None,
-
-            registerby=registerby,
-
-            status=1,
-
-            deleted=0,
-
-            father_occupation_id=father_occupation_id,
-
-            mother_occupation_id=mother_occupation_id,
-
-            college=college,
-
-            university=university,
-
-            placeofstudy=placeofstudy,
-
-            yearofpassing=yearofpassing,
-
-            total_work_experiance=total_work_experiance,
-
-            family_members=family_members,
-
-            family_income=family_income,
-
-            family_hometown=family_hometown,
-
-            family_livingcity=family_livingcity,
-
-            hobbies=None,
-
-            interests=None,
-
-            assets=None,
-
-            about_me=None,
-
-            interest_on_pets=None,
-
-            health_info=None,
-
-            about_physical_status=params.get(
-                "about_physical_status"
-            ),
-
-            specialization=specialization,
-
-            company_name=company_name,
-
-            father_name=father_name,
-
-            mother_name=mother_name,
-
-            other_contact_person=other_contact_person,
-
-            other_contact_person_relation=(
-                other_contact_person_relation
-            ),
-
-            other_contact_person_phonenum=(
-                other_contact_person_phonenum
-            ),
-
-            other_contact_person_address=(
-                other_contact_person_address
-            ),
+            contact_address="", 
+            contact_relationship=None, 
+            registerby=registerby, 
+            status=1, 
+            deleted=0, 
+            father_occupation_id=father_occupation_id, 
+            mother_occupation_id=mother_occupation_id, 
+            college=college, university=university, 
+            placeofstudy=placeofstudy, 
+            yearofpassing=yearofpassing, 
+            total_work_experiance=total_work_experiance, 
+            family_members=family_members, 
+            family_income=family_income, 
+            family_hometown=family_hometown, 
+            family_livingcity=family_livingcity, 
+            hobbies=None, 
+            interests=None, 
+            assets=None, 
+            about_me=None, 
+            interest_on_pets=None, 
+            health_info=None, 
+            about_physical_status=about_physical_status, 
+            specialization=specialization, 
+            company_name=company_name, 
+            father_name=father_name, 
+            mother_name=mother_name, 
+            other_contact_person=other_contact_person, 
+            other_contact_person_relation=( other_contact_person_relation ), 
+            other_contact_person_phonenum=( other_contact_person_phonenum ), 
+            other_contact_person_address=( other_contact_person_address ),
 
             # ================================
             reference1_name="",
@@ -1354,4 +1261,4 @@ def new_registartion(
             }
         }
     }
-
+    

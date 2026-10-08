@@ -10,14 +10,16 @@ def common_payload(request):
     access_token = request.session.get("access_token")
 
     if not access_token:
-        return redirect("login")
+        # return redirect("login")
+        return None, None
 
     api_type = request.session.get("api_type")
     api_authkey = request.session.get("api_authkey")
 
     if not api_type or not api_authkey:
         request.session.flush()
-        return redirect("login")
+        # return redirect("login")
+        return None, None
 
     payload = { "type": api_type, "Authkey": api_authkey, "params": {} }
     headers = { "Authorization": f"Bearer {access_token}" }

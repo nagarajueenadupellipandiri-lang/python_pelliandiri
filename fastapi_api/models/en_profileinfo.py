@@ -6,12 +6,7 @@ class EnProfileInfo(Base):
     __tablename__ = "en_profileinfo"
 
     profileinfo_id = Column(Integer, primary_key=True, autoincrement=True)
-    register_id = Column(
-        Integer,
-        ForeignKey("en_register.register_id"),
-        nullable=False,
-        index=True
-    )
+    register_id = Column( Integer, ForeignKey("en_register.register_id"), nullable=False, index=True )
     bloodgroup = Column(String(10), nullable=True)
     height_id = Column(Integer, nullable=False, index=True)
     weight = Column(Integer, nullable=True)
@@ -125,11 +120,7 @@ class EnProfileInfo(Base):
 
     other_contact_person = Column(String(50), nullable=True)
 
-    other_contact_person_relation = Column(
-        "other_contact_person_relation_to_bride/groom",
-        String(50),
-        nullable=True
-    )
+    other_contact_person_relation = Column( "other_contact_person_relation_to_bride/groom", String(50), nullable=True )
 
     other_contact_person_phonenum = Column(String(45), nullable=True)
     other_contact_person_address = Column(Text, nullable=True)
