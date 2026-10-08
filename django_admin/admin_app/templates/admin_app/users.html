@@ -651,7 +651,7 @@
                     <input type="text" id="phoneNumber" name="phoneNumber" placeholder="Enter phone number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber" required>
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion <span id="mandatoryField">*</span></label>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion123 <span id="mandatoryField">*</span></label>
                     <select id="religion" name="religion" onchange="religionSelect(this.value)" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
                         <option value="" selected>--Select--</option>
                         {% for rl in religion_list %}
@@ -668,7 +668,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-span-12 md:col-span-2" id="muslimSubsectsDiv"style="display: none;">
+                <div class="col-span-12 md:col-span-2" id="muslimSubsectsDiv" style="display: none;">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Muslim Subsects</label>
                     <select id="muslimSubsects" name="muslimSubsects" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="" selected>--Select--</option>
@@ -1085,23 +1085,33 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Employment Details </label>
-                    <select id="preference_occupation" name="preference_occupation" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">--Select--</option>
-                        {% for category in occupation_groups %}
-                            <optgroup label="{{ category.cat_name }}" >
-                            {% for occupation in category.occupations %}
-                            <option value="{{ occupation.occupation_id }}" > {{ occupation.occupation }} </option>
+                    <div class="relative">
+                        <!-- Selected Text -->
+                        <button type="button" onclick="preferenceToggleOccupationDropdown()" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none text-left flex justify-between items-center" > <span id="preference_occupationSelectedText">--Select--</span> <!-- <span>▼</span> --> </button>
+
+                        <!-- Dropdown -->
+                        <div id="preference_occupationDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-72 overflow-y-auto" >
+                            <!-- Any -->
+                            <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> <input type="checkbox" value="any" class="preference_occupation-checkbox" data-name="Any" onchange="preferenceOccupationChanged(this)" > <span>Any</span> </label>
+                            {% for category in occupation_groups %}
+                                <div class="px-4 py-2 font-semibold text-sm theme-dark-text border-t theme-border"> {{ category.cat_name }} </div>
+                                {% for occupation in category.occupations %}
+                                    <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
+                                        <input type="checkbox" name="preference_occupation[]" value="{{ occupation.occupation_id }}" class="preference_occupation-checkbox" data-name="{{ occupation.occupation }}" onchange="preferenceOccupationChanged(this)" >
+                                        <span> {{ occupation.occupation }} </span>
+                                    </label>
+                                {% endfor %}
                             {% endfor %}
-                            </optgroup>
-                        {% endfor %}
-                    </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <h1 class="block text-sm font-semibold theme-dark-text mb-2">Annual Income</h1>
+                    <h1 class="block text-sm font-semibold theme-dark-text mb-2"> Annual Income </h1>
                     <div class="flex items-center gap-3">
+                        <!-- Currency -->
                         <div class="flex items-center gap-1">
-                            <label for="preference_incomeId" class="text-sm theme-dark-text"></label>
-                            <select id="preference_incomeId" name="preference_incomeId" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                            <label for="preference_incomeId" class="text-sm theme-dark-text"> </label>
+                            <select id="preference_incomeId" name="preference_incomeId" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" onchange="preferenceChangeCurrency(this.value)" >
                                 <option value="0">Currency</option>
                                 <option value="1">INR</option>
                                 <option value="2">USD</option>
@@ -1109,16 +1119,27 @@
                                 <option value="4">POUNDS</option>
                             </select>
                         </div>
-                        <div class="flex items-center gap-1">
-                            <label for="preference_incomeValue" class="text-sm theme-dark-text"></label>
-                            <select id="preference_incomeValue" name="preference_incomeValue" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
-                                <option value="">Income</option>
-                                {% for income in income_list %}
-                                <option value="{{ income.income_id }}"> {{ income.income }} </option>
-                                {% endfor %}
-                            </select>
+
+                        <!-- Income Multiple Selection -->
+                        <div class="relative flex items-center gap-1">
+                            <button type="button" onclick="preferenceToggleIncomeDropdown()" class="w-32 px-3 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none text-left" > <span id="preference_incomeSelectedText"> Income </span> </button>
+
+                            <!-- Income Dropdown -->
+                            <div id="preference_incomeDropdown" class="hidden absolute top-full left-0 mt-1 z-50 w-56 max-h-64 overflow-y-auto rounded-xl border theme-border theme-page shadow-lg" >
+
+                            <!-- ANY -->
+                            <label id="preference_incomeAnyOption" class="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-100" style="display: none;" > <input type="checkbox" value="any" data-name="Any" class="preference_income-checkbox" onchange="preferenceIncomeChanged(this)" > <span>Any</span> </label>
+
+                            <!-- INCOME OPTIONS -->
+                            {% for income in income_list %}
+                                <label class="preference-income-option flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-100" data-currency="{{ income.currency_id }}" style="display:none;" >
+                                    <input type="checkbox" name="preference_incomeValue[]" value="{{ income.income_id }}" data-name="{{ income.income }}" data-currency="{{ income.currency_id }}" class="preference_income-checkbox" onchange="preferenceIncomeChanged(this)" >
+                                    <span> {{ income.income }} </span>
+                                </label>
+                            {% endfor %}
                         </div>
                     </div>
+                </div>
                 </div>
                 <div class="col-span-12 md:col-span-2 relative">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Country </label>
@@ -1140,7 +1161,6 @@
                     </div>
                 </div>
                 <div class="col-span-12 md:col-span-2 relative" id="preference_state_div" style="display:none;" >
-
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> State </label>
 
                     <!-- State dropdown button -->
@@ -1186,14 +1206,39 @@
                         {% endfor %}
                     </div>
                 </div>
-                <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion </label>
-                    <select id="preference_religion" name="preference_religion" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="" selected>--Select--</option>
+                <div class="col-span-12 md:col-span-2"> <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion </label>
+                    <select id="preference_religion" name="preference_religion" onchange="preferenceReligionSelect(this.value)" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="">--Select--</option>
                         {% for rl in religion_list %}
-                        <option value="{{rl.religion_id}}">{{rl.religion_name}}</option>
+                            <option value="{{ rl.religion_id }}"> {{ rl.religion_name }} </option>
                         {% endfor %}
                     </select>
+                </div>
+                <div class="col-span-12 md:col-span-2 hidden" id="preference_christianDenominationDiv" >
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Christian Denominations </label>
+                    <div class="relative">
+                        <button type="button" onclick="preferenceToggleChristianDenominationDropdown()" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none text-left" > <span id="preference_christianDenominationSelectedText"> --Select-- </span> </button>
+                        <div id="preference_christianDenominationDropdown" class="hidden absolute z-50 w-full mt-1 max-h-64 overflow-y-auto rounded-xl border theme-border theme-page shadow-lg" >
+                            <!-- ANY -->
+                            <label class="flex items-center gap-2 px-4 py-2 cursor-pointer"> <input type="checkbox" value="any" data-name="Any" class="preference_christianDenomination-checkbox" onchange="preferenceChristianDenominationChanged(this)" > <span>Any</span> </label>
+                            {% for pref_cr in christianDenomination_list %}
+                            <label class="flex items-center gap-2 px-4 py-2 cursor-pointer"> <input type="checkbox" name="preference_christianDenomination[]" value="{{ pref_cr.denomination_id }}" data-name="{{ pref_cr.denomination }}" class="preference_christianDenomination-checkbox" onchange="preferenceChristianDenominationChanged(this)" > <span>{{ pref_cr.denomination }}</span> </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2 hidden" id="preference_muslimSubsectsDiv" >
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Muslim Subsects </label>
+                    <div class="relative">
+                        <button type="button" onclick="preferenceToggleMuslimSubsectsDropdown()" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none text-left" > <span id="preference_muslimSubsectsSelectedText"> --Select-- </span> </button>
+                        <div id="preference_muslimSubsectsDropdown" class="hidden absolute z-50 w-full mt-1 max-h-64 overflow-y-auto rounded-xl border theme-border theme-page shadow-lg" >
+                        <!-- ANY -->
+                            <label class="flex items-center gap-2 px-4 py-2 cursor-pointer"> <input type="checkbox" value="any" data-name="Any" class="preference_muslimSubsects-checkbox" onchange="preferenceMuslimSubsectsChanged(this)" > <span>Any</span> </label>
+                            {% for pref_mss in muslimSubsects_list %}
+                            <label class="flex items-center gap-2 px-4 py-2 cursor-pointer"> <input type="checkbox" name="preference_muslimSubsects[]" value="{{ pref_mss.denomination_id }}" data-name="{{ pref_mss.denomination }}" class="preference_muslimSubsects-checkbox" onchange="preferenceMuslimSubsectsChanged(this)" > <span>{{ pref_mss.denomination }}</span> </label>
+                            {% endfor %}
+                        </div>
+                    </div>
                 </div>
                 <div class="col-span-12 md:col-span-2 relative">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Caste </label>
@@ -1227,7 +1272,6 @@
                 </div>
             </div>
         </div>
-
         <div class="p-5 border-t theme-border flex justify-end gap-3">
             <button type="button" onclick="closeModal('createModal')" class="px-5 py-2.5 rounded-xl theme-soft theme-primary-text font-semibold"> Cancel </button>
             <!-- <button type="button" onclick="saveSampleUser()" class="theme-primary text-white px-5 py-2.5 rounded-xl font-semibold"> Create User </button> -->
@@ -2116,7 +2160,6 @@
         }
     }
 
-
     /* =========================================================
     SHOW DISTRICTS
     ========================================================= */
@@ -2152,7 +2195,6 @@
         */
         $districtDiv.show();
     }
-
 
     /* =========================================================
     HIDE DISTRICT
@@ -2239,7 +2281,6 @@
         updatePreferenceCasteText();
     }
 
-
     function updatePreferenceCasteText() {
         const selected = [];
         $(".preference_caste-checkbox:checked")
@@ -2323,12 +2364,382 @@
             $("#educationSelectedText").text("Select Education");
         }
     }
-</script>
 
-<style>
-    #mandatoryField{
-        color:red;
+    // మీ existing functions style లోనే:
+    /* =========================================================
+    OCCUPATION DROPDOWN TOGGLE
+    ========================================================= */
+    function preferenceToggleOccupationDropdown() {
+        $("#preference_occupationDropdown")
+            .toggleClass("hidden");
     }
-</style>
+
+    /* =========================================================
+    OCCUPATION CHANGE
+    ========================================================= */
+    function preferenceOccupationChanged(element) {
+        const $checkbox = $(element);
+        const value = $checkbox.val();
+
+        /* =====================================================
+        ANY SELECTED
+        ===================================================== */
+        if (value === "any" && $checkbox.is(":checked")) {
+            $(".preference_occupation-checkbox")
+                .not('[value="any"]')
+                .prop("checked", false);
+        }
+
+        /* =====================================================
+        SPECIFIC OCCUPATION SELECTED
+        ===================================================== */
+        if (value !== "any" && $checkbox.is(":checked")) {
+            $('.preference_occupation-checkbox[value="any"]')
+                .prop("checked", false);
+        }
+
+        /* =====================================================
+        UPDATE SELECTED TEXT
+        ===================================================== */
+        updatePreferenceOccupationText();
+    }
+
+    /* =========================================================
+    UPDATE OCCUPATION TEXT
+    ========================================================= */
+    function updatePreferenceOccupationText() {
+        const selected = [];
+        $(".preference_occupation-checkbox:checked")
+            .each(function () {
+                selected.push(
+                    $(this).data("name")
+                );
+            });
+
+        /* =====================================================
+        NOTHING SELECTED
+        ===================================================== */
+        if (selected.length === 0) {
+            $("#preference_occupationSelectedText")
+                .text("Select Employment");
+        }
+
+        /* =====================================================
+        OCCUPATIONS SELECTED
+        ===================================================== */
+        else {
+            $("#preference_occupationSelectedText")
+                .text(selected.join(", "));
+        }
+    }
+    
+    /* =========================================================
+    PARTNER PREFERENCE - CHANGE CURRENCY
+    ========================================================= */
+    function preferenceChangeCurrency(currency_id) {
+
+        /* Reset all selected incomes */
+        $(".preference_income-checkbox")
+            .prop("checked", false);
+
+        /* Reset selected text */
+        $("#preference_incomeSelectedText")
+            .text("Income");
+
+        /* Hide all income options */
+        $(".preference-income-option")
+            .hide();
+
+        /* Hide Any */
+        $("#preference_incomeAnyOption")
+            .hide();
+
+
+        /* =====================================================
+        NO CURRENCY SELECTED
+        ===================================================== */
+        if (currency_id === "0" || currency_id === "") {
+            return;
+        }
+
+
+        /* =====================================================
+        CURRENCY SELECTED
+        Show Any
+        ===================================================== */
+        $("#preference_incomeAnyOption")
+            .show();
+
+
+        /* =====================================================
+        SHOW INCOMES FOR SELECTED CURRENCY
+        ===================================================== */
+        $('.preference-income-option[data-currency="' + currency_id + '"]')
+            .show();
+    }
+
+    /* =========================================================
+    TOGGLE INCOME DROPDOWN
+    ========================================================= */
+    function preferenceToggleIncomeDropdown() {
+
+        $("#preference_incomeDropdown")
+            .toggleClass("hidden");
+    }
+
+    /* =========================================================
+    INCOME CHANGE
+    ========================================================= */
+    function preferenceIncomeChanged(element) {
+
+        const $checkbox = $(element);
+        const value = $checkbox.val();
+
+
+        /* =====================================================
+        ANY SELECTED
+        ===================================================== */
+        if (value === "any" && $checkbox.is(":checked")) {
+
+            $(".preference_income-checkbox")
+                .not('[value="any"]')
+                .prop("checked", false);
+        }
+
+
+        /* =====================================================
+        SPECIFIC INCOME SELECTED
+        ===================================================== */
+        if (value !== "any" && $checkbox.is(":checked")) {
+
+            $('.preference_income-checkbox[value="any"]')
+                .prop("checked", false);
+        }
+
+
+        /* Update text */
+        updatePreferenceIncomeText();
+    }
+
+    /* =========================================================
+    UPDATE SELECTED INCOME TEXT
+    ========================================================= */
+    function updatePreferenceIncomeText() {
+
+        const selected = [];
+
+        $(".preference_income-checkbox:checked")
+            .each(function () {
+
+                selected.push(
+                    $(this).data("name")
+                );
+
+            });
+
+
+        if (selected.length === 0) {
+
+            $("#preference_incomeSelectedText")
+                .text("Income");
+
+        } else {
+
+            $("#preference_incomeSelectedText")
+                .text(selected.join(", "));
+
+        }
+    }
+
+    /* =========================================================
+    PARTNER PREFERENCE RELIGION CHANGE
+    ========================================================= */
+    function preferenceReligionSelect(religion_id) {
+
+        console.log("Religion selected:", religion_id);
+
+        /* =====================================================
+        FIRST HIDE BOTH
+        ===================================================== */
+        $("#preference_muslimSubsectsDiv")
+            .addClass("hidden");
+
+        $("#preference_christianDenominationDiv")
+            .addClass("hidden");
+
+
+        /* =====================================================
+        MUSLIM
+        ===================================================== */
+        if (String(religion_id) === "2") {
+
+            $("#preference_muslimSubsectsDiv")
+                .removeClass("hidden");
+        }
+
+
+        /* =====================================================
+        CHRISTIAN
+        ===================================================== */
+        else if (String(religion_id) === "3") {
+
+            $("#preference_christianDenominationDiv")
+                .removeClass("hidden");
+        }
+    }
+
+    /* =========================================================
+    CHRISTIAN DENOMINATION DROPDOWN
+    ========================================================= */
+    function preferenceToggleChristianDenominationDropdown() {
+
+        $("#preference_christianDenominationDropdown")
+            .toggleClass("hidden");
+    }
+
+    /* =========================================================
+    CHRISTIAN DENOMINATION CHANGE
+    ========================================================= */
+    function preferenceChristianDenominationChanged(element) {
+
+        const $checkbox = $(element);
+
+        const value = $checkbox.val();
+
+
+        /* -----------------------------------------------------
+        ANY SELECTED
+        ----------------------------------------------------- */
+        if (value === "any" && $checkbox.is(":checked")) {
+
+            $(".preference_christianDenomination-checkbox")
+                .not('[value="any"]')
+                .prop("checked", false);
+        }
+
+
+        /* -----------------------------------------------------
+        SPECIFIC DENOMINATION SELECTED
+        ----------------------------------------------------- */
+        if (value !== "any" && $checkbox.is(":checked")) {
+
+            $('.preference_christianDenomination-checkbox[value="any"]')
+                .prop("checked", false);
+        }
+
+
+        /* -----------------------------------------------------
+        UPDATE TEXT
+        ----------------------------------------------------- */
+        updatePreferenceChristianDenominationText();
+    }
+
+    /* =========================================================
+    UPDATE CHRISTIAN DENOMINATION TEXT
+    ========================================================= */
+    function updatePreferenceChristianDenominationText() {
+
+        const selected = [];
+
+        $(".preference_christianDenomination-checkbox:checked")
+            .each(function () {
+
+                selected.push(
+                    $(this).data("name")
+                );
+
+            });
+
+
+        if (selected.length === 0) {
+
+            $("#preference_christianDenominationSelectedText")
+                .text("Select Denominations");
+
+        } else {
+
+            $("#preference_christianDenominationSelectedText")
+                .text(selected.join(", "));
+
+        }
+    }
+
+    /* =========================================================
+    MUSLIM SUBSECTS DROPDOWN
+    ========================================================= */
+    function preferenceToggleMuslimSubsectsDropdown() {
+
+        $("#preference_muslimSubsectsDropdown")
+            .toggleClass("hidden");
+    }
+
+    /* =========================================================
+    MUSLIM SUBSECTS CHANGE
+    ========================================================= */
+    function preferenceMuslimSubsectsChanged(element) {
+
+        const $checkbox = $(element);
+
+        const value = $checkbox.val();
+
+
+        /* -----------------------------------------------------
+        ANY SELECTED
+        ----------------------------------------------------- */
+        if (value === "any" && $checkbox.is(":checked")) {
+
+            $(".preference_muslimSubsects-checkbox")
+                .not('[value="any"]')
+                .prop("checked", false);
+        }
+
+
+        /* -----------------------------------------------------
+        SPECIFIC SUBSECT SELECTED
+        ----------------------------------------------------- */
+        if (value !== "any" && $checkbox.is(":checked")) {
+
+            $('.preference_muslimSubsects-checkbox[value="any"]')
+                .prop("checked", false);
+        }
+
+
+        /* -----------------------------------------------------
+        UPDATE TEXT
+        ----------------------------------------------------- */
+        updatePreferenceMuslimSubsectsText();
+    }
+
+    /* =========================================================
+    UPDATE MUSLIM SUBSECTS TEXT
+    ========================================================= */
+    function updatePreferenceMuslimSubsectsText() {
+
+    const selected = [];
+
+    $(".preference_muslimSubsects-checkbox:checked")
+        .each(function () {
+
+            selected.push(
+                $(this).data("name")
+            );
+
+        });
+
+
+    if (selected.length === 0) {
+
+        $("#preference_muslimSubsectsSelectedText")
+            .text("Select Subsects");
+
+    } else {
+
+        $("#preference_muslimSubsectsSelectedText")
+            .text(selected.join(", "));
+
+    }
+}
+    </script>
+    <style> #mandatoryField{ color:red; } </style>
 </body>
 </html>
