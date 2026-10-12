@@ -4,10 +4,14 @@
     <div class="flex items-center gap-4">
         <!-- MOBILE MENU -->
         <button type="button" onclick="toggleSidebar()" class="lg:hidden w-10 h-10 rounded-xl theme-soft theme-primary-text text-xl"> ☰ </button>
-
+        
         <!-- HEADING -->
         <div>
+            {% if template == 'dashboard' %}
             <h2 class="text-xl sm:text-2xl font-bold theme-dark-text"> Dashboard </h2>
+            {% elif template == 'users' %}
+            <h2 class="text-xl sm:text-2xl font-bold theme-dark-text"> Users </h2>
+            {% endif %}
             <p class="text-xs sm:text-sm theme-secondary-text"> Welcome back, Administrator </p>
         </div>
     </div>

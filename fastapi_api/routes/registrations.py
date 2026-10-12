@@ -87,29 +87,29 @@ def get_registrations(
 
     total_registrations = total_registrations or 0
 
+    # -----------------------------------------
+    # Today count
+    # -----------------------------------------
     today_start = int(
         datetime.combine(
             date.today(),
             datetime.min.time()
         ).timestamp()
     )
-
     tomorrow_start = today_start + 86400
-
     today_registrations = query.filter(
         EngRegister.datecreated >= today_start,
         EngRegister.datecreated < tomorrow_start
     ).with_entities(
         func.count(EngRegister.register_id)
     ).scalar() or 0
-
     today_registrations = today_registrations or 0
 
-    # ========================================================
+    # -----------------------------------------
+    # This maonth count
+    # -----------------------------------------
     ist = ZoneInfo("Asia/Kolkata")
-
     now = datetime.now(ist)
-
     month_start = now.replace(
         day=1,
         hour=0,
@@ -139,7 +139,6 @@ def get_registrations(
     ).scalar() or 0
 
     this_month_registrations = this_month_registrations
-    # ============================================================
 
     total_pages = (
         (total_registrations + limit - 1) // limit
@@ -302,7 +301,6 @@ def get_registrations(
         "data": data,
     }
 
-
 @router.post("/createRegistartion")
 def new_registartion(
     request: CommonRequest,
@@ -328,9 +326,6 @@ def new_registartion(
     livingin = params.get("livingin")
     state_id = params.get("state_id")
 
-
-
-
     # =========================================================
     # 3. OPTIONAL REGISTRATION FIELDS
     # =========================================================
@@ -349,6 +344,7 @@ def new_registartion(
     maxage = params.get("maxage")
     minheight_id = params.get("minheight_id")
     maxheight_id = params.get("maxheight_id")
+    marital_status = params.get("marital_status")
     minweight = params.get("minweight")
     maxweight = params.get("maxweight")
     partner_qualification = params.get("partner_qualification", "")
@@ -993,7 +989,6 @@ def new_registartion(
         # =====================================================
 
         define_profile = EnDefineProfile(
-
             # ---------------------------------
             # Registration reference
             # ---------------------------------
@@ -1007,10 +1002,8 @@ def new_registartion(
 
             minage=minage,
             maxage=maxage,
-
             minheight_id=minheight_id,
             maxheight_id=maxheight_id,
-
             minweight=minweight,
             maxweight=maxweight,
 
@@ -1104,7 +1097,7 @@ def new_registartion(
                 if height_id is not None
                 else 1
             ),
-            marital_status=str(maritialstatus),
+            marital_status=marital_status,
             caste_more=None
         )
 
@@ -1183,8 +1176,7 @@ def new_registartion(
             "profile_info": {
                 "profileinfo_id": ( profile_info.profileinfo_id ), 
                 "register_id": ( profile_info.register_id ), 
-                "height_id": profile_info.height_id, 
-                # "weight": profile_info.weight, 
+                "height_id": profile_info.height_id,
                 "bodytype": profile_info.bodytype, 
                 "physicalstatus": ( profile_info.physicalstatus ), 
                 "complextion": ( profile_info.complextion ), 
