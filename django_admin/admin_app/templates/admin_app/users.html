@@ -2,43 +2,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard</title>
-
-<!-- ========================================= -->
-<!-- TAILWIND CSS -->
-<!-- ========================================= -->
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-    tailwind.config = {
-        theme: {
-            extend: {
-                colors: {
-                    brand: {
-                        sky: '#0284c7',
-                        blue: '#0369a1',
-                        light: '#e0f2fe',
-                        soft: '#f0f9ff'
-                    }
-                }
-            }
-        }
-    }
-</script>
-
-<!-- ========================================= -->
-<!-- DYNAMIC THEME CSS -->
-<!-- ========================================= -->
-<link rel="stylesheet" href="{% static 'admin_app/css/theme.css' %}">
-
-<!-- ========================================= -->
-<!-- LOAD SAVED THEME -->
-<!-- ========================================= -->
-<script src="{% static 'admin_app/js/theme.js' %}"> </script>
+    {% include "admin_app/includes/headScript.html" %}
 </head>
 
 <body class="theme-page theme-dark-text">
+<!-- ========================== -->
+{% if message %}
+<script>
+    alert("{{ message|escapejs }}");
+</script>
+{% endif %}
+<!-- ================================= -->
+
+
 <div class="min-h-screen flex">
 <!-- ========================================= -->
 <!-- MOBILE OVERLAY -->
@@ -83,8 +59,6 @@
                     <p class="theme-secondary-text text-sm mt-5"> This Month Users </p>
                     <h3 class="text-3xl font-bold theme-dark-text mt-1"> {{ this_month_registrations }} </h3>
                 </div>
-
-
 
                 <!-- REPORTS -->
                 <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
@@ -651,7 +625,7 @@
                     <input type="text" id="phoneNumber" name="phoneNumber" placeholder="Enter phone number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber" required>
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion123 <span id="mandatoryField">*</span></label>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion <span id="mandatoryField">*</span></label>
                     <select id="religion" name="religion" onchange="religionSelect(this.value)" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
                         <option value="" selected>--Select--</option>
                         {% for rl in religion_list %}
@@ -1053,7 +1027,7 @@
                     </div>
                 </div>
                 <div class="col-span-12 md:col-span-2 relative">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Marital Status </label>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Marital Status456 <span id="mandatoryField">*</span></label>
                     <div id="preference_maritalStatusDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleMaritalStatusDropdown()"> <span id="maritalStatusSelectedText">--Select--</span> </div>
                     
                     <div id="preference_maritalStatusDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto">
@@ -1206,7 +1180,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <div class="col-span-12 md:col-span-2"> <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion </label>
+                <div class="col-span-12 md:col-span-2"> <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion456 </label>
                     <select id="preference_religion" name="preference_religion" onchange="preferenceReligionSelect(this.value)" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="">--Select--</option>
                         {% for rl in religion_list %}
@@ -1401,162 +1375,105 @@
         }
     };
 
-
-
     /* ========================================= */
     /* VIEW USER */
     /* ========================================= */
-
     function viewUser(id) {
         const user = users[id];
         if (!user) {
             return;
         }
 
-
         document.getElementById("viewName")
             .innerText = user.name;
-
 
         document.getElementById("viewUsername")
             .innerText = user.username;
 
-
         document.getElementById("viewEmail")
             .innerText = user.email;
-
 
         document.getElementById("viewRole")
             .innerText = user.role;
 
-
         document.getElementById("viewStatus")
             .innerText = user.status;
-
 
         document.getElementById("viewAvatar")
             .innerText = user.avatar;
 
-
         openModal("viewModal");
-
     }
-
-
 
     /* ========================================= */
     /* EDIT USER */
     /* ========================================= */
-
     function editUser(id) {
-
         const user = users[id];
 
-
         if (!user) {
-
             return;
-
         }
 
 
         document.getElementById("createName")
             .value = user.name;
 
-
         document.getElementById("createEmail")
             .value = user.email;
 
-
         document.getElementById("createRole")
             .value = user.role;
-
 
         alert(
             "Edit mode for " +
             user.name +
             " will be connected to API later."
         );
-
     }
-
-
 
     /* ========================================= */
     /* DELETE USER */
     /* ========================================= */
-
     let deleteUserId = null;
-
-
     function deleteUser(id) {
-
         deleteUserId = id;
-
-
         openModal("deleteModal");
-
     }
-
-
 
     /* ========================================= */
     /* CONFIRM DELETE */
     /* ========================================= */
-
     function confirmDelete() {
-
         if (!deleteUserId) {
-
             return;
-
         }
-
 
         alert(
             "Delete user ID: " +
             deleteUserId +
             " - API connection will be added later."
         );
-
-
         closeModal("deleteModal");
-
-
         deleteUserId = null;
-
     }
-
-
 
     /* ========================================= */
     /* CREATE MODAL */
     /* ========================================= */
-
     function openCreateModal() {
-
         document.getElementById("createName")
             .value = "";
-
-
         document.getElementById("createEmail")
             .value = "";
-
-
         document.getElementById("createRole")
             .value = "Admin";
-
-
         openModal("createModal");
-
     }
-
-
 
     /* ========================================= */
     /* SAVE SAMPLE USER */
     /* ========================================= */
-
     function saveSampleUser() {
         const name = document.getElementById("createName") .value .trim();
         const email = document.getElementById("createEmail") .value .trim();
@@ -1577,48 +1494,29 @@
     /* ========================================= */
     /* MODAL OPEN */
     /* ========================================= */
-
     function openModal(id) {
-
         const modal =
             document.getElementById(id);
-
-
         modal.classList.remove("hidden");
-
         modal.classList.add("flex");
-
     }
-
-
 
     /* ========================================= */
     /* MODAL CLOSE */
     /* ========================================= */
-
     function closeModal(id) {
-
         const modal =
             document.getElementById(id);
-
-
         modal.classList.add("hidden");
-
         modal.classList.remove("flex");
-
     }
-
-
 
     /* ========================================= */
     /* CLOSE MODAL WHEN CLICK OUTSIDE */
     /* ========================================= */
-
     document.addEventListener(
         "click",
         function(event) {
-
-
             const modals =
                 [
                     "viewModal",
@@ -1626,27 +1524,19 @@
                     "deleteModal"
                 ];
 
-
             modals.forEach(function(id) {
-
                 const modal =
                     document.getElementById(id);
-
 
                 if (
                     event.target === modal
                 ) {
-
                     closeModal(id);
-
                 }
-
             });
-
         }
     );
 </script>
-<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
     /* ========================================= */
     /* print only numbers */
@@ -1688,9 +1578,8 @@
     /* ========================================= */
     function religionSelect(religion_id) {
         $("#muslimSubsectsDiv, #christianDenominationDiv, #otherCasteDiv").hide();
-        if(religion_id == 1) {
-            alert("Hindu")
-        }
+        // if(religion_id == 1) {
+        // }
         if(religion_id == 2) {
             $("#muslimSubsectsDiv").show();
         }

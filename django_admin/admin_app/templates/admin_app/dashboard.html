@@ -2,44 +2,8 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
-
-    <!-- ========================================= -->
-    <!-- TAILWIND CSS -->
-    <!-- ========================================= -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            sky: '#0284c7',
-                            blue: '#0369a1',
-                            light: '#e0f2fe',
-                            soft: '#f0f9ff'
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
-
-    <!-- ========================================= -->
-    <!-- DYNAMIC THEME CSS -->
-    <!-- ========================================= -->
-    <link rel="stylesheet" href="{% static 'admin_app/css/theme.css' %}">
-
-    <!-- ========================================= -->
-    <!-- LOAD SAVED THEME -->
-    <!-- ========================================= -->
-    <script src="{% static 'admin_app/js/theme.js' %}"></script>
-
+    {% include "admin_app/includes/headScript.html" %}
 </head>
 <body class="theme-page theme-dark-text">
 <div class="min-h-screen flex">
