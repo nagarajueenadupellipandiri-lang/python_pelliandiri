@@ -8,9 +8,9 @@ class EnProfileInfo(Base):
     profileinfo_id = Column(Integer, primary_key=True, autoincrement=True)
     register_id = Column( Integer, ForeignKey("en_register.register_id"), nullable=False, index=True )
     bloodgroup = Column(String(10), nullable=True)
-    height_id = Column(Integer, nullable=False, index=True)
+    height_id = Column(Integer, nullable=True, index=True)
     weight = Column(Integer, nullable=True)
-    bodytype = Column(String(20), nullable=False)
+    bodytype = Column(String(20), nullable=True)
     physicalstatus = Column(CHAR(1), nullable=False)
     complextion = Column(String(15), nullable=False)
 

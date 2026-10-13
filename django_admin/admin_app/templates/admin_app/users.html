@@ -6,15 +6,6 @@
 </head>
 
 <body class="theme-page theme-dark-text">
-<!-- ========================== -->
-{% if message %}
-<script>
-    alert("{{ message|escapejs }}");
-</script>
-{% endif %}
-<!-- ================================= -->
-
-
 <div class="min-h-screen flex">
 <!-- ========================================= -->
 <!-- MOBILE OVERLAY -->
@@ -589,6 +580,24 @@
 <!-- ====================================================== -->
 <!-- CREATE USER MODAL -->
 <!-- ====================================================== -->
+{% if create_user_result %}
+    <div class="alert {% if create_user_result.success %}alert-success{% else %}alert-danger{% endif %}"
+         role="alert"
+         style="display: block; padding: 15px; margin: 15px 0; border-radius: 8px;">
+
+        {{ create_user_result.message|default:"Registration completed." }}
+
+    </div>
+{% else %}
+    <div class="alert alert-info"
+         role="alert"
+         style="display: block; padding: 15px; margin: 15px 0; border-radius: 8px;">
+
+        No registration message available.
+
+    </div>
+{% endif %}
+
 <form id="createUserForm" method="post" action="{% url 'createUser' %}">
 <div id="createModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
     <div class="theme-card w-full max-w-7xl max-h-[95vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
@@ -671,7 +680,7 @@
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Marital Status <span id="mandatoryField">*</span></label>
                     <select id="maritalStatus" name="maritalStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none"  onchange="maritalStatusSelect(this.value)" required>
-                        <option value="0">--Select--</option>
+                        <option value="">--Select--</option>
                         <option value="1">UnMarried</option>
                         <option value="2">Widow/Widower</option>
                         <option value="3">Divorcee</option>
@@ -1027,7 +1036,7 @@
                     </div>
                 </div>
                 <div class="col-span-12 md:col-span-2 relative">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Marital Status456 <span id="mandatoryField">*</span></label>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Marital Status </label>
                     <div id="preference_maritalStatusDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleMaritalStatusDropdown()"> <span id="maritalStatusSelectedText">--Select--</span> </div>
                     
                     <div id="preference_maritalStatusDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto">
@@ -1180,7 +1189,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <div class="col-span-12 md:col-span-2"> <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion456 </label>
+                <div class="col-span-12 md:col-span-2"> <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion </label>
                     <select id="preference_religion" name="preference_religion" onchange="preferenceReligionSelect(this.value)" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="">--Select--</option>
                         {% for rl in religion_list %}
@@ -1375,105 +1384,162 @@
         }
     };
 
+
+
     /* ========================================= */
     /* VIEW USER */
     /* ========================================= */
+
     function viewUser(id) {
         const user = users[id];
         if (!user) {
             return;
         }
 
+
         document.getElementById("viewName")
             .innerText = user.name;
+
 
         document.getElementById("viewUsername")
             .innerText = user.username;
 
+
         document.getElementById("viewEmail")
             .innerText = user.email;
+
 
         document.getElementById("viewRole")
             .innerText = user.role;
 
+
         document.getElementById("viewStatus")
             .innerText = user.status;
+
 
         document.getElementById("viewAvatar")
             .innerText = user.avatar;
 
+
         openModal("viewModal");
+
     }
+
+
 
     /* ========================================= */
     /* EDIT USER */
     /* ========================================= */
+
     function editUser(id) {
+
         const user = users[id];
 
+
         if (!user) {
+
             return;
+
         }
 
 
         document.getElementById("createName")
             .value = user.name;
 
+
         document.getElementById("createEmail")
             .value = user.email;
 
+
         document.getElementById("createRole")
             .value = user.role;
+
 
         alert(
             "Edit mode for " +
             user.name +
             " will be connected to API later."
         );
+
     }
+
+
 
     /* ========================================= */
     /* DELETE USER */
     /* ========================================= */
+
     let deleteUserId = null;
+
+
     function deleteUser(id) {
+
         deleteUserId = id;
+
+
         openModal("deleteModal");
+
     }
+
+
 
     /* ========================================= */
     /* CONFIRM DELETE */
     /* ========================================= */
+
     function confirmDelete() {
+
         if (!deleteUserId) {
+
             return;
+
         }
+
 
         alert(
             "Delete user ID: " +
             deleteUserId +
             " - API connection will be added later."
         );
+
+
         closeModal("deleteModal");
+
+
         deleteUserId = null;
+
     }
+
+
 
     /* ========================================= */
     /* CREATE MODAL */
     /* ========================================= */
+
     function openCreateModal() {
+
         document.getElementById("createName")
             .value = "";
+
+
         document.getElementById("createEmail")
             .value = "";
+
+
         document.getElementById("createRole")
             .value = "Admin";
+
+
         openModal("createModal");
+
     }
+
+
 
     /* ========================================= */
     /* SAVE SAMPLE USER */
     /* ========================================= */
+
     function saveSampleUser() {
         const name = document.getElementById("createName") .value .trim();
         const email = document.getElementById("createEmail") .value .trim();
@@ -1494,29 +1560,48 @@
     /* ========================================= */
     /* MODAL OPEN */
     /* ========================================= */
+
     function openModal(id) {
+
         const modal =
             document.getElementById(id);
+
+
         modal.classList.remove("hidden");
+
         modal.classList.add("flex");
+
     }
+
+
 
     /* ========================================= */
     /* MODAL CLOSE */
     /* ========================================= */
+
     function closeModal(id) {
+
         const modal =
             document.getElementById(id);
+
+
         modal.classList.add("hidden");
+
         modal.classList.remove("flex");
+
     }
+
+
 
     /* ========================================= */
     /* CLOSE MODAL WHEN CLICK OUTSIDE */
     /* ========================================= */
+
     document.addEventListener(
         "click",
         function(event) {
+
+
             const modals =
                 [
                     "viewModal",
@@ -1524,19 +1609,27 @@
                     "deleteModal"
                 ];
 
+
             modals.forEach(function(id) {
+
                 const modal =
                     document.getElementById(id);
+
 
                 if (
                     event.target === modal
                 ) {
+
                     closeModal(id);
+
                 }
+
             });
+
         }
     );
 </script>
+<!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
 <script>
     /* ========================================= */
     /* print only numbers */
@@ -1579,6 +1672,7 @@
     function religionSelect(religion_id) {
         $("#muslimSubsectsDiv, #christianDenominationDiv, #otherCasteDiv").hide();
         // if(religion_id == 1) {
+        //     alert("Hindu")
         // }
         if(religion_id == 2) {
             $("#muslimSubsectsDiv").show();
