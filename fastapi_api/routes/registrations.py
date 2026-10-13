@@ -500,7 +500,6 @@ def new_registartion(
     countrycode = params.get("countrycode")
     areacode = params.get("areacode")
 
-
     # =========================================================
     # 9. OPTIONAL FAMILY FIELDS
     # =========================================================
@@ -565,8 +564,9 @@ def new_registartion(
         #     else None
         # )
 
+        # bodytype is VARCHAR, so keep it as a string
         bodytype = (
-            int(bodytype)
+            str(bodytype).strip()
             if bodytype not in [None, ""]
             else None
         )
@@ -971,10 +971,8 @@ def new_registartion(
             reference2_tele="",
             reference2_address="",
             # ==============================
-
-
+            
             is_email_verified=None,
-
             family_incometype=0
         )
 

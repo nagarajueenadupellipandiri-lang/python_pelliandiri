@@ -5,6 +5,13 @@ from django.contrib import messages
 import json
 from django.http import JsonResponse
 from django.conf import settings
+from datetime import datetime
+
+
+
+import logging
+from datetime import datetime
+
 
 def common_payload(request):
     access_token = request.session.get("access_token")
@@ -849,138 +856,25 @@ def user_view(request):
     }
 
     # Read registration result after redirect
-    create_user_result = request.session.pop(
-        "create_user_result", None
-    )
-
-    if create_user_result:
-        data.update(create_user_result)
-
+    create_user_result = request.session.pop( "create_user_result", None )
+    # print("create_user_result is", create_user_result)
+    data["create_user_result"] = create_user_result
     return render( request, "admin_app/users.html", data )
 
-# def createUser(request):
-
-#     # Display the registration form
-#     if request.method == "GET": 
-#         return render(request, "admin_app/users.html")
-
-#     # Allow only POST requests for registration
-
-#     if request.method != "POST": 
-#         return JsonResponse({ 
-#             "status": False, 
-#             "message": "Only POST method is allowed" }, 
-#             status=405
-#         )
-
-#     try: 
-#         # Get common payload and authentication headers 
-#         payload, headers = common_payload(request)
-
-#         # Get values submitted from the HTML template 
-#         data = request.POST
-#         # print("data is ", data)
-
-#         # Prepare the registration parameters 
-#         registration_params = {
-#             "name": data.get("createName", "").strip(), 
-#             "gender": data.get("gender", ""), 
-#             "dob": data.get("dob", ""), 
-#             "maritialstatus": data.get("maritialstatus", ""), 
-#             "religionid": data.get("religionid", ""), 
-#             "casteid": data.get("casteid", ""), 
-#             "citizenship": data.get("citizenship", ""), 
-#             "livingin": data.get("livingin", ""), 
-#             "stateid": data.get("state_id", ""),
-
-#             # Contact details 
-#             "email": data.get("createEmail", "").strip(), 
-#             "mobile": data.get("phoneNumber", "").strip(), 
-#             "countrycode": data.get("countrycode", "91"),
-
-#             # Optional fields 
-#             "tob": data.get("tob", ""), 
-#             "childstatus": data.get("childstatus", ""), 
-#             "denomination": data.get("denomination", 0), 
-#             "subcaste": data.get("subcaste", ""), 
-#             "stateother": data.get("stateother", ""), 
-#             "registerby": data.get("registerby", "Self"), 
-#         }
-
-#         # Attach form data to the common API payload 
-#         payload["params"] = registration_params
-
-#         # Send registration details to FastAPI 
-#         response = requests.post( 
-#                     f"{settings.FASTAPI_BASE_URL}/registrations/createRegistartion", 
-#                     json=payload, 
-#                     headers=headers, 
-#                     timeout=10 
-#                 )
-
-#         # Parse the FastAPI response 
-#         try: 
-#             apidata = response.json() 
-        
-#         except ValueError: 
-#             apidata = { 
-#                 "status": False, 
-#                 "message": "Invalid JSON response from FastAPI" 
-#             }
-
-#         # If this view is called by an HTML form, 
-#         # display the API response on the same template 
-#         if apidata.get("status") is True: 
-#             return render(request, "createuser.html", 
-#                 { 
-#                     "success": True, 
-#                     "message": apidata.get( "message", 
-#                     "Registration created successfully" ), 
-#                     # "apidata": api_data.get("data", {}) 
-#                     "apidata": apidata.get("data", {}) 
-#                 }
-#             )
-
-#             return render(request, "createuser.html", 
-#                 { 
-#                     "success": False, 
-#                     "message": apidata.get( "message", "Registration failed" ), 
-#                     "apidata": apidata.get("data", {}) 
-#                 }
-#             )
-
-#     except requests.RequestException as e: 
-#         print("FASTAPI REQUEST ERROR:", str(e))
-#         return render(request, "admin_app/users.html", 
-#             { 
-#                 "success": False, 
-#                 "message": "Unable to connect to registration API" 
-#             }
-#         )
-
-#     except Exception as e: 
-#         print("CREATE USER ERROR:", str(e))
-#         return render(request, "admin_app/users.html", 
-#             { "success": False,
-#               "message": "An unexpected error occurred" 
-#             }
-#         )
-
+# maritalStatus
+logger = logging.getLogger(__name__)
 def createUser(request):
 
-    # GET: Use existing user_view to load all dropdown data
+    # GET: Load existing dropdown data
     if request.method == "GET":
         return user_view(request)
 
-    # Allow only POST requests
+    # Allow only POST
     if request.method != "POST":
-        return JsonResponse(
-            {
-                "status": False,
-                "message": "Only POST method is allowed"
-            },
-            status=405
-        )
+        return JsonResponse({
+            "status": False,
+            "message": "Only POST method is allowed"
+        }, status=405)
 
     try:
         payload, headers = common_payload(request)
@@ -990,20 +884,48 @@ def createUser(request):
             return redirect("login")
 
         data = request.POST
-        
-        preference_marital_status = data.getlist( "preference_marital_status[]" )
-        
+
+        dob = data.get("dob", "").strip()
+        dob_date = datetime.strptime(dob, "%Y-%m-%d").date()
+        maritialstatus = data.get("maritalStatus", "").strip()
+
+        preference_marital_status = data.getlist( "preference_marital_status" )
+        if isinstance(preference_marital_status, list):
+            preference_marital_status = ",".join(
+                str(value) for value in preference_marital_status
+            )
+        elif preference_marital_status is not None:
+            preference_marital_status = str(preference_marital_status)
+
+        height_value = data.get("height_id", "").strip()
+
+        if height_value:
+            try:
+                height_id = int(height_value)
+            except (TypeError, ValueError):
+                request.session["create_user_result"] = {
+                    "success": False,
+                    "message": "Invalid height value."
+                }
+                return redirect("createUser")
+        else:
+            height_id = 0
+
         registration_params = {
             "name": data.get("createName", "").strip(),
             "gender": data.get("gender", ""),
-            "dob": data.get("dob", ""),
-            "maritial_status": data.get("maritialstatus", ""),
+            "dob": dob_date.strftime("%Y-%m-%d"),
+
+            "maritialstatus": int(maritialstatus),
+            "marital_status": preference_marital_status,
+
             "religion_id": data.get("religion", ""),
             "caste_id": data.get("caste", ""),
+            "height_id": height_id,
             "citizenship": 1,
-            # "livingin": data.get("livingin", ""),
             "livingin": 1,
-            "stateid": data.get("state_id", ""),
+            "bodytype": None,
+            "state_id": data.get("permanentState", ""),
             "email": data.get("createEmail", "").strip(),
             "mobile": data.get("phoneNumber", "").strip(),
             "countrycode": data.get("countrycode", "91"),
@@ -1013,9 +935,10 @@ def createUser(request):
             "subcaste": data.get("subcaste", ""),
             "stateother": data.get("stateother", ""),
             "registerby": data.get("registerby", "Self"),
-            "maritialstatus": data.getlist( "preference_marital_status[]" ),
-            # "":data.get("preference_religion", ""),
         }
+
+        print("REGISTRATION PARAMS:", registration_params)
+        # print("DOB SENT TO API:", registration_params["dob"])
 
         payload["params"] = registration_params
 
@@ -1034,25 +957,34 @@ def createUser(request):
                 "message": "Invalid JSON response from FastAPI"
             }
 
-        # Store result in session so user_view can load dropdowns
+        print("API STATUS CODE:", response.status_code)
+        print("API RESPONSE:", apidata)
+
+        success = (
+            response.ok
+            and apidata.get("status") is True
+        )
+
+        # logger.info("Registration API status: %s", response.status_code)
+        # logger.info("Registration API success: %s", success)
+        print("REGISTRATION SUCCESS:", success)
+
         request.session["create_user_result"] = {
-            "success": (
-                response.ok and apidata.get("status") is True
-            ),
+            "success": success,
             "message": apidata.get(
                 "message",
                 "Registration created successfully"
-                if response.ok and apidata.get("status") is True
-                else "Registration failed"
+                if success else "Registration failed"
             ),
             "apidata": apidata.get("data", {})
         }
 
-        # Redirect to the existing page
+        request.session.modified = True
+
         return redirect("createUser")
 
-    except requests.RequestException as e:
-        print("FASTAPI REQUEST ERROR:", str(e))
+    except requests.RequestException:
+        logger.exception("FastAPI registration request failed")
 
         request.session["create_user_result"] = {
             "success": False,
@@ -1061,8 +993,8 @@ def createUser(request):
 
         return redirect("createUser")
 
-    except Exception as e:
-        print("CREATE USER ERROR:", str(e))
+    except Exception:
+        logger.exception("Unexpected error in createUser")
 
         request.session["create_user_result"] = {
             "success": False,
