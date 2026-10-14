@@ -26,10 +26,10 @@ class EngRegister(Base):
     religiousvalue = Column(Integer, nullable=True)
 
     citizenship = Column(Integer, nullable=False)
-    livingin = Column(Integer, nullable=False)
+    livingin = Column(Integer, nullable=True, default=None)
 
     state_id = Column(Integer, nullable=False)
-    state_other = Column(String(50), nullable=False)
+    state_other = Column(Integer, nullable=True, default="")
 
     permnt_state_id = Column(Integer, nullable=True)
     residing_city = Column(String(1000), nullable=True)

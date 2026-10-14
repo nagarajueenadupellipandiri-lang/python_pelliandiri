@@ -43,7 +43,7 @@ class EnProfileInfo(Base):
     annualincome_id = Column(Integer, nullable=False, index=True)
     annualincome = Column(String(50), nullable=False)
 
-    residingstatus_code = Column(CHAR(1), nullable=False)
+    residingstatus_code = Column(CHAR(1), nullable=False, default="")
 
     email = Column(String(100), nullable=True, index=True)
     email_display_status = Column(Integer, nullable=False, default=0)
@@ -51,7 +51,7 @@ class EnProfileInfo(Base):
     mobile = Column(String(20), nullable=False, index=True)
     mobile_display_status = Column(Integer, nullable=False, default=0)
 
-    countrycode = Column(String(10), nullable=False)
+    countrycode = Column(String(10), nullable=False, default="")
     areacode = Column(Integer, nullable=True)
     phoneno = Column(String(10), nullable=True)
     phone_display_status = Column(Integer, nullable=False, default=0)
