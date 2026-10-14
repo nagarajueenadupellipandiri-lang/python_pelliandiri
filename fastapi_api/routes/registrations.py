@@ -210,10 +210,9 @@ def get_registrations(
 
             # en_profileinfo
             "profileinfo_id": profile.profileinfo_id if profile else None,
-
             "bloodgroup": profile.bloodgroup if profile else None,
             "height_id": profile.height_id if profile else None,
-            # "weight": profile.weight if profile else None,
+            "weight": profile.weight if profile else None,
             "bodytype": profile.bodytype if profile else None,
             "physicalstatus": profile.physicalstatus if profile else None,
             "complextion": profile.complextion if profile else None,
@@ -313,53 +312,111 @@ def new_registartion(
     validate_common_request(request, "login")
     params = request.params or {}
 
-    # =========================================================
-    # 2. REQUIRED REGISTRATION FIELDS
-    # =========================================================
     name = params.get("name")
     gender = params.get("gender")
     dob = params.get("dob")
-    maritialstatus = params.get("maritialstatus")
+    mobile = params.get("mobile")
     religion_id = params.get("religion_id")
     caste_id = params.get("caste_id")
-    citizenship = params.get("citizenship")
-    livingin = params.get("livingin")
-    state_id = params.get("state_id")
-
-    # =========================================================
-    # 3. OPTIONAL REGISTRATION FIELDS
-    # =========================================================
-    tob = params.get("tob")
-    childstatus = params.get("childstatus")
     denomination = params.get("denomination", 0)
     subcaste = params.get("subcaste")
-    state_other = params.get("state_other", "")
+    maritialstatus = params.get("maritialstatus")
+    childstatus = params.get("childstatus")
+    tob = params.get("tob")
+    email = params.get("email")
+    height_id = params.get("height_id")
     registerby = params.get("registerby")
-    offline_empid=params.get( "offline_empid" )
+    offline_empid = params.get( "offline_empid" )
+    physicalstatus = params.get("physicalstatus")
+    about_physical_status = params.get("about_physical_status")
 
-    # =========================================================
-    # PARTNER PREFERENCE FIELDS
-    # =========================================================
+    qualification_id = params.get("qualification_id")
+    qualification = params.get("qualification")
+    specialization = params.get( "specialization" ) 
+    placeofstudy = params.get( "placeofstudy" ) 
+    yearofpassing = params.get( "yearofpassing" ) 
+
+    occupation_id = params.get("occupation_id")
+    designation = params.get("designation")
+    company_name = params.get( "company_name" )
+    total_work_experiance = params.get( "total_work_experiance" ) 
+    employment_location = params.get("employment_location")
+    annualincome_id = params.get("annualincome_id")
+    annualincome = params.get("annualincome")
+    
+    father_name = params.get( "father_name" )
+    father_occupation_id = params.get( "father_occupation_id" )
+    mother_name = params.get( "mother_name" )
+    mother_occupation_id = params.get( "mother_occupation_id" )
+    family_brothers_married = int(params.get("family_brothers_married") or 0)
+    family_brothers_unmarried = int(params.get("family_brothers_unmarried") or 0)
+    family_sisters_married = int(params.get("family_sisters_married") or 0)
+    family_sisters_unmarried = int(params.get("family_sisters_unmarried") or 0)
+    family_livingcity = params.get( "family_livingcity" )
+    family_hometown = params.get( "family_hometown" )
+
+    star_id = params.get("star_id")
+    raasi_id = params.get("raasi_id")
+    gothram = params.get("gothram")
+
+    person_citizenship = params.get("person_citizenship")
+    livingin = params.get("livingin")
+
+    # not mentioned params at form
+    weight = params.get("weight")
+    bodytype = params.get("bodytype")
+    mothertongue = params.get("complextion")
+    complextion = params.get("complextion")
+    can_speak = params.get("can_speak")
+    can_speak_lang = params.get("can_speak_lang")
+    placeofbirth = params.get("placeofbirth")
+    employed_in = params.get("employed_in")
+    occupation_details = params.get("occupation_details")
+    lifestyle = params.get("lifestyle")
+    partner_diet = params.get("partner_diet")
+    partner_smoke = params.get("partner_smoke")
+    partner_family_type = params.get("partner_family_type")
+    partner_hobbiles = params.get("partner_hobbiles")
+    partner_interests = params.get("partner_interests")
+    partner_interests_pets = params.get("partner_interests_pets")
+    partner_interest_assets = params.get("partner_interest_assets")
+    minweight = params.get("minweight")
+    maxweight = params.get("maxweight")
+    partnerdrink = params.get("partnerdrink")
+    residingstatus_code = params.get("residingstatus_code")
+    state_other = params.get("state_other")
+    discipline_id = params.get("discipline_id")
+
+    # person perminet address
+    temp_country = params.get( "temp_country" ) 
+    temp_state = params.get( "temp_state" ) 
+    temp_city = params.get( "temp_city" ) 
+    temp_town = params.get( "temp_town" )
+    
+    # person currentt address
+    permnt_country_id = params.get("citizenship")
+    state_id = params.get("state_id")
+    permt_residing_city = params.get( "residing_city" ) 
+    permnt_village = params.get("town")
+
+    # Contact Information
+    other_contact_person_phonenum = params.get( "other_contact_person_phonenum" ) 
+    alternative_phone_number= params.get("phone")
+
+    # partner preferrence
     minage = params.get("minage")
     maxage = params.get("maxage")
     minheight_id = params.get("minheight_id")
     maxheight_id = params.get("maxheight_id")
     marital_status = params.get("marital_status")
-    minweight = params.get("minweight")
-    maxweight = params.get("maxweight")
+    partner_qualification_id = params.get("partner_qualification_id")
     partner_qualification = params.get("partner_qualification", "")
-    partner_diet = params.get("partnerdiet")
-    partner_smoke = params.get("partnersmoke")
-    partner_drink = params.get("partnerdrink", 0)
-    religiousvalue = params.get("religiousvalue")
-    partner_family_type = params.get("partner_family_type")
+    partner_country_id = params.get("partner_country_id")
+    partner_state_id = params.get("partner_state_id")
+    partner_residing_city = params.get("partner_residing_city")
+    partner_religion_id = params.get("partner_religion_id")
+    partner_caste_id = params.get("partner_caste_id")
     willing_tomarryothres_cast = params.get( "willing_tomarryothres_cast" )
-    partner_hobbiles = params.get("partner_hobbiles")
-    partner_interests = params.get("partner_interests")
-    partner_interests_pets = params.get( "partner_interests_pets" )
-    partner_interest_assets = params.get( "partner_interest_assets" )
-
-    lifestyle = params.get("lifestyle")
     otherinfo = params.get("otherinfo", "")
 
     # =========================================================
@@ -372,8 +429,6 @@ def new_registartion(
         "maritialstatus": maritialstatus,
         "religion_id": religion_id,
         "caste_id": caste_id,
-        "citizenship": citizenship,
-        "livingin": livingin,
         "state_id": state_id,
     }
 
@@ -391,9 +446,7 @@ def new_registartion(
         ).date()
 
         today = date.today()
-
         age = today.year - birth_date.year
-
         if (today.month, today.day) < (
             birth_date.month,
             birth_date.day
@@ -436,9 +489,6 @@ def new_registartion(
         religion_id = int(religion_id)
         denomination = int(denomination)
         caste_id = int(caste_id)
-        citizenship = int(citizenship)
-        livingin = int(livingin)
-        state_id = int(state_id)
         maritialstatus = int(maritialstatus)
 
     except (TypeError, ValueError):
@@ -446,107 +496,6 @@ def new_registartion(
             "status": False,
             "message": "Invalid numeric value in required fields"
         }
-
-    # =========================================================
-    # 8. OPTIONAL PROFILE FIELDS
-    # =========================================================
-    height_id = params.get("height_id")
-    weight = params.get("weight")
-
-    if weight in [None, ""]:
-        weight = 0
-    else:
-        try:
-            weight = int(weight)
-        except (TypeError, ValueError):
-            return {
-                "status": False,
-                "message": "weight must be a number"
-            }
-            
-    bodytype = params.get("bodytype")
-    physicalstatus = params.get("physicalstatus")
-    about_physical_status = params.get("about_physical_status")
-    complextion = params.get("complextion")
-
-    mothertongue = params.get("mothertongue")
-    can_speak = params.get("can_speak")
-    can_speak_lang = params.get("can_speak_lang")
-
-    placeofbirth = params.get("placeofbirth")
-
-    star_id = params.get("star_id")
-    raasi_id = params.get("raasi_id")
-    gothram = params.get("gothram")
-
-    qualification_id = params.get("qualification_id")
-    discipline_id = params.get("discipline_id")
-    occupation_id = params.get("occupation_id")
-
-    designation = params.get("designation")
-    employed_in = params.get("employed_in")
-    employment_location = params.get("employment_location")
-    occupation_details = params.get("occupation_details")
-
-    qualification = params.get("qualification")
-
-    annualincome_id = params.get("annualincome_id")
-    annualincome = params.get("annualincome")
-
-    residingstatus_code = params.get("residingstatus_code")
-
-    email = params.get("email")
-    mobile = params.get("mobile")
-    countrycode = params.get("countrycode")
-    areacode = params.get("areacode")
-
-    # =========================================================
-    # 9. OPTIONAL FAMILY FIELDS
-    # =========================================================
-    family_brothers_married = int(params.get("family_brothers_married") or 0)
-    family_brothers_unmarried = int(params.get("family_brothers_unmarried") or 0)
-    family_sisters_married = int(params.get("family_sisters_married") or 0)
-    family_sisters_unmarried = int(params.get("family_sisters_unmarried") or 0)
-
-
-    family_livingcity = params.get( "family_livingcity" )
-    family_hometown = params.get( "family_hometown" )
-    family_income = params.get( "family_income" )
-    family_members = params.get( "family_members" )
-    # =========================================================
-    # 10. OPTIONAL EDUCATION / WORK FIELDS
-    # =========================================================
-    father_occupation_id = params.get( "father_occupation_id" )
-    mother_occupation_id = params.get( "mother_occupation_id" )
-    father_name = params.get( "father_name" )
-    mother_name = params.get( "mother_name" ) 
-    college = params.get( "college" ) 
-    university = params.get( "university" ) 
-    placeofstudy = params.get( "placeofstudy" ) 
-    yearofpassing = params.get( "yearofpassing" ) 
-    total_work_experiance = params.get( "total_work_experiance" ) 
-    specialization = params.get( "specialization" ) 
-    company_name = params.get( "company_name" )
-
-    # =========================================================
-    # 11. OPTIONAL CONTACT FIELDS
-    # =========================================================
-    other_contact_person = params.get( "other_contact_person" )
-    other_contact_person_relation = params.get( "other_contact_person_relation" )
-    other_contact_person_phonenum = params.get( "other_contact_person_phonenum" ) 
-    other_contact_person_address = params.get( "other_contact_person_address" )
-
-    # =========================================================
-    # 12. OPTIONAL LOCATION FIELDS
-    # =========================================================
-    permnt_state_id = params.get( "permnt_state_id" ) 
-    residing_city = params.get( "residing_city" ) 
-    residing_other_city = params.get( "residing_other_city" ) 
-    temp_country = params.get( "temp_country" ) 
-    temp_state = params.get( "temp_state" ) 
-    temp_city = params.get( "temp_city" ) 
-    temp_town = params.get( "temp_town" ) 
-    temp_pincode = params.get( "temp_pincode" )
 
     # =========================================================
     # 13. OPTIONAL NUMERIC CONVERSION
@@ -558,46 +507,83 @@ def new_registartion(
             else None
         )
 
-        # weight = (
-        #     int(weight)
-        #     if weight not in [None, ""]
-        #     else None
-        # )
-
-        # bodytype is VARCHAR, so keep it as a string
-        bodytype = (
-            str(bodytype).strip()
-            if bodytype not in [None, ""]
+        residingstatus_code = (
+            int(residingstatus_code)
+            if residingstatus_code not in [None, ""]
             else None
         )
+
+        if weight is None or str(weight).strip() == "":
+            weight = 0
+        else:
+            weight = int(weight)
+
+        if minweight is None or str(minweight).strip() == "":
+            minweight = 0
+        else:
+            minweight = int(minweight)
+        
+        if maxweight is None or str(maxweight).strip() == "":
+            maxweight = 0
+        else:
+            maxweight = int(maxweight)
+
+        if minweight is None or str(minweight).strip() == "":
+            minweight = 0
+        else:
+            minweight = int(minweight)
+        
+        if partnerdrink is None or str(partnerdrink).strip() == "":
+            partnerdrink = 0
+        else:
+            partnerdrink = int(partnerdrink)
+
+        print("DEBUG partnerdrink:", repr(partnerdrink))
+
+        if bodytype is None:
+            bodytype = ""
+        else:
+            bodytype = str(bodytype).strip()
+
+        if complextion is None:
+            complextion = ""
+        else:
+            complextion = str(complextion).strip()
+
+        if mothertongue is None or str(mothertongue).strip() == "":
+            mothertongue = 0
+        else:
+            mothertongue = int(mothertongue)   
+
+        if can_speak is None:
+            can_speak = ""
+        else:
+            can_speak = str(can_speak).strip()    
+
+        if  can_speak_lang is None:
+            can_speak_lang = ""
+        else:
+            can_speak_lang = str(can_speak_lang).strip()   
+
+        if  placeofbirth is None:
+            placeofbirth = ""
+        else:
+            placeofbirth = str(placeofbirth).strip()
+
+        if  employed_in is None:
+            employed_in = ""
+        else:
+            employed_in = str(employed_in).strip()
+
+        if  occupation_details is None:
+            occupation_details = ""
+        else:
+            occupation_details = str(occupation_details).strip()
+            
 
         physicalstatus = (
             int(physicalstatus)
             if physicalstatus not in [None, ""]
-            else None
-        )
-
-        complextion = (
-            int(complextion)
-            if complextion not in [None, ""]
-            else None
-        )
-
-        mothertongue = (
-            int(mothertongue)
-            if mothertongue not in [None, ""]
-            else None
-        )
-
-        can_speak = (
-            int(can_speak)
-            if can_speak not in [None, ""]
-            else None
-        )
-
-        can_speak_lang = (
-            int(can_speak_lang)
-            if can_speak_lang not in [None, ""]
             else None
         )
 
@@ -631,17 +617,17 @@ def new_registartion(
             else None
         )
 
+        if state_other is None:
+            state_other = ""
+        else:
+            state_other = str(state_other).strip()
+
         annualincome_id = (
             int(annualincome_id)
             if annualincome_id not in [None, ""]
             else None
         )
 
-        residingstatus_code = (
-            int(residingstatus_code)
-            if residingstatus_code not in [None, ""]
-            else None
-        )
 
         father_occupation_id = (
             int(father_occupation_id)
@@ -691,40 +677,11 @@ def new_registartion(
             else height_id or 1
         )
 
-        minweight = (
-            int(minweight)
-            if minweight not in [None, ""]
-            else 0
-        )
-
-        maxweight = (
-            int(maxweight)
-            if maxweight not in [None, ""]
-            else 0
-        )
-
-        religiousvalue = (
-            int(religiousvalue)
-            if religiousvalue not in [None, ""]
-            else 0
-        )
-
-        partner_drink = (
-            int(partner_drink)
-            if partner_drink not in [None, ""]
-            else 0
-        )
-
-
     except (TypeError, ValueError):
         return {
             "status": False,
             "message": "Invalid optional numeric value"
         }
-
-    # =========================================================
-    # 14. EMAIL
-    # =========================================================
 
     email = (
         str(email).strip()
@@ -791,7 +748,6 @@ def new_registartion(
     # 17. DATABASE INSERT
     # =========================================================
     try:
-
         registration = EngRegister(
             profile_id=temporary_profile_id,
             name=name,
@@ -805,13 +761,12 @@ def new_registartion(
             maritialstatus=maritialstatus,
             childstatus=childstatus,
             religion_id=religion_id,
+            citizenship=int(person_citizenship) if person_citizenship not in [None, ""] else None,
+            state_id=state_id,
+            livingin=1,
             denomination=denomination,
             caste_id=caste_id,
             subcaste=subcaste,
-            citizenship=citizenship,
-            livingin=livingin,
-            state_id=state_id,
-            state_other=state_other,
             hasphoto=0,
             hasvideo=0,
             isprotected=0,
@@ -859,7 +814,6 @@ def new_registartion(
             temp_state=temp_state,
             temp_city=temp_city,
             temp_town=temp_town,
-            temp_pincode=temp_pincode,
             pincode=None,
             town=None,
             is_temp_perment_same=0,
@@ -885,7 +839,6 @@ def new_registartion(
         # =====================================================
         # 19. CREATE PROFILE INFO
         # =====================================================
-
         profile_info = EnProfileInfo(
             register_id=register_id, 
             height_id=height_id, 
@@ -910,13 +863,10 @@ def new_registartion(
             qualification=qualification, 
             annualincome_id=annualincome_id, 
             annualincome=annualincome, 
-            residingstatus_code=residingstatus_code, 
             email=email, 
             email_display_status=0, 
             mobile=mobile, 
             mobile_display_status=0, 
-            countrycode=countrycode, 
-            areacode=areacode, 
             phoneno=None, 
             phone_display_status=0, 
             family_values=None, 
@@ -938,12 +888,9 @@ def new_registartion(
             deleted=0, 
             father_occupation_id=father_occupation_id, 
             mother_occupation_id=mother_occupation_id, 
-            college=college, university=university, 
             placeofstudy=placeofstudy, 
             yearofpassing=yearofpassing, 
             total_work_experiance=total_work_experiance, 
-            family_members=family_members, 
-            family_income=family_income, 
             family_hometown=family_hometown, 
             family_livingcity=family_livingcity, 
             hobbies=None, 
@@ -957,12 +904,8 @@ def new_registartion(
             company_name=company_name, 
             father_name=father_name, 
             mother_name=mother_name, 
-            other_contact_person=other_contact_person, 
-            other_contact_person_relation=( other_contact_person_relation ), 
             other_contact_person_phonenum=( other_contact_person_phonenum ), 
-            other_contact_person_address=( other_contact_person_address ),
 
-            # ================================
             reference1_name="",
             reference1_tele="",
             reference1_address="",
@@ -970,10 +913,7 @@ def new_registartion(
             reference2_name="",
             reference2_tele="",
             reference2_address="",
-            # ==============================
-            
             is_email_verified=None,
-            family_incometype=0
         )
 
         # =====================================================
@@ -985,7 +925,6 @@ def new_registartion(
         # =====================================================
         # 20. CREATE DEFINE PROFILE / PARTNER PREFERENCE
         # =====================================================
-
         define_profile = EnDefineProfile(
             # ---------------------------------
             # Registration reference
@@ -997,27 +936,15 @@ def new_registartion(
             # Basic preference
             # ---------------------------------
             gender=gender,
-
             minage=minage,
             maxage=maxage,
             minheight_id=minheight_id,
             maxheight_id=maxheight_id,
             minweight=minweight,
             maxweight=maxweight,
-
-            # ---------------------------------
-            # Appearance
-            # ---------------------------------
+            partnerdrink=partnerdrink,
             complextion=complextion,
-
-            # ---------------------------------
-            # Education / Occupation
-            # ---------------------------------
-            qualification_id=(
-                str(qualification_id)
-                if qualification_id is not None
-                else None
-            ),
+            qualification_id = partner_qualification_id,
             partner_qualification=partner_qualification,
             occupation_id=(
                 str(occupation_id)
@@ -1025,27 +952,15 @@ def new_registartion(
                 else None
             ),
 
-            # ---------------------------------
-            # Religion / Caste
-            # ---------------------------------
+            # ==========================================================
+            citizenship = partner_country_id,
+            state_id = partner_state_id,
+            residing_city = partner_residing_city,
+            # =============================================================
             religion_id=religion_id,
             denomination=denomination,
-            religiousvalue=religiousvalue,
             caste_id=caste_id,
             subcaste=subcaste,
-
-            # ---------------------------------
-            # Location / Citizenship
-            # ---------------------------------
-            citizenship=str(citizenship),
-            state_id=(
-                str(state_id)
-                if state_id is not None
-                else None
-            ),
-            state_other=state_other,
-            residing_city=residing_city,
-            residing_other_city=residing_other_city,
 
             # ---------------------------------
             # Income
@@ -1063,7 +978,6 @@ def new_registartion(
             lifestyle=lifestyle,
             partnerdiet=partner_diet,
             partnersmoke=partner_smoke,
-            partnerdrink=partner_drink,
 
             # ---------------------------------
             # Other information
@@ -1083,6 +997,7 @@ def new_registartion(
             partner_interests=partner_interests, 
             partner_interests_pets=( partner_interests_pets ), 
             partner_interest_assets=( partner_interest_assets ),
+
             # ---------------------------------
             # System fields
             # ---------------------------------
@@ -1100,10 +1015,13 @@ def new_registartion(
         )
 
         db.add(define_profile)
-        db.commit()
+        db.flush()
+
         db.refresh(registration)
         db.refresh(profile_info)
         db.refresh(define_profile)
+
+        db.commit()
 
     except Exception as e:
         db.rollback()
@@ -1116,7 +1034,6 @@ def new_registartion(
     # =========================================================
     # 21. RESPONSE
     # =========================================================
-
     return {
         "status": True,
         "message": "Registration created successfully",
@@ -1136,9 +1053,6 @@ def new_registartion(
                 "caste_id": registration.caste_id,
                 "subcaste": registration.subcaste,
                 "citizenship": registration.citizenship,
-                "livingin": registration.livingin,
-                "state_id": registration.state_id,
-                "state_other": registration.state_other,
                 "hasphoto": registration.hasphoto,
                 "hasvideo": registration.hasvideo,
                 "isprotected": registration.isprotected,
@@ -1155,11 +1069,11 @@ def new_registartion(
                 "loginstatus": registration.loginstatus,
                 "register_from": registration.register_from,
                 "privacy_access": registration.privacy_access,
+                "state_id": registration.state_id,
                 "temp_country": registration.temp_country,
                 "temp_state": registration.temp_state,
                 "temp_city": registration.temp_city,
                 "temp_town": registration.temp_town,
-                "temp_pincode": registration.temp_pincode,
                 "pincode": registration.pincode,
                 "town": registration.town,
                 "is_temp_perment_same": ( registration.is_temp_perment_same ),
@@ -1195,9 +1109,8 @@ def new_registartion(
                 "qualification": ( profile_info.qualification ), 
                 "annualincome_id": ( profile_info.annualincome_id ), 
                 "annualincome": ( profile_info.annualincome ), 
-                "residingstatus_code": ( profile_info.residingstatus_code ), 
-                "email": profile_info.email, "mobile": profile_info.mobile, 
-                "countrycode": ( profile_info.countrycode ), 
+                "email": profile_info.email, 
+                "mobile": profile_info.mobile, 
                 "family_brothers_married": ( profile_info.family_brothers_married ), 
                 "family_brothers_unmarried": ( profile_info.family_brothers_unmarried ), 
                 "family_sisters_married": ( profile_info.family_sisters_married ), 
@@ -1205,25 +1118,18 @@ def new_registartion(
                 "registerby": profile_info.registerby, 
                 "father_occupation_id": ( profile_info.father_occupation_id ), 
                 "mother_occupation_id": ( profile_info.mother_occupation_id ), 
-                "college": profile_info.college, "university": profile_info.university, 
                 "placeofstudy": ( profile_info.placeofstudy ), 
                 "yearofpassing": ( profile_info.yearofpassing ), 
                 "total_work_experiance": ( profile_info.total_work_experiance ), 
-                "family_members": ( profile_info.family_members ), 
-                "family_income": ( profile_info.family_income ), 
                 "family_hometown": ( profile_info.family_hometown ), 
                 "family_livingcity": ( profile_info.family_livingcity ), 
                 "specialization": ( profile_info.specialization ), 
                 "company_name": ( profile_info.company_name ), 
                 "father_name": ( profile_info.father_name ), 
                 "mother_name": ( profile_info.mother_name ), 
-                "other_contact_person": ( profile_info.other_contact_person ), 
-                "other_contact_person_relation": ( profile_info.other_contact_person_relation ), 
                 "other_contact_person_phonenum": ( profile_info.other_contact_person_phonenum ), 
-                "other_contact_person_address": ( profile_info.other_contact_person_address ), 
                 "about_physical_status": ( profile_info.about_physical_status ), 
                 "is_email_verified": ( profile_info.is_email_verified ), 
-                "family_incometype": ( profile_info.family_incometype )
             },
 
             "define_profile": {
@@ -1246,8 +1152,10 @@ def new_registartion(
                 "annualincome_id": define_profile.annualincome_id,
                 "annualincome": define_profile.annualincome,
                 "marital_status": define_profile.marital_status,
-                "status": define_profile.status,
-                "deleted": define_profile.deleted
+                "qualification_id": define_profile.qualification_id,
+                "partner_qualification": define_profile.partner_qualification,
+                "partner_country_id":define_profile.citizenship,
+                "partner_state_id":define_profile.state_id
             }
         }
     }
