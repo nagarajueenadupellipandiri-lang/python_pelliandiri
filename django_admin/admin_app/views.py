@@ -861,7 +861,6 @@ def user_view(request):
     data["create_user_result"] = create_user_result
     return render( request, "admin_app/users.html", data )
 
-# maritalStatus
 logger = logging.getLogger(__name__)
 def createUser(request):
 
@@ -881,22 +880,46 @@ def createUser(request):
 
         # Check authentication
         if payload is None or headers is None:
+            logger.warning("Create user failed: authentication data missing")
             return redirect("login")
 
         data = request.POST
+        print("data is ", data)
 
+        # Validate DOB
         dob = data.get("dob", "").strip()
+        if not dob:
+            request.session["create_user_result"] = {
+                "success": False,
+                "message": "Date of birth is required."
+            }
+            return redirect("createUser")
+
         dob_date = datetime.strptime(dob, "%Y-%m-%d").date()
+
+        # Validate marital status
         maritialstatus = data.get("maritalStatus", "").strip()
 
-        preference_marital_status = data.getlist( "preference_marital_status" )
-        if isinstance(preference_marital_status, list):
-            preference_marital_status = ",".join(
-                str(value) for value in preference_marital_status
-            )
-        elif preference_marital_status is not None:
-            preference_marital_status = str(preference_marital_status)
+        if not maritialstatus:
+            request.session["create_user_result"] = {
+                "success": False,
+                "message": "Marital status is required."
+            }
+            return redirect("createUser")
 
+        # Get preference marital status
+        preference_marital_status = data.getlist( "preference_marital_status[]" )
+        preference_country = data.getlist("preference_country[]")
+
+        preference_marital_status = ",".join(
+            str(value) for value in preference_marital_status
+        )
+
+        preference_country = ",".join(
+            str(value) for value in preference_country
+        )
+
+        # Height
         height_value = data.get("height_id", "").strip()
 
         if height_value:
@@ -911,37 +934,96 @@ def createUser(request):
         else:
             height_id = 0
 
+        permnt_country_id = data.get("currentCountry", "").strip()
+        state_id = data.get("currentState", "").strip()
+        permnt_city_id = data.get("currentCity", "").strip()
+        permnt_village = data.get("currentVillage").strip()
+
+        temp_country = data.get("permanentCountry", "").strip()
+        temp_state = data.get("permanentState", "").strip()
+        temp_city = data.get("permanentTeluguCities_list", "").strip()
+        temp_town = data.get("permanentVillage").strip()
+
+        # Prepare registration parameters
         registration_params = {
             "name": data.get("createName", "").strip(),
             "gender": data.get("gender", ""),
             "dob": dob_date.strftime("%Y-%m-%d"),
-
-            "maritialstatus": int(maritialstatus),
-            "marital_status": preference_marital_status,
-
+            "mobile": data.get("phoneNumber", "").strip(),
             "religion_id": data.get("religion", ""),
             "caste_id": data.get("caste", ""),
-            "height_id": height_id,
-            "citizenship": 1,
-            "livingin": 1,
-            "bodytype": None,
-            "state_id": data.get("permanentState", ""),
-            "email": data.get("createEmail", "").strip(),
-            "mobile": data.get("phoneNumber", "").strip(),
-            "countrycode": data.get("countrycode", "91"),
-            "tob": data.get("tob", ""),
-            "childstatus": data.get("childstatus", ""),
             "denomination": data.get("denomination", 0),
             "subcaste": data.get("subcaste", ""),
-            "stateother": data.get("stateother", ""),
+            "maritialstatus": int(maritialstatus),
+            "childstatus": data.get("childstatus", ""),
+            "tob": data.get("tob", ""),
+            "email": data.get("email", "").strip(),
+            "height_id": height_id,
             "registerby": data.get("registerby", "Self"),
+            "offline_empid": data.get("offline_empid"),
+            "physicalstatus": data.get("physical_status"),
+            "marital_status": preference_marital_status,
+            "person_citizenship": 1,
+            "qualification_id": data.get("qualification_id"),
+            "qualification": data.get("qualification"),
+            "Specialization": data.get("Specialization"),
+            "placeofstudy": data.get("placeOfStudy"),
+            "yearofpassing": data.get("yearOfPassing"),
+            # "designation": data.get("designation"),
+            "occupation_id": data.get("designation"),
+            "company_name": data.get("company_name"),
+            "total_work_experiance": data.get("total_work_experiance"),
+            "employment_location": data.get("employment_location"),
+            "annualincome_id":data.get("currency_type"),
+            "annualincome":data.get("currency_value"),
+            "father_name":data.get("father_name"),
+            "father_occupation_id":data.get("father_occupation_id"),
+            "mother_name":data.get("mother_name"),
+            "mother_occupation_id":data.get("mother_occupation_id"),
+            "family_brothers_married":data.get("family_brothers_married"),
+            "family_brothers_unmarried":data.get("family_brothers_unmarried"),
+            "family_sisters_married":data.get("family_sisters_married"),
+            "family_sisters_unmarried":data.get("family_sisters_unmarried"),
+            "family_livingcity":data.get("family_livingcity"),
+            "family_hometown":data.get("family_hometown"),
+            "star_id":data.get("star_id"),
+            "raasi_id":data.get("raasi_id"),
+            "gothram": data.get("gothram"),
+            "temp_country":temp_country,
+            "temp_state": temp_state, 
+            "temp_city": temp_city, 
+            "temp_town":temp_town,
+            "permnt_country_id": permnt_country_id,
+            "state_id": state_id,
+            "permt_residing_city": permnt_city_id,
+            "permnt_village": permnt_village,
+            "partner_country_id": preference_country,
+
+            "alternative_phone_number": data.get("alternative_phone_number"),
+            "other_contact_person_phonenum":data.get("other_contact_person_phonenum"),
+            "minage":data.get("minage"),
+            "maxage":data.get("maxage"),
+            "minheight_id":data.get("minheight_id"),
+            "maxheight_id":data.get("maxheight_id"),
+            "marital_status":data.get("preference_marital_status"),
+            "partner_qualification_id":data.get("preference_education"),
+
+            "partner_occupation_id": data.get("preference_occupation"),
+            "partner_annualincome_id": data.get("preference_incomeId"),
+            "partner_annualincome": data.get("preference_incomeValue"),
+            "partner_country_id": data.get("preference_country"),
+            "partner_state_id": data.get("preference_state"),
+            "partner_residing_city": data.get("preference_city"),
+            "partner_religion_id": data.get("preference_caste"),
+            "partner_caste_id":data.get("preference_caste"),
+            "willing_tomarryothres_cast": data.get("willing_tomarryothres_cast"),
+            "otherinfo": data.get("otherinfo"),
         }
 
         print("REGISTRATION PARAMS:", registration_params)
-        # print("DOB SENT TO API:", registration_params["dob"])
-
         payload["params"] = registration_params
 
+        # Call FastAPI
         response = requests.post(
             f"{settings.FASTAPI_BASE_URL}/registrations/createRegistartion",
             json=payload,
@@ -957,17 +1039,20 @@ def createUser(request):
                 "message": "Invalid JSON response from FastAPI"
             }
 
-        print("API STATUS CODE:", response.status_code)
-        print("API RESPONSE:", apidata)
+        success = response.ok and apidata.get("status") is True
 
-        success = (
-            response.ok
-            and apidata.get("status") is True
+        logger.info(
+            "Registration API response: HTTP status=%s, success=%s",
+            response.status_code,
+            success
         )
 
-        # logger.info("Registration API status: %s", response.status_code)
-        # logger.info("Registration API success: %s", success)
-        print("REGISTRATION SUCCESS:", success)
+        if not success:
+            logger.error(
+                "Registration API failed: HTTP status=%s, response=%s",
+                response.status_code,
+                apidata
+            )
 
         request.session["create_user_result"] = {
             "success": success,
