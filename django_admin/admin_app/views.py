@@ -884,7 +884,7 @@ def createUser(request):
             return redirect("login")
 
         data = request.POST
-        print("data is ", data)
+        # print("data is ", data)
 
         # Validate DOB
         dob = data.get("dob", "").strip()
@@ -910,18 +910,10 @@ def createUser(request):
         # Get preference marital status
         preference_marital_status = data.getlist( "preference_marital_status[]" )
         preference_country = data.getlist("preference_country[]")
+        preference_marital_status = ",".join( str(value) for value in preference_marital_status )
+        preference_country = ",".join( str(value) for value in preference_country )
 
-        preference_marital_status = ",".join(
-            str(value) for value in preference_marital_status
-        )
-
-        preference_country = ",".join(
-            str(value) for value in preference_country
-        )
-
-        # Height
         height_value = data.get("height_id", "").strip()
-
         if height_value:
             try:
                 height_id = int(height_value)
@@ -969,7 +961,6 @@ def createUser(request):
             "Specialization": data.get("Specialization"),
             "placeofstudy": data.get("placeOfStudy"),
             "yearofpassing": data.get("yearOfPassing"),
-            # "designation": data.get("designation"),
             "occupation_id": data.get("designation"),
             "company_name": data.get("company_name"),
             "total_work_experiance": data.get("total_work_experiance"),
@@ -1007,7 +998,6 @@ def createUser(request):
             "maxheight_id":data.get("maxheight_id"),
             "marital_status":data.get("preference_marital_status"),
             "partner_qualification_id":data.get("preference_education"),
-
             "partner_occupation_id": data.get("preference_occupation"),
             "partner_annualincome_id": data.get("preference_incomeId"),
             "partner_annualincome": data.get("preference_incomeValue"),
@@ -1020,7 +1010,6 @@ def createUser(request):
             "otherinfo": data.get("otherinfo"),
         }
 
-        print("REGISTRATION PARAMS:", registration_params)
         payload["params"] = registration_params
 
         # Call FastAPI
@@ -1040,12 +1029,7 @@ def createUser(request):
             }
 
         success = response.ok and apidata.get("status") is True
-
-        logger.info(
-            "Registration API response: HTTP status=%s, success=%s",
-            response.status_code,
-            success
-        )
+        logger.info( "Registration API response: HTTP status=%s, success=%s", response.status_code, success )
 
         if not success:
             logger.error(
@@ -1063,27 +1047,21 @@ def createUser(request):
             ),
             "apidata": apidata.get("data", {})
         }
-
         request.session.modified = True
-
         return redirect("createUser")
 
     except requests.RequestException:
         logger.exception("FastAPI registration request failed")
-
         request.session["create_user_result"] = {
             "success": False,
             "message": "Unable to connect to registration API"
         }
-
         return redirect("createUser")
 
     except Exception:
         logger.exception("Unexpected error in createUser")
-
         request.session["create_user_result"] = {
             "success": False,
             "message": "An unexpected error occurred"
         }
-
         return redirect("createUser")
