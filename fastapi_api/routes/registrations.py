@@ -329,7 +329,7 @@ def new_registartion(
     offline_empid = params.get( "offline_empid" )
     physicalstatus = params.get("physicalstatus")
     about_physical_status = params.get("about_physical_status")
-
+    
     qualification_id = params.get("qualification_id")
     qualification = params.get("qualification")
     specialization = params.get( "specialization" ) 
@@ -393,7 +393,7 @@ def new_registartion(
     temp_city = params.get( "temp_city" ) 
     temp_town = params.get( "temp_town" )
     
-    # person currentt address
+    # person current/temprary address
     permnt_country_id = params.get("citizenship")
     state_id = params.get("state_id")
     permt_residing_city = params.get( "residing_city" ) 
@@ -410,7 +410,10 @@ def new_registartion(
     maxheight_id = params.get("maxheight_id")
     marital_status = params.get("marital_status")
     partner_qualification_id = params.get("partner_qualification_id")
-    partner_qualification = params.get("partner_qualification", "")
+    partner_qualification = str( params.get("partner_qualification") or "" ).strip()
+    partner_occupation_id = params.get("partner_occupation_id")
+    partner_annualincome_id = params.get("partner_annualincome_id")
+    partner_annualincome = params.get("partner_annualincome")
     partner_country_id = params.get("partner_country_id")
     partner_state_id = params.get("partner_state_id")
     partner_residing_city = params.get("partner_residing_city")
@@ -540,6 +543,11 @@ def new_registartion(
 
         print("DEBUG partnerdrink:", repr(partnerdrink))
 
+        if designation is None:
+            designation = ""
+        else:
+            designation = str(designation).strip()
+
         if bodytype is None:
             bodytype = ""
         else:
@@ -580,11 +588,10 @@ def new_registartion(
         else:
             occupation_details = str(occupation_details).strip()
             
-
         physicalstatus = (
-            int(physicalstatus)
+            str(physicalstatus).strip()
             if physicalstatus not in [None, ""]
-            else None
+            else "N"
         )
 
         star_id = (
@@ -677,10 +684,10 @@ def new_registartion(
             else height_id or 1
         )
 
-    except (TypeError, ValueError):
+    except (TypeError, ValueError) as e:
         return {
             "status": False,
-            "message": "Invalid optional numeric value"
+            "message": f"Invalid optional numeric value: {str(e)}"
         }
 
     email = (
@@ -945,18 +952,17 @@ def new_registartion(
             partnerdrink=partnerdrink,
             complextion=complextion,
             qualification_id = partner_qualification_id,
-            partner_qualification=partner_qualification,
+            partner_qualification = partner_qualification,
             occupation_id=(
                 str(occupation_id)
                 if occupation_id is not None
                 else None
             ),
 
-            # ==========================================================
             citizenship = partner_country_id,
             state_id = partner_state_id,
             residing_city = partner_residing_city,
-            # =============================================================
+
             religion_id=religion_id,
             denomination=denomination,
             caste_id=caste_id,
@@ -1153,7 +1159,6 @@ def new_registartion(
                 "annualincome": define_profile.annualincome,
                 "marital_status": define_profile.marital_status,
                 "qualification_id": define_profile.qualification_id,
-                "partner_qualification": define_profile.partner_qualification,
                 "partner_country_id":define_profile.citizenship,
                 "partner_state_id":define_profile.state_id
             }

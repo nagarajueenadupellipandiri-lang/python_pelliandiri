@@ -689,7 +689,7 @@
                 </div>
                 <div class="col-span-12 md:col-span-2" id="num_child_div" style="display:none;">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Number Of Children(If any) </label> 
-                    <input type="text" id="num_child" name="num_child" placeholder="Enter Number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
+                    <input type="text" id="childstatus" name="childstatus" placeholder="Enter Number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Time Of Birth </label>
@@ -697,7 +697,7 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Email </label>
-                    <input type="email" id="createEmail" name="createEmail" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="email" id="email" name="email" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Height </label>
@@ -710,7 +710,7 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Registered By </label>
-                    <select id="createRegisteredBy" name="createRegisteredBy" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="registerby" name="registerby" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="0">--Select--</option>
                         <option value="Self">SELF</option>
                         <option value="Parents">PARENTS</option>
@@ -722,7 +722,7 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Registered Team Member </label>
-                    <select id="registeredByTeamMember" name="registeredByTeamMember" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="offline_empid" name="offline_empid" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="">--Select--</option>
                         {% for el in employee_list %}
                         <option value="{{ el.emp_id }}"> {{ el.username }} </option>
@@ -747,7 +747,7 @@
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Education Details </h1> </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Education </label>
-                    <select id="educationQualification" name="educationQualification" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="qualification_id" name="qualification_id" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="" selected>--Select--</option>
                         {% for qul in educationQualification_list %}
                         <option value="{{qul.qualification_id}}">{{qul.qualification}}</option>
@@ -756,7 +756,7 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Qualification </label>
-                    <input type="email" id="qualification" placeholder="Enter qualification" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="qualification" placeholder="Enter qualification" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Specialization </label>
@@ -768,7 +768,7 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Year of Passing </label>
-                    <input type="text" id="YearOfPassing" name="YearOfPassing" placeholder="Enter year" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="yearOfPassing" name="yearOfPassing" placeholder="Enter year" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
             </div>
 
@@ -783,22 +783,22 @@
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2">Designation</label>
+                    <label for="designation" class="block text-sm font-semibold theme-dark-text mb-2">Designation</label>
                     <select id="designation" name="designation" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="">--Select--</option>
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Company Name </label>
-                    <input type="text" id="company" name="company" placeholder="Enter company name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="company_name" name="company_name" placeholder="Enter company name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Experience </label>
-                    <input type="text" id="experience" name="experience" placeholder="Enter experience" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="total_work_experiance" name="total_work_experiance" placeholder="Enter experience" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Location </label>
-                    <input type="text" id="location" name="location" placeholder="Enter location" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="employment_location" name="employment_location" placeholder="Enter location" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <h1 class="block text-sm font-semibold theme-dark-text mb-2">Annual Income</h1>
@@ -830,11 +830,11 @@
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Family Details </h1> </div>
                 <div class="col-span-12 md:col-span-2"> 
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Father Name </label> 
-                    <input type="text" id="fatherName" name="fatherName" placeholder="Enter father name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" > 
+                    <input type="text" id="father_name" name="father_name" placeholder="Enter father name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" > 
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Father Occupation </label>
-                    <select id="fatherOccupation" name="fatherOccupation" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="father_occupation_id" name="father_occupation_id" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="">--Select--</option>
                         {% for category in occupation_groups %}
                             <optgroup label="{{ category.cat_name }}" >
@@ -847,11 +847,11 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Mother Name </label>
-                    <input type="text" id="motherName" name="motherName" placeholder="Enter mother name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="mother_name" name="mother_name" placeholder="Enter mother name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Mother Occupation </label>
-                    <select id="motherOccupation" name="motherOccupation" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="mother_occupation_id" name="mother_occupation_id" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="">--Select--</option>
                         {% for category in occupation_groups %}
                             <optgroup label="{{ category.cat_name }}" >
@@ -864,27 +864,27 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Married Brothers </label> 
-                    <input type="text" id="marriedBrothers" name="marriedBrothers" placeholder="Enter Number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
+                    <input type="text" id="family_brothers_married" name="family_brothers_married" placeholder="Enter Number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> UnMarried Brothers </label> 
-                    <input type="text" id="createUsername" placeholder="Enter Number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
+                    <input type="text" id="family_brothers_unmarried" name="family_brothers_unmarried" placeholder="Enter Number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Married Sisters </label>
-                    <input type="text" id="createUsername" placeholder="Enter Number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
+                    <input type="text" id="family_sisters_married" name="family_sisters_married" placeholder="Enter Number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> UnMarried Sisters </label>
-                    <input type="text" id="createUsername" placeholder="Enter Number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly">
+                    <input type="text" id="family_sisters_unmarried" name="family_sisters_unmarried" placeholder="Enter Number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly">
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Family Current Living In </label>
-                    <input type="text" id="createUsername" placeholder="Enter living place" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400">
+                    <input type="text" id="family_livingcity" name="family_livingcity" placeholder="Enter living place" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400">
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Family HomeTown </label>
-                    <input type="text" id="famliyHomeTown" name="famliyHomeTown" placeholder="Enter home town" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" > 
+                    <input type="text" id="family_hometown" name="family_hometown" placeholder="Enter home town" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" > 
                 </div>
             </div>
 
@@ -892,7 +892,7 @@
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Socio-Religious </h1> </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Raasi </label>
-                    <select id="raasi" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="raasi_id" name="raasi_id" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="">--Select--</option>
                         {% for rsl in raasi_list %}
                         <option value="{{rsl.raasi_id}}">{{rsl.raasi}}</option>
@@ -901,7 +901,7 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Star </label>
-                    <select id="star" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <select id="star_id" name="star_id" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="">--Select--</option>
                         {% for stl in star_list %}
                         <option value="{{stl.star_id}}">{{stl.star}}</option>
@@ -914,44 +914,50 @@
                     <input type="text" id="gothram" name="gothram" placeholder="Enter gothram" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
             </div>
-
+<!-- ================================start================================================== -->
             <div class="grid grid-cols-12 gap-5 mt-8">
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Current Location Details </h1> </div>
-                <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Country<span id="mandatoryField">*</span></label>
-                    <select id="" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" mandatoryField>
-                        <option value="">--Select--</option>
+
+                <!-- Country -->
+                <div class="col-span-12 md:col-span-3">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Country <span class="text-red-500">*</span> </label>
+                    <select id="currentCountry" name="currentCountry" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="currentCountrySelect(this.value)" required >
+                        <option value="">--Select Country--</option>
                         {% for cl in counry_list %}
-                        <option value="{{cl.country_id}}">{{cl.country_name}}</option>
+                            <option value="{{ cl.country_id }}"> {{ cl.country_name }} </option>
                         {% endfor %}
                     </select>
                 </div>
 
-                <div class="col-span-12 md:col-span-2">
+                <!-- State -->
+                <div class="col-span-12 md:col-span-3" id="currentStateDiv" style="display: none;" >
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> State </label>
-                    <select id="" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">--Select--</option>
-                        <option value="admin">Admin</option>
-                        <option value="manager">Manager</option>
-                        <option value="editor">Editor</option>
-                        <option value="user">User</option>
+                    <select id="currentState" name="currentState" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="currentStateSelect(this.value)" >
+                        <option value="">--Select State--</option>
+                        {% for st in inadian_states_list %}
+                        <option value="{{ st.state_id }}"> {{ st.state_name }} </option>
+                        {% endfor %}
                     </select>
                 </div>
-                <div class="col-span-12 md:col-span-2">
+
+                <!-- City / District -->
+                <div class="col-span-12 md:col-span-3" id="currentDistrictDiv" style="display: none;" >
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> City / District </label>
-                    <select id="createRole" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="">--Select--</option>
-                        <option value="admin">Admin</option>
-                        <option value="manager">Manager</option>
-                        <option value="editor">Editor</option>
-                        <option value="user">User</option>
+                    <select id="currentTeluguCities_list" name="currentTeluguCities_list" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="currentDistrictSelect(this.value)" >
+                        <option value="">--Select City / District--</option>
+                        {% for city in teluguCities_list %}
+                            <option value="{{ city.city_id }}" data-state="{{ city.state_id }}" > {{ city.city_name }} </option>
+                        {% endfor %}
                     </select>
                 </div>
-                <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Town / Village </label> 
-                    <input type="password" id="createPassword" placeholder="Enter town/village" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+
+                <!-- Town / Village -->
+                <div class="col-span-12 md:col-span-3" id="currentVillageDiv" style="display: none;" >
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Town / Village </label>
+                    <input type="text" id="currentVillage" name="currentVillage" placeholder="Enter town / village" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" />
                 </div>
             </div>
+<!-- =======================================end================================================= -->
 
             <div class="grid grid-cols-12 gap-5 mt-8">
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Permanent Location Details </h1> </div>
@@ -992,11 +998,11 @@
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Contact Information </h1> </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2 min-h-[40px]"> Alternative Phone Number </label>
-                    <input type="text" id="alternativePhoneNumber" name="alternativePhoneNumber" placeholder="Enter phone number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
+                    <input type="text" id="alternative_phone_number" name="alternative_phone_number" placeholder="Enter phone number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2 min-h-[40px]"> Family / Friends / Other contact person mobile number </label>
-                    <input type="text" id="familyContactNumber" name="familyContactNumber" placeholder="Enter phone number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
+                    <input type="text" id="other_contact_person_phonenum" name="other_contact_person_phonenum" placeholder="Enter phone number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
                 </div>
             </div>
             <div class="grid grid-cols-12 gap-5 mt-8">
@@ -1005,11 +1011,11 @@
                     <h1 class="block text-sm font-semibold theme-dark-text mb-2"> Age </h1>
                     <div class="flex items-center gap-3">
                         <div class="flex items-center gap-1">
-                            <label for="minAge" class="text-sm theme-dark-text"> <!-- Min --> </label>
-                            <select id="minAge" name="minAge" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" ><option value="">Min</option> </select>
+                            <label for="minage" class="text-sm theme-dark-text"> <!-- Min --> </label>
+                            <select id="minage" name="minage" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" ><option value="">Min</option> </select>
                         </div>
-                        <div class="flex items-center gap-1"> <label for="maxAge" class="text-sm theme-dark-text"> <!-- Max --> </label>
-                            <select id="maxAge" name="maxAge" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" ><option value="">Max</option> </select>
+                        <div class="flex items-center gap-1"> <label for="maxage" class="text-sm theme-dark-text"> <!-- Max --> </label>
+                            <select id="maxage" name="maxage" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" ><option value="">Max</option> </select>
                         </div>
                     </div>
                 </div>
@@ -1017,8 +1023,8 @@
                     <h1 class="block text-sm font-semibold theme-dark-text mb-2"> Height </h1>
                     <div class="flex items-center gap-3">
                         <div class="flex items-center gap-1">
-                            <label for="minHeight" class="text-sm theme-dark-text"></label>
-                            <select id="minHeight" name="minHeight" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                            <label for="minheight_id" class="text-sm theme-dark-text"></label>
+                            <select id="minheight_id" name="minheight_id" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                                 <option value="">Min</option>
                                 {% for minHeight in height_list %}
                                 <option value="{{ minHeight.height_id }}"> {{ minHeight.height }} </option>
@@ -1026,8 +1032,8 @@
                             </select>
                         </div>
                         <div class="flex items-center gap-1">
-                            <label for="maxHeight" class="text-sm theme-dark-text"></label>
-                            <select id="maxHeight" name="maxHeight" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                            <label for="maxheight_id" class="text-sm theme-dark-text"></label>
+                            <select id="maxheight_id" name="maxheight_id" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                                 <option value="">Max</option>
                                 {% for maxHeight in height_list %}
                                 <option value="{{ maxHeight.height_id }}"> {{ maxHeight.height }} </option>
@@ -1076,7 +1082,7 @@
                         <!-- Dropdown -->
                         <div id="preference_occupationDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-72 overflow-y-auto" >
                             <!-- Any -->
-                            <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> <input type="checkbox" value="any" class="preference_occupation-checkbox" data-name="Any" onchange="preferenceOccupationChanged(this)" > <span>Any</span> </label>
+                            <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> <input type="checkbox" name="preference_occupation[]" value="any" class="preference_occupation-checkbox" data-name="Any" onchange="preferenceOccupationChanged(this)" > <span>Any</span> </label>
                             {% for category in occupation_groups %}
                                 <div class="px-4 py-2 font-semibold text-sm theme-dark-text border-t theme-border"> {{ category.cat_name }} </div>
                                 {% for occupation in category.occupations %}
@@ -1112,7 +1118,7 @@
                             <div id="preference_incomeDropdown" class="hidden absolute top-full left-0 mt-1 z-50 w-56 max-h-64 overflow-y-auto rounded-xl border theme-border theme-page shadow-lg" >
 
                             <!-- ANY -->
-                            <label id="preference_incomeAnyOption" class="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-100" style="display: none;" > <input type="checkbox" value="any" data-name="Any" class="preference_income-checkbox" onchange="preferenceIncomeChanged(this)" > <span>Any</span> </label>
+                            <label id="preference_incomeAnyOption" class="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-100" style="display: none;" > <input type="checkbox" name="preference_incomeValue[]" value="any" data-name="Any" class="preference_income-checkbox" onchange="preferenceIncomeChanged(this)" > <span>Any</span> </label>
 
                             <!-- INCOME OPTIONS -->
                             {% for income in income_list %}
@@ -1212,7 +1218,7 @@
                     </div>
                 </div>
                 <div class="col-span-12 md:col-span-2 hidden" id="preference_muslimSubsectsDiv" >
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Muslim Subsects123 </label>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Muslim Subsects</label>
                     <div class="relative">
                         <button type="button" onclick="preferenceToggleMuslimSubsectsDropdown()" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none text-left" > <span id="preference_muslimSubsectsSelectedText"> --Select-- </span> </button>
                         <div id="preference_muslimSubsectsDropdown" class="hidden absolute z-50 w-full mt-1 max-h-64 overflow-y-auto rounded-xl border theme-border theme-page shadow-lg" >
@@ -1246,13 +1252,13 @@
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Willing to Marry Other Caste or Religion </label>
                     <div class="flex items-center gap-6">
-                        <label class="flex items-center gap-2 cursor-pointer"> <input type="radio" name="willing_other_caste" value="Yes" class="w-4 h-4" > <span>Yes</span> </label>
-                        <label class="flex items-center gap-2 cursor-pointer"> <input type="radio" name="willing_other_caste" value="No" class="w-4 h-4" checked> <span>No</span> </label>
+                        <label class="flex items-center gap-2 cursor-pointer"> <input type="radio" name="willing_tomarryothres_cast" value="Y" class="w-4 h-4" > <span>Yes</span> </label>
+                        <label class="flex items-center gap-2 cursor-pointer"> <input type="radio" name="willing_tomarryothres_cast" value="N" class="w-4 h-4" checked> <span>No</span> </label>
                     </div>
                 </div>
                 <div class="col-span-12 md:col-span-4">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> About Preferred Partner </label> 
-                    <textarea name="preference_partner" id="preference_partner" rows="3" cols="20" border="3" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400"></textarea> 
+                    <textarea name="otherinfo" id="otherinfo" rows="3" cols="20" border="3" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400"></textarea> 
                 </div>
             </div>
         </div>
@@ -1446,11 +1452,11 @@
             .value = user.name;
 
 
-        document.getElementById("createEmail")
+        document.getElementById("email")
             .value = user.email;
 
 
-        document.getElementById("createRole")
+        document.getElementById("currentTeluguCities_list")
             .value = user.role;
 
         alert( "Edit mode for " + user.name + " will be connected to API later." );
@@ -1485,8 +1491,8 @@
     /* ========================================= */
     function openCreateModal() {
         document.getElementById("createName") .value = "";
-        document.getElementById("createEmail") .value = "";
-        document.getElementById("createRole") .value = "Admin";
+        document.getElementById("email") .value = "";
+        document.getElementById("currentTeluguCities_list") .value = "Admin";
         openModal("createModal");
     }
 
@@ -1495,8 +1501,8 @@
     /* ========================================= */
     function saveSampleUser() {
         const name = document.getElementById("createName") .value .trim();
-        const email = document.getElementById("createEmail") .value .trim();
-        const role = document.getElementById("createRole") .value;
+        const email = document.getElementById("email") .value .trim();
+        const role = document.getElementById("currentTeluguCities_list") .value;
         if (!name || !email) {
             alert("Please enter name and email.");
             return;
@@ -1581,19 +1587,19 @@
     /* ========================================= */
     /* partener preferernce min and max age */
     /* ========================================= */
-    const minAge = document.getElementById("minAge");
-    const maxAge = document.getElementById("maxAge");
+    const minage = document.getElementById("minage");
+    const maxage = document.getElementById("maxage");
 
     for (let age = 18; age <= 60; age++) {
         const minOption = document.createElement("option");
         minOption.value = age;
         minOption.textContent = age;
-        minAge.appendChild(minOption);
+        minage.appendChild(minOption);
 
         const maxOption = document.createElement("option");
         maxOption.value = age;
         maxOption.textContent = age;
-        maxAge.appendChild(maxOption);
+        maxage.appendChild(maxOption);
     }
 
     /* ========================================= */
@@ -2597,6 +2603,96 @@
                 .text(selected.join(", "));
         }
     }
+    </script>
+
+
+    <!-- ******************************************************************* -->
+    <script>
+        $(document).ready(function () {
+            // Hide dependent fields on page load
+            $("#currentStateDiv").hide();
+            $("#currentDistrictDiv").hide();
+            $("#currentVillageDiv").hide();
+
+            // Hide all city options initially
+            $("#currentTeluguCities_list option[data-state]").hide();
+        });
+
+        function currentCountrySelect(countryId) {
+            const stateSelect = $("#currentState");
+            const citySelect = $("#currentTeluguCities_list");
+
+            // Clear old selections
+            stateSelect.val("");
+            citySelect.val("");
+            $("#currentVillage").val("");
+
+            // Reset dependent fields
+            $("#currentStateDiv").hide();
+            $("#currentDistrictDiv").hide();
+            $("#currentVillageDiv").hide();
+
+            // Reset city options
+            citySelect.find("option[data-state]").hide();
+            if (countryId === "") {
+                return;
+            }
+
+            if (String(countryId) === "1") {
+
+                // INDIA: Country -> State -> City/District
+                $("#currentStateDiv").show();
+
+            } else {
+
+                // USA / Other countries: Country -> City/District
+                $("#currentDistrictDiv").show();
+
+                // Show placeholder
+                citySelect.find("option:first").show();
+            }
+        }
+
+
+        function currentStateSelect(stateId) {
+            const citySelect = $("#currentTeluguCities_list");
+
+            // Reset previous city and village
+            citySelect.val("");
+            $("#currentVillage").val("");
+
+            // Hide dependent fields
+            $("#currentDistrictDiv").hide();
+            $("#currentVillageDiv").hide();
+
+            // Hide all cities
+            citySelect.find("option[data-state]").hide();
+            if (stateId === "") {
+                return;
+            }
+
+            // Use your existing state IDs
+            if (String(stateId) === "2" || String(stateId) === "3193") {
+                $("#currentDistrictDiv").show();
+
+                // Show only cities belonging to selected state
+                citySelect
+                    .find("option[data-state='" + stateId + "']")
+                    .show();
+
+                // Show placeholder
+                citySelect.find("option:first").show();
+            }
+        }
+
+        function currentDistrictSelect(cityId) {
+            $("#currentVillage").val("");
+            if (cityId !== "") {
+                $("#currentVillageDiv").show();
+            } else {
+                $("#currentVillageDiv").hide();
+            }
+        }
     </script>
     <style> #mandatoryField{ color:red; } </style>
 </body>
