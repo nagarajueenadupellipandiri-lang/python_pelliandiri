@@ -149,7 +149,6 @@ def get_registrations(
     # -----------------------------------------
     # Pagination
     # -----------------------------------------
-
     offset = (page - 1) * limit
 
     registrations = (
@@ -163,11 +162,9 @@ def get_registrations(
     # -----------------------------------------
     # Response data
     # -----------------------------------------
-
     data = []
 
     for reg, profile in registrations:
-
         data.append({
             # en_register
             "register_id": reg.register_id,
@@ -1164,4 +1161,3 @@ def new_registartion(
             }
         }
     }
-    

@@ -54,95 +54,44 @@
                 <!-- REPORTS -->
                 <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
                     <div class="flex items-center justify-between">
-
                         <div class="w-12 h-12 rounded-xl theme-soft flex items-center justify-center theme-primary-text text-xl"> 📊 </div>
-
-
                         <span class="text-xs font-semibold theme-primary-text theme-soft px-2 py-1 rounded-full"> This Month </span>
-
                     </div>
-
-
                     <p class="theme-secondary-text text-sm mt-5"> Reports </p>
-
-
                     <h3 class="text-3xl font-bold theme-dark-text mt-1"> 156 </h3>
-
                 </div>
-
             </div>
-
-
 
             <!-- ================================================= -->
             <!-- SAMPLE USERS TABLE -->
             <!-- ================================================= -->
-
             <div class="theme-card rounded-2xl border shadow-sm mb-8">
-
-
                 <!-- TABLE HEADER -->
-
                 <div class="p-5 sm:p-6 border-b theme-border">
-
-
                     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"> <div>
-
                             <h3 class="text-lg font-bold theme-dark-text">Users </h3>
-
-
                             <p class="text-sm theme-secondary-text mt-1"> Manage sample users and their status </p>
-
                         </div>
-
-
 
                         <!-- CREATE -->
-
                         <button type="button" onclick="openCreateModal()" class="theme-primary text-white px-4 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-90 transition flex items-center justify-center gap-2"> <span class="text-lg"> + </span> Create User </button>
-
                     </div>
-
                 </div>
 
-
-
                 <!-- SEARCH + FILTER -->
-
-                <div class="p-5
-                            sm:p-6">
-
-
+                <div class="p-5 sm:p-6">
                     <div class="flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
-
-
                         <!-- SEARCH -->
-
                         <div class="relative w-full md:max-w-md">
-
-
                             <span class="absolute left-3 top-1/2 -translate-y-1/2 theme-secondary-text"> 🔍 </span>
-
-
                             <input type="text" id="userSearch" onkeyup="filterUsers()" placeholder="Search users..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400">
-
                         </div>
 
-
-
                         <!-- STATUS FILTER -->
-
                         <div class="flex items-center gap-1 theme-soft p-1 rounded-xl w-fit">
-
-
                             <button type="button" onclick="filterStatus('all')" id="filterAll" class="status-filter px-4 py-2 rounded-lg text-sm font-semibold theme-primary text-white transition"> All </button>
-
-
                             <button type="button" onclick="filterStatus('active')" id="filterActive" class="status-filter px-4 py-2 rounded-lg text-sm font-semibold theme-dark-text transition"> Active </button>
-
-
                             <button type="button" onclick="filterStatus('inactive')" id="filterInactive" class="status-filter px-4 py-2 rounded-lg text-sm font-semibold theme-dark-text transition"> Inactive </button>
-
                         </div>
 
                     </div>
@@ -202,333 +151,55 @@
                 </div>
             </div>
 
-
-
             <!-- ========================================= -->
             <!-- LOWER SECTION -->
             <!-- ========================================= -->
-
-            <div class="grid
-                        grid-cols-1
-                        xl:grid-cols-3
-                        gap-6">
-
-
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
                 <!-- RECENT ACTIVITY -->
-
-                <div class="xl:col-span-2
-                            theme-card
-                            rounded-2xl
-                            border
-                            shadow-sm">
-
-
-                    <div class="p-6
-                                border-b
-                                theme-border
-                                flex
-                                items-center
-                                justify-between">
-
-
-                        <h3 class="font-bold
-                                text-lg
-                                theme-dark-text">
-
-                            Recent Activity
-
-                        </h3>
-
-
-                        <button
-                            type="button"
-                            class="theme-primary-text
-                                text-sm
-                                font-semibold">
-
-                            View All
-
-                        </button>
-
+                <div class="xl:col-span-2 theme-card rounded-2xl border shadow-sm">
+                    <div class="p-6 border-b theme-border flex items-center justify-between">
+                        <h3 class="font-bold text-lg theme-dark-text"> Recent Activity </h3>
+                        <button type="button" class="theme-primary-text text-sm font-semibold"> View All </button>
                     </div>
-
-
-
-                    <div class="divide-y
-                                theme-border">
-
-
-                        <div class="p-5
-                                    flex
-                                    items-center
-                                    gap-4">
-
-
-                            <div class="w-10
-                                        h-10
-                                        rounded-full
-                                        theme-soft
-                                        flex
-                                        items-center
-                                        justify-center">
-
-                                👤
-
+                    <div class="divide-y theme-border"> 
+                        <div class="p-5 flex items-center gap-4"> 
+                            <div class="w-10 h-10 rounded-full theme-soft flex items-center justify-center"> 👤 </div> 
+                            <div class="flex-1 min-w-0"> 
+                                <p class="font-semibold text-sm theme-dark-text"> New user registered </p> 
+                                <p class="text-xs theme-secondary-text mt-1"> A new user joined the system </p> 
                             </div>
-
-
-                            <div class="flex-1
-                                        min-w-0">
-
-
-                                <p class="font-semibold
-                                        text-sm
-                                        theme-dark-text">
-
-                                    New user registered
-
-                                </p>
-
-
-                                <p class="text-xs
-                                        theme-secondary-text
-                                        mt-1">
-
-                                    A new user joined the system
-
-                                </p>
-
-                            </div>
-
-
-                            <span class="text-xs
-                                        theme-secondary-text">
-
-                                2 min ago
-
-                            </span>
-
+                            <span class="text-xs theme-secondary-text"> 2 min ago </span>
                         </div>
-
-
-
-                        <div class="p-5
-                                    flex
-                                    items-center
-                                    gap-4">
-
-
-                            <div class="w-10
-                                        h-10
-                                        rounded-full
-                                        theme-soft
-                                        flex
-                                        items-center
-                                        justify-center">
-
-                                📅
-
+                        <div class="p-5 flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full theme-soft flex items-center justify-center"> 📅 </div>
+                            <div class="flex-1 min-w-0"> 
+                                <p class="font-semibold text-sm theme-dark-text"> New event created </p> 
+                                <p class="text-xs theme-secondary-text mt-1"> An event was added </p> 
                             </div>
-
-
-                            <div class="flex-1
-                                        min-w-0">
-
-
-                                <p class="font-semibold
-                                        text-sm
-                                        theme-dark-text">
-
-                                    New event created
-
-                                </p>
-
-
-                                <p class="text-xs
-                                        theme-secondary-text
-                                        mt-1">
-
-                                    An event was added
-
-                                </p>
-
-                            </div>
-
-
-                            <span class="text-xs
-                                        theme-secondary-text">
-
-                                15 min ago
-
-                            </span>
-
+                            <span class="text-xs theme-secondary-text"> 15 min ago </span>
                         </div>
-
-
-
-                        <div class="p-5
-                                    flex
-                                    items-center
-                                    gap-4">
-
-
-                            <div class="w-10
-                                        h-10
-                                        rounded-full
-                                        theme-soft
-                                        flex
-                                        items-center
-                                        justify-center">
-
-                                ✓
-
-                            </div>
-
-
-                            <div class="flex-1
-                                        min-w-0">
-
-
-                                <p class="font-semibold
-                                        text-sm
-                                        theme-dark-text">
-
-                                    System login successful
-
-                                </p>
-
-
-                                <p class="text-xs
-                                        theme-secondary-text
-                                        mt-1">
-
-                                    Super Admin logged in
-
-                                </p>
-
-                            </div>
-
-
-                            <span class="text-xs
-                                        theme-secondary-text">
-
-                                1 hour ago
-
-                            </span>
-
+                        <div class="p-5 flex items-center gap-4"> 
+                            <div class="w-10 h-10 rounded-full theme-soft flex items-center justify-center"> ✓ </div> 
+                            <div class="flex-1 min-w-0"> 
+                                <p class="font-semibold text-sm theme-dark-text"> System login successful </p> 
+                                <p class="text-xs theme-secondary-text mt-1"> Super Admin logged in </p> 
+                            </div> 
+                            <span class="text-xs theme-secondary-text"> 1 hour ago </span> 
                         </div>
-
                     </div>
-
                 </div>
-
-
 
                 <!-- QUICK ACTIONS -->
-
-                <div class="theme-card
-                            rounded-2xl
-                            border
-                            shadow-sm
-                            p-6">
-
-
-                    <h3 class="font-bold
-                            text-lg
-                            theme-dark-text
-                            mb-5">
-
-                        Quick Actions
-
-                    </h3>
-
-
+                <div class="theme-card rounded-2xl border shadow-sm p-6">
+                    <h3 class="font-bold text-lg theme-dark-text mb-5"> Quick Actions </h3>
                     <div class="space-y-3">
-
-
-                        <button
-                            type="button"
-                            onclick="openCreateModal()"
-                            class="w-full
-                                flex
-                                items-center
-                                gap-3
-                                px-4
-                                py-3
-                                rounded-xl
-                                theme-soft
-                                theme-primary-text
-                                hover:opacity-80
-                                transition">
-
-                            <span class="text-xl">
-
-                                +
-
-                            </span>
-
-                            Add New User
-
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="w-full
-                                flex
-                                items-center
-                                gap-3
-                                px-4
-                                py-3
-                                rounded-xl
-                                theme-soft
-                                theme-primary-text
-                                hover:opacity-80
-                                transition">
-
-                            <span class="text-xl">
-
-                                +
-
-                            </span>
-
-                            Create Event
-
-                        </button>
-
-
-                        <button
-                            type="button"
-                            class="w-full
-                                flex
-                                items-center
-                                gap-3
-                                px-4
-                                py-3
-                                rounded-xl
-                                theme-soft
-                                theme-primary-text
-                                hover:opacity-80
-                                transition">
-
-                            <span>
-
-                                ▤
-
-                            </span>
-
-                            View Reports
-
-                        </button>
-
+                        <button type="button" onclick="openCreateModal()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl theme-soft theme-primary-text hover:opacity-80 transition"> <span class="text-xl"> + </span> Add New User </button>
+                        <button type="button" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl theme-soft theme-primary-text hover:opacity-80 transition"> <span class="text-xl"> + </span> Create Event </button>
+                        <button type="button" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl theme-soft theme-primary-text hover:opacity-80 transition"> <span> ▤ </span> View Reports </button>
                     </div>
-
                 </div>
-
             </div>
-
         </main>
-        
     </div>
 </div>
 
@@ -573,7 +244,6 @@
 
         <!-- FOOTER -->
         <div class="p-5 border-t theme-border flex justify-end"> <button type="button" onclick="closeModal('viewModal')" class="theme-primary text-white px-5 py-2.5 rounded-xl font-semibold"> Close </button> </div>
-
     </div>
 </div>
 
@@ -581,21 +251,9 @@
 <!-- CREATE USER MODAL -->
 <!-- ====================================================== -->
 {% if create_user_result %}
-    <div class="alert {% if create_user_result.success %}alert-success{% else %}alert-danger{% endif %}"
-         role="alert"
-         style="display: block; padding: 15px; margin: 15px 0; border-radius: 8px;">
-
-        {{ create_user_result.message|default:"Registration completed." }}
-
-    </div>
+    <div class="alert {% if create_user_result.success %}alert-success{% else %}alert-danger{% endif %}" role="alert" style="display: block; padding: 15px; margin: 15px 0; border-radius: 8px;"> {{ create_user_result.message|default:"Registration completed." }} </div>
 {% else %}
-    <div class="alert alert-info"
-         role="alert"
-         style="display: block; padding: 15px; margin: 15px 0; border-radius: 8px;">
-
-        No registration message available.
-
-    </div>
+    <div class="alert alert-info" role="alert" style="display: block; padding: 15px; margin: 15px 0; border-radius: 8px;"> No registration message available. </div>
 {% endif %}
 
 <form id="createUserForm" method="post" action="{% url 'createUser' %}">
@@ -631,7 +289,7 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Phone Number<span id="mandatoryField">*</span></label>
-                    <input type="text" id="phoneNumber" name="phoneNumber" placeholder="Enter phone number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber" required>
+                    <input type="text" name="phoneNumber" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber" placeholder="Enter 10-digit mobile number" maxlength="10" pattern="[0-9]{10}" inputmode="numeric" required >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion <span id="mandatoryField">*</span></label>
@@ -746,8 +404,8 @@
             <div class="grid grid-cols-12 gap-5 mt-8">
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Education Details </h1> </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Education </label>
-                    <select id="qualification_id" name="qualification_id" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Education<span class="text-red-500">*</span></label>
+                    <select id="qualification_id" name="qualification_id" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
                         <option value="" selected>--Select--</option>
                         {% for qul in educationQualification_list %}
                         <option value="{{qul.qualification_id}}">{{qul.qualification}}</option>
@@ -756,7 +414,7 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Qualification </label>
-                    <input type="text" id="qualification" placeholder="Enter qualification" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="qualification" name="qualification" placeholder="Enter qualification" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Specialization </label>
@@ -768,7 +426,7 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Year of Passing </label>
-                    <input type="text" id="yearOfPassing" name="yearOfPassing" placeholder="Enter year" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="yearOfPassing" name="yearOfPassing" placeholder="Enter year" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 Year of Passing printDigitsonly" >
                 </div>
             </div>
 
@@ -794,7 +452,7 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Experience </label>
-                    <input type="text" id="total_work_experiance" name="total_work_experiance" placeholder="Enter experience" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                    <input type="text" id="total_work_experiance" name="total_work_experiance" placeholder="Enter experience" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Location </label>
@@ -914,7 +572,7 @@
                     <input type="text" id="gothram" name="gothram" placeholder="Enter gothram" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
             </div>
-<!-- ================================start================================================== -->
+
             <div class="grid grid-cols-12 gap-5 mt-8">
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Current Location Details </h1> </div>
 
@@ -957,7 +615,6 @@
                     <input type="text" id="currentVillage" name="currentVillage" placeholder="Enter town / village" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" />
                 </div>
             </div>
-<!-- =======================================end================================================= -->
 
             <div class="grid grid-cols-12 gap-5 mt-8">
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Permanent Location Details </h1> </div>
@@ -998,11 +655,11 @@
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Contact Information </h1> </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2 min-h-[40px]"> Alternative Phone Number </label>
-                    <input type="text" id="alternative_phone_number" name="alternative_phone_number" placeholder="Enter phone number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
+                    <input type="text" id="alternative_phone_number" name="alternative_phone_number" placeholder="Enter phone number" maxlength="10" pattern="[0-9]{10}" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <label class="block text-sm font-semibold theme-dark-text mb-2 min-h-[40px]"> Family / Friends / Other contact person mobile number </label>
-                    <input type="text" id="other_contact_person_phonenum" name="other_contact_person_phonenum" placeholder="Enter phone number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
+                    <input type="text" id="other_contact_person_phonenum" name="other_contact_person_phonenum" placeholder="Enter phone number" maxlength="10" pattern="[0-9]{10}" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
                 </div>
             </div>
             <div class="grid grid-cols-12 gap-5 mt-8">
@@ -1403,14 +1060,11 @@
             return;
         }
 
-
         document.getElementById("viewName")
             .innerText = user.name;
 
-
         document.getElementById("viewUsername")
             .innerText = user.username;
-
 
         document.getElementById("viewEmail")
             .innerText = user.email;
@@ -1576,11 +1230,25 @@
         })
     }); 
 
+    // document.querySelectorAll(".insertMobileNumber").forEach(function(inputValue) {
+    //     inputValue.addEventListener("input", function() {
+    //         this.value = this.value
+    //             .replace(/[^0-9]/g, "")
+    //             .slice(0, 10);
+    //     });
+    // });
+
     document.querySelectorAll(".insertMobileNumber").forEach(function(inputValue) {
         inputValue.addEventListener("input", function() {
             this.value = this.value
                 .replace(/[^0-9]/g, "")
                 .slice(0, 10);
+
+                if(this.value.length === 10) {
+                    this.setCustomValidity("")
+                } else {
+                    this.setCustomValidy("Mobile number must be exactly 10 digits.")
+                }
         });
     });
 
@@ -2652,7 +2320,6 @@
                 citySelect.find("option:first").show();
             }
         }
-
 
         function currentStateSelect(stateId) {
             const citySelect = $("#currentTeluguCities_list");
