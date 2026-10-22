@@ -118,7 +118,7 @@
                         <tbody id="userTableBody" class="divide-y theme-border">
                             {% for user in register_users %}
                             <tr class="user-row" data-status="active">
-                                <td class="px-6 py-4 theme-secondary-text"> 1 </td>
+                                <td class="px-6 py-4 theme-secondary-text"> {{ forloop.counter }} </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
                                         <div class="w-10 h-10 rounded-full theme-primary text-white flex items-center justify-center font-bold"> NR </div>
@@ -129,10 +129,20 @@
                                 <td class="px-6 py-4">{{user.mobile}}</td>
                                 <td class="px-6 py-4">{{user.dob}}</td>
                                 <td class="px-6 py-4">{{user.gender}}</td>
-                                <td class="px-6 py-4">{{user.maritialstatus}}</td>
-                                <td class="px-6 py-4">{{user.religion_id}}</td>
-                                <td class="px-6 py-4">{{user.caste_id}}</td>
-                                <td class="px-6 py-4"><span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700"> <span class="w-2 h-2 rounded-full bg-green-500"> </span> Active </span> </td>
+                                <td class="px-6 py-4">
+                                    {% if user.maritialstatus == 1 %}
+                                    {{ "UnMarried" }}
+                                    {% elif UnMarried == 2 %}
+                                    {{ "Widow/Widower" }}
+                                    {% elif user.maritialstatus == 3 %}
+                                    {{ "Divorcee" }}
+                                    {% else %}
+                                    {{ "Awaiting Divorcee" }}
+                                    {% endif %}
+                                </td>
+                                <td class="px-6 py-4">{{user.religion_name}}</td>
+                                <td class="px-6 py-4">{{user.caste_name}}</td>
+                                <td class="px-6 py-4">{{user.status}}</td>
                                 <td class="px-6 py-4 text-right whitespace-nowrap">
                                     <button type="button" onclick="viewUser(1)" class="theme-primary-text hover:underline font-semibold mr-3">View</button>
                                     <button type="button" onclick="editUser(1)" class="theme-primary-text hover:underline font-semibold mr-3">Edit</button>
@@ -272,11 +282,11 @@
             <div class="grid grid-cols-12 gap-5">
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Basic Information </h1> </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Name<span id="mandatoryField">*</span></label>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Name<span class="text-red-500">*</span></label>
                     <input type="text" id="createName" name="createName" placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" required>
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Gender <span id="mandatoryField">*</span></label>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Gender <span class="text-red-500">*</span></label>
                     <select id="gender" name="gender" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
                         <option value="">--Select--</option>
                         <option value="M">Male</option>
@@ -284,15 +294,15 @@
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Date Of Birth <span id="mandatoryField">*</span></label>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Date Of Birth <span class="text-red-500">*</span></label>
                     <input type="date" id="dob" name="dob" placeholder="Enter username" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" required>
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Phone Number<span id="mandatoryField">*</span></label>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Phone Number<span class="text-red-500">*</span></label>
                     <input type="text" name="phoneNumber" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber" placeholder="Enter 10-digit mobile number" maxlength="10" pattern="[0-9]{10}" inputmode="numeric" required >
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion <span id="mandatoryField">*</span></label>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion <span class="text-red-500">*</span></label>
                     <select id="religion" name="religion" onchange="religionSelect(this.value)" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
                         <option value="" selected>--Select--</option>
                         {% for rl in religion_list %}
@@ -319,7 +329,7 @@
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2" id="casteDiv">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Caste <span id="mandatoryField">*</span></label>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Caste <span class="text-red-500">*</span></label>
                     <select id="caste" name="caste" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
                         <option value="" selected>--Select--</option>
                         {% for cl in caste_list %}
@@ -336,7 +346,7 @@
                     <input type="text" id="subCaste" name="subCaste"placeholder="Enter subcaste" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Marital Status <span id="mandatoryField">*</span></label>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Marital Status <span class="text-red-500">*</span></label>
                     <select id="maritalStatus" name="maritalStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none"  onchange="maritalStatusSelect(this.value)" required>
                         <option value="">--Select--</option>
                         <option value="1">UnMarried</option>
@@ -367,9 +377,9 @@
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Registered By </label>
-                    <select id="registerby" name="registerby" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
-                        <option value="0">--Select--</option>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Registered By <span class="text-red-500">*</span></label>
+                    <select id="registerby" name="registerby" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
+                        <option value="">--Select--</option>
                         <option value="Self">SELF</option>
                         <option value="Parents">PARENTS</option>
                         <option value="Siblings">SIBLINGS</option>
@@ -379,8 +389,8 @@
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Registered Team Member </label>
-                    <select id="offline_empid" name="offline_empid" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Registered Team Member <span class="text-red-500">*</span> </label>
+                    <select id="offline_empid" name="offline_empid" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
                         <option value="">--Select--</option>
                         {% for el in employee_list %}
                         <option value="{{ el.emp_id }}"> {{ el.username }} </option>
@@ -433,16 +443,16 @@
             <div class="grid grid-cols-12 gap-5 mt-8">
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Employment Details: </h1> </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Employment Status </label>
-                    <select id="employmentStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="employeeStatusSelect(this.value)">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Employment Status <span class="text-red-500">*</span></label>
+                    <select id="employmentStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="employeeStatusSelect(this.value)" required>
                         <option value="">--Select--</option>
                         <option value="working">Working</option>
                         <option value="notworking">Not Working</option>
                     </select>
                 </div>
                 <div class="col-span-12 md:col-span-2">
-                    <label for="designation" class="block text-sm font-semibold theme-dark-text mb-2">Designation</label>
-                    <select id="designation" name="designation" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                    <label for="designation" class="block text-sm font-semibold theme-dark-text mb-2">Designation <span class="text-red-500">*</span></label>
+                    <select id="designation" name="designation" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
                         <option value="">--Select--</option>
                     </select>
                 </div>
@@ -548,7 +558,7 @@
 
             <div class="grid grid-cols-12 gap-5 mt-8">
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Socio-Religious </h1> </div>
-                <div class="col-span-12 md:col-span-2">
+                <div class="col-span-12 md:col-span-4">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Raasi </label>
                     <select id="raasi_id" name="raasi_id" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="">--Select--</option>
@@ -557,7 +567,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-span-12 md:col-span-2">
+                <div class="col-span-12 md:col-span-4">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Star </label>
                     <select id="star_id" name="star_id" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
                         <option value="">--Select--</option>
@@ -567,7 +577,7 @@
                         star_list
                     </select>
                 </div>
-                <div class="col-span-12 md:col-span-2">
+                <div class="col-span-12 md:col-span-4">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Gothram </label>
                     <input type="text" id="gothram" name="gothram" placeholder="Enter gothram" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
@@ -618,8 +628,8 @@
 
             <div class="grid grid-cols-12 gap-5 mt-8">
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Permanent Location Details </h1> </div>
-                <div class="col-span-12 md:col-span-2">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Country<span id="mandatoryField">*</span></label>
+                <div class="col-span-12 md:col-span-3">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Country<span class="text-red-500">*</span></label>
                     <select class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" id="permanentCountry" name="permanentCountry" onchange="permanentCountrySelect(this.value)" required>
                         <option value="">--Select--</option>
                         {% for cl in counry_list %}
@@ -627,7 +637,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-span-12 md:col-span-2" id="permanentStateDiv" style="display:none;">
+                <div class="col-span-12 md:col-span-3" id="permanentStateDiv" style="display:none;">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> State </label>
                     <select class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" id="permanentState" name="permanentState" onchange="permanentStateSelect(this.value)">
                         <option value="">Select</option>
@@ -636,7 +646,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-span-12 md:col-span-2" id="permanentDistrictDiv" style="display:none;">
+                <div class="col-span-12 md:col-span-3" id="permanentDistrictDiv" style="display:none;">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> City/District </label>
                     <select id="permanentTeluguCities_list" name="permanentTeluguCities_list" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="permanentDistrictSelect(this.value)">
                         <option value="">Select</option>
@@ -645,7 +655,7 @@
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-span-12 md:col-span-2" id="permanentVillageDiv" style="display:none;">
+                <div class="col-span-12 md:col-span-3" id="permanentVillageDiv" style="display:none;">
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Town / Village </label> 
                     <input type="text" id="permanentVillage" name="permanentVillage" placeholder="Enter town/village" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
                 </div>
@@ -653,11 +663,11 @@
             
             <div class="grid grid-cols-12 gap-5 mt-8">
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Contact Information </h1> </div>
-                <div class="col-span-12 md:col-span-2">
+                <div class="col-span-12 md:col-span-6">
                     <label class="block text-sm font-semibold theme-dark-text mb-2 min-h-[40px]"> Alternative Phone Number </label>
                     <input type="text" id="alternative_phone_number" name="alternative_phone_number" placeholder="Enter phone number" maxlength="10" pattern="[0-9]{10}" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
                 </div>
-                <div class="col-span-12 md:col-span-2">
+                <div class="col-span-12 md:col-span-6">
                     <label class="block text-sm font-semibold theme-dark-text mb-2 min-h-[40px]"> Family / Friends / Other contact person mobile number </label>
                     <input type="text" id="other_contact_person_phonenum" name="other_contact_person_phonenum" placeholder="Enter phone number" maxlength="10" pattern="[0-9]{10}" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
                 </div>
@@ -921,7 +931,6 @@
         </div>
         <div class="p-5 border-t theme-border flex justify-end gap-3">
             <button type="button" onclick="closeModal('createModal')" class="px-5 py-2.5 rounded-xl theme-soft theme-primary-text font-semibold"> Cancel </button>
-            <!-- <button type="button" onclick="saveSampleUser()" class="theme-primary text-white px-5 py-2.5 rounded-xl font-semibold"> Create User </button> -->
             <button type="submit" class="theme-primary text-white px-5 py-2.5 rounded-xl font-semibold"> Create User </button>
         </div>
     </div>
@@ -2361,6 +2370,5 @@
             }
         }
     </script>
-    <style> #mandatoryField{ color:red; } </style>
 </body>
 </html>

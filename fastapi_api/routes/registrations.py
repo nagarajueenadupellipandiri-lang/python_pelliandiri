@@ -5,7 +5,7 @@ from hashlib import md5
 from sqlalchemy.orm import Session
 from sqlalchemy import func, or_
 from database import get_db
-from models import EngRegister, EnProfileInfo, EnDefineProfile
+from models import EngRegister, EnProfileInfo, EnDefineProfile, EnReligionMaster, EnCasteMaster
 from core.security import (
     validate_common_request,
     get_current_user,
@@ -56,11 +56,21 @@ def get_registrations(
     query = (
         db.query(
             EngRegister,
-            EnProfileInfo
+            EnProfileInfo,
+            EnReligionMaster,
+            EnCasteMaster,
         )
         .outerjoin(
             EnProfileInfo,
             EngRegister.register_id == EnProfileInfo.register_id
+        )
+        .outerjoin(
+            EnReligionMaster,
+            EngRegister.religion_id == EnReligionMaster.religion_id
+        )
+        .outerjoin(
+            EnCasteMaster,
+            EngRegister.caste_id == EnCasteMaster.caste_id
         )
     )
 
@@ -164,7 +174,8 @@ def get_registrations(
     # -----------------------------------------
     data = []
 
-    for reg, profile in registrations:
+    # for reg, profile in registrations:
+    for reg, profile, religion, caste in registrations:
         data.append({
             # en_register
             "register_id": reg.register_id,
@@ -178,8 +189,10 @@ def get_registrations(
             "childstatus": reg.childstatus,
 
             "religion_id": reg.religion_id,
+            "religion_name": (religion.religion_name if religion else None),
             "denomination": reg.denomination,
             "caste_id": reg.caste_id,
+            "caste_name": ( caste.caste_name if caste else None ),
             "subcaste": reg.subcaste,
 
             "citizenship": reg.citizenship,
