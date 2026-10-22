@@ -752,6 +752,7 @@ def user_view(request):
 
         religion_response = get_religion_list(request)
         religion_list = religion_response.get("data", [])
+        # print("religion_list is ", religion_list)
 
         christianDenomination_response  = get_christianDenomination_list(request)
         christianDenomination_list = christianDenomination_response.get("data", [])
@@ -857,7 +858,6 @@ def user_view(request):
 
     # Read registration result after redirect
     create_user_result = request.session.pop( "create_user_result", None )
-    # print("create_user_result is", create_user_result)
     data["create_user_result"] = create_user_result
     return render( request, "admin_app/users.html", data )
 
@@ -1004,7 +1004,7 @@ def createUser(request):
             "partner_country_id": data.get("preference_country"),
             "partner_state_id": data.get("preference_state"),
             "partner_residing_city": data.get("preference_city"),
-            "partner_religion_id": data.get("preference_caste"),
+            "partner_religion_id": data.get("preference_religion"),
             "partner_caste_id":data.get("preference_caste"),
             "willing_tomarryothres_cast": data.get("willing_tomarryothres_cast"),
             "otherinfo": data.get("otherinfo"),
