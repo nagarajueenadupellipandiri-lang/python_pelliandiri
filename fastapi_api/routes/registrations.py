@@ -15,6 +15,19 @@ from schemas.common import CommonRequest
 
 router = APIRouter( prefix="/registrations", tags=["Registrations"] )
 
+def format_dob(dob):
+    if dob is None or dob == "":
+        return None
+
+    try:
+        return datetime.fromtimestamp(
+            int(dob),
+            tz=ZoneInfo("Asia/Kolkata")
+        ).strftime("%d-%m-%Y")
+
+    except (ValueError, TypeError, OSError, OverflowError):
+        return None
+
 @router.post("/getRegistartions")
 def get_registrations(
     request: CommonRequest,
@@ -174,14 +187,19 @@ def get_registrations(
     # -----------------------------------------
     data = []
 
+
     # for reg, profile in registrations:
     for reg, profile, religion, caste in registrations:
+        # ================================
+        print("DOB VALUE:", repr(reg.dob))
+        print("DOB TYPE:", type(reg.dob))
+        # =================================
         data.append({
             # en_register
             "register_id": reg.register_id,
             "profile_id": reg.profile_id,
             "name": reg.name,
-            "dob": reg.dob,
+            "dob": format_dob(reg.dob),
             "tob": reg.tob,
             "age": reg.age,
             "gender": reg.gender,

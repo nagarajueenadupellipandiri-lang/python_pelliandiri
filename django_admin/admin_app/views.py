@@ -486,6 +486,17 @@ def get_events_data(request):
         )
     return events_response
 
+
+def get_banners_list(request):
+    payload, headers = common_payload(request)
+    banners_response = requests.post(
+            f"{settings.FASTAPI_BASE_URL}/logoAndBanners",
+            json=payload,
+            headers=headers,
+            timeout=10
+        )
+    return banners_response
+
 def login_view(request):
 
     logout_success = request.session.pop(
@@ -859,7 +870,6 @@ def user_view(request):
     # Read registration result after redirect
     create_user_result = request.session.pop( "create_user_result", None )
     data["create_user_result"] = create_user_result
-    # print("<pre>", data)
     return render( request, "admin_app/users.html", data )
 
 logger = logging.getLogger(__name__)
@@ -1066,3 +1076,16 @@ def createUser(request):
             "message": "An unexpected error occurred"
         }
         return redirect("createUser")
+
+def banners_logo_view(request):
+    payload, headers = common_payload(request)
+
+    if payload is None or headers is None:
+        return redirect("login")
+    return render(request, "admin_app/settings.html")
+
+# redierct to react page
+def react_home(request):
+    return redirect("http://localhost:5173/")
+
+
