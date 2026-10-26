@@ -664,11 +664,11 @@
             <div class="grid grid-cols-12 gap-5 mt-8">
                 <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Contact Information </h1> </div>
                 <div class="col-span-12 md:col-span-6">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2 min-h-[40px]"> Alternative Phone Number </label>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Alternative Phone Number </label>
                     <input type="text" id="alternative_phone_number" name="alternative_phone_number" placeholder="Enter phone number" maxlength="10" pattern="[0-9]{10}" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
                 </div>
                 <div class="col-span-12 md:col-span-6">
-                    <label class="block text-sm font-semibold theme-dark-text mb-2 min-h-[40px]"> Family / Friends / Other contact person mobile number </label>
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Family / Friends / Other contact person mobile number </label>
                     <input type="text" id="other_contact_person_phonenum" name="other_contact_person_phonenum" placeholder="Enter phone number" maxlength="10" pattern="[0-9]{10}" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
                 </div>
             </div>
@@ -744,7 +744,7 @@
                     <label class="block text-sm font-semibold theme-dark-text mb-2"> Employment Details </label>
                     <div class="relative">
                         <!-- Selected Text -->
-                        <button type="button" onclick="preferenceToggleOccupationDropdown()" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none text-left flex justify-between items-center" > <span id="preference_occupationSelectedText">--Select--</span> <!-- <span>▼</span> --> </button>
+                        <button type="button" onclick="preferenceToggleOccupationDropdown()" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none text-left flex justify-between items-center" > <span id="preference_occupationSelectedText">--Select--</span></button>
 
                         <!-- Dropdown -->
                         <div id="preference_occupationDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-72 overflow-y-auto" >
@@ -1160,26 +1160,6 @@
     }
 
     /* ========================================= */
-    /* SAVE SAMPLE USER */
-    /* ========================================= */
-    function saveSampleUser() {
-        const name = document.getElementById("createName") .value .trim();
-        const email = document.getElementById("email") .value .trim();
-        const role = document.getElementById("currentTeluguCities_list") .value;
-        if (!name || !email) {
-            alert("Please enter name and email.");
-            return;
-        }
-        alert(
-            "User created successfully!\n\n" +
-            "Name: " + name +
-            "\nEmail: " + email +
-            "\nRole: " + role
-        );
-        closeModal("createModal");
-    }
-
-    /* ========================================= */
     /* MODAL OPEN */
     /* ========================================= */
 
@@ -1228,7 +1208,6 @@
         }
     );
 </script>
-<!-- <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> -->
 <script>
     /* ========================================= */
     /* print only numbers */
@@ -1238,14 +1217,6 @@
             this.value = this.value.replace(/[^0-9]/g, "");
         })
     }); 
-
-    // document.querySelectorAll(".insertMobileNumber").forEach(function(inputValue) {
-    //     inputValue.addEventListener("input", function() {
-    //         this.value = this.value
-    //             .replace(/[^0-9]/g, "")
-    //             .slice(0, 10);
-    //     });
-    // });
 
     document.querySelectorAll(".insertMobileNumber").forEach(function(inputValue) {
         inputValue.addEventListener("input", function() {
@@ -1714,12 +1685,9 @@
 
         /*
         * IMPORTANT
-        * AP     = 2, TG     = 3193
+        * AP = 2, TG = 3193
         * Districts should ONLY appear when:
-        * AP
-        * TG
-        * AP + TG
-        * No other state combination.
+        * AP, TG, AP+TG, No other state combination.
         */
         const onlyAllowedStates = stateIds.every(function (id) {
                 return id === "2" || id === "3193";
@@ -2029,7 +1997,6 @@
     PARTNER PREFERENCE - CHANGE CURRENCY
     ========================================================= */
     function preferenceChangeCurrency(currency_id) {
-
         /* Reset all selected incomes */
         $(".preference_income-checkbox")
             .prop("checked", false);
@@ -2086,12 +2053,10 @@
         ANY SELECTED
         ===================================================== */
         if (value === "any" && $checkbox.is(":checked")) {
-
             $(".preference_income-checkbox")
                 .not('[value="any"]')
                 .prop("checked", false);
         }
-
 
         /* =====================================================
         SPECIFIC INCOME SELECTED
@@ -2116,7 +2081,6 @@
                     $(this).data("name")
                 );
             });
-
 
         if (selected.length === 0) {
             $("#preference_incomeSelectedText")
@@ -2148,7 +2112,6 @@
             $("#preference_muslimSubsectsDiv")
                 .removeClass("hidden");
         }
-
 
         /* =====================================================
         CHRISTIAN
@@ -2207,9 +2170,7 @@
                 selected.push(
                     $(this).data("name")
                 );
-
             });
-
 
         if (selected.length === 0) {
             $("#preference_christianDenominationSelectedText")
@@ -2243,7 +2204,6 @@
                 .not('[value="any"]')
                 .prop("checked", false);
         }
-
 
         /* -----------------------------------------------------
         SPECIFIC SUBSECT SELECTED
@@ -2281,9 +2241,6 @@
         }
     }
     </script>
-
-
-    <!-- ******************************************************************* -->
     <script>
         $(document).ready(function () {
             // Hide dependent fields on page load
@@ -2316,16 +2273,9 @@
             }
 
             if (String(countryId) === "1") {
-
-                // INDIA: Country -> State -> City/District
                 $("#currentStateDiv").show();
-
             } else {
-
-                // USA / Other countries: Country -> City/District
-                $("#currentDistrictDiv").show();
-
-                // Show placeholder
+                $("#currentDistrictDiv").hide();
                 citySelect.find("option:first").show();
             }
         }

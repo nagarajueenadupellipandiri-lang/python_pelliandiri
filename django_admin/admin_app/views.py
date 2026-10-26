@@ -859,6 +859,7 @@ def user_view(request):
     # Read registration result after redirect
     create_user_result = request.session.pop( "create_user_result", None )
     data["create_user_result"] = create_user_result
+    # print("<pre>", data)
     return render( request, "admin_app/users.html", data )
 
 logger = logging.getLogger(__name__)
