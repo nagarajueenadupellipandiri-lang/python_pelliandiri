@@ -27,4 +27,9 @@ urlpatterns = [
     path( "occupationAsWorking/", views.occupations_as_working, name="occupationAsWorking" ),
     path( "occupationsAsNotWorking/", views.occupations_as_not_working, name="occupationsAsNotWorking" ),
     path( "createUser/", views.createUser, name="createUser"),
+
+    path("banners_logo_view/", views.banners_logo_view, name="banners_logo_view"),
+
+    # for ract application
+    path("", views.react_home, name="home"),
 ]
