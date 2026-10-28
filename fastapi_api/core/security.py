@@ -76,8 +76,8 @@ def verify_access_token(token: str):
 
         return payload
 
-    except JWTError:
-
+    except JWTError as e:
+        print("JWT VERIFICATION ERROR:", repr(e))
         return None
 
 

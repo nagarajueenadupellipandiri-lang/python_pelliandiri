@@ -21,32 +21,20 @@
         <!-- MENU -->
         <!-- ===================================== -->
         <nav class="flex-1 px-4 py-6 space-y-2">
-            <!-- Main Menu -->
+            
             <p class="text-white/70 text-xs uppercase tracking-wider font-semibold px-3 mb-4"> Main Menu </p>
-            <!-- Dashboard -->
             <a href="{% url 'dashboard' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-white theme-primary-text font-semibold shadow-sm"> <span class="text-lg"> ▦ </span> Dashboard </a>
-
-            <!-- Employees -->
             <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/15 hover:text-white transition"> <span class="text-lg"> 👥 </span> Employees </a>
-
-            <!-- Users -->
             <a href="{% url 'users' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/15 hover:text-white transition"> <span class="text-lg"> ◉ </span> Users </a>
-
-
-            <!-- Events -->
             <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/15 hover:text-white transition"> <span class="text-lg"> ▣ </span> Events </a>
-
-
-            <!-- Reports -->
             <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/15 hover:text-white transition"> <span class="text-lg"> ▤ </span> Reports </a>
 
-            <!-- Settings Heading -->
             <p class="text-white/70 text-xs uppercase tracking-wider font-semibold px-3 pt-6 mb-4"> Settings </p>
-
-            <!-- Settings -->
             <a href="#" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/15 hover:text-white transition"> <span class="text-lg"> ⚙ </span> Settings </a>
+            <a href="{% url 'banners' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/15 hover:text-white transition"> <span class="text-lg"> ⚙ </span> Banners </a>
 
-            <a href="{% url 'banners_logo_view' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/15 hover:text-white transition"> <span class="text-lg"> ⚙ </span> Banners </a>
+            <p class="text-white/70 text-xs uppercase tracking-wider font-semibold px-3 pt-6 mb-4"> Pacakges </p>
+            <a href="{% url 'packages' %}" class="flex items-center gap-3 px-4 py-3 rounded-xl text-white/80 hover:bg-white/15 hover:text-white transition"> <span class="text-lg"> ⚙ </span> Categories </a>
         </nav>
 
         <!-- ===================================== -->

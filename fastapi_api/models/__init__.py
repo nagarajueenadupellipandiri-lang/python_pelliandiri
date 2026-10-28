@@ -19,3 +19,4 @@ from .en_defineprofile import EnDefineProfile
 from .en_muslim_subsects import EnMuslimSubsects
 from .en_christian_denomination import EnChristianDenomination
 from .en_banners import EnBanners
+from .en_package_categories import EnPackageCategories

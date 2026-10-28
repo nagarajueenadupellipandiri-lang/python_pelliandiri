@@ -69,12 +69,12 @@
                 <!-- TABLE HEADER -->
                 <div class="p-5 sm:p-6 border-b theme-border">
                     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"> <div>
-                            <h3 class="text-lg font-bold theme-dark-text">Users </h3>
+                            <h3 class="text-lg font-bold theme-dark-text">Categories </h3>
                             <p class="text-sm theme-secondary-text mt-1"> Manage sample users and their status </p>
                         </div>
 
                         <!-- CREATE -->
-                        <button type="button" onclick="openCreateModal()" class="theme-primary text-white px-4 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-90 transition flex items-center justify-center gap-2"> <span class="text-lg"> + </span> Create User </button>
+                        <button type="button" onclick="openCreateModal()" class="theme-primary text-white px-4 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-90 transition flex items-center justify-center gap-2"> <span class="text-lg"> + </span> Create Category </button>
                     </div>
                 </div>
 
@@ -93,56 +93,27 @@
                             <button type="button" onclick="filterStatus('active')" id="filterActive" class="status-filter px-4 py-2 rounded-lg text-sm font-semibold theme-dark-text transition"> Active </button>
                             <button type="button" onclick="filterStatus('inactive')" id="filterInactive" class="status-filter px-4 py-2 rounded-lg text-sm font-semibold theme-dark-text transition"> Inactive </button>
                         </div>
-
                     </div>
-
                 </div>
-                
                 <div class="overflow-x-auto">
+                <!-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full"> -->
                     <table class="w-full min-w-[850px] text-sm">
                         <thead>
                             <tr class="theme-soft border-y theme-border">
                                 <th class="px-6 py-4 text-left font-semibold theme-dark-text"> # </th>
                                 <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Name </th>
-                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> ProfileId </th>
-                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Mobile </th>
-                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Date Of Birth </th>
-                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Gender </th>
-                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Martisal Status </th>
-                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Religion </th>
-                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Caste </th>
-                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Status </th>
+                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> CreatdAt </th>
+                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Status</th>
                                 <th class="px-6 py-4 text-right font-semibold theme-dark-text"> Action </th>
                             </tr>
                         </thead>
                         <tbody id="userTableBody" class="divide-y theme-border">
-                            {% for user in register_users %}
+                            {% for pcl in packageCategories_list %}
                             <tr class="user-row" data-status="active">
-                                <td class="px-6 py-4 theme-secondary-text"> {{ forloop.counter }} </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 rounded-full theme-primary text-white flex items-center justify-center font-bold"> NR </div>
-                                        <div> <p class="font-semibold theme-dark-text"> {{ user.name }} </p> </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">{{ user.profile_id }}</td>
-                                <td class="px-6 py-4">{{user.mobile}}</td>
-                                <td class="px-6 py-4">{{user.dob}}</td>
-                                <td class="px-6 py-4">{{user.gender}}</td>
-                                <td class="px-6 py-4">
-                                    {% if user.maritialstatus == 1 %}
-                                    {{ "UnMarried" }}
-                                    {% elif UnMarried == 2 %}
-                                    {{ "Widow/Widower" }}
-                                    {% elif user.maritialstatus == 3 %}
-                                    {{ "Divorcee" }}
-                                    {% else %}
-                                    {{ "Awaiting Divorcee" }}
-                                    {% endif %}
-                                </td>
-                                <td class="px-6 py-4">{{user.religion_name}}</td>
-                                <td class="px-6 py-4">{{user.caste_name}}</td>
-                                <td class="px-6 py-4">{{user.status}}</td>
+                                <td class="px-6 py-4 theme-secondary-text"> {{ forloop.counter }}</td>
+                                <td class="px-6 py-4">{{ pcl.package_name }}</td>
+                                <td class="px-6 py-4">{{ pcl.datecreated }}</td>
+                                <td class="px-6 py-4">{{pcl.status}}</td>
                                 <td class="px-6 py-4 text-right whitespace-nowrap">
                                     <button type="button" onclick="viewUser(1)" class="theme-primary-text hover:underline font-semibold mr-3">View</button>
                                     <button type="button" onclick="editUser(1)" class="theme-primary-text hover:underline font-semibold mr-3">Edit</button>

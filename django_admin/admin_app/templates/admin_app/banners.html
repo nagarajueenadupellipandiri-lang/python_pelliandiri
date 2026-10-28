@@ -1,0 +1,927 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% include "admin_app/includes/headScript.html" %}
+</head>
+
+<body class="theme-page theme-dark-text">
+<div class="min-h-screen flex">
+<!-- ========================================= -->
+<!-- MOBILE OVERLAY -->
+<!-- ========================================= -->
+    <div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden"> </div>
+    {% include "admin_app/includes/side_navBar.html" %}
+    <div class="flex-1 lg:ml-72 min-w-0">
+        {% include "admin_app/includes/header.html" %}
+        <main class="p-4 sm:p-6 lg:p-8">
+            {% include "admin_app/includes/welcomeBanner.html" %}
+
+            <!-- ===================================== -->
+            <!-- STATISTICS -->
+            <!-- ===================================== -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
+                <!-- USERS -->
+                <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-12 h-12 rounded-xl theme-soft flex items-center justify-center theme-primary-text text-xl"> 👥 </div>
+                        <span class="text-xs font-semibold theme-primary-text theme-soft px-2 py-1 rounded-full"> +12% </span>
+                    </div>
+                    <p class="theme-secondary-text text-sm mt-5"> Total Users </p> 
+                    <h3 class="text-3xl font-bold theme-dark-text mt-1"> {{ total_registrations }} </h3>
+                </div>
+
+                <!-- EMPLOYEES -->
+                <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-12 h-12 rounded-xl theme-soft flex items-center justify-center theme-primary-text text-xl"> 👨‍💼 </div>
+                        <span class="text-xs font-semibold theme-primary-text theme-soft px-2 py-1 rounded-full"> Active </span>
+                    </div>
+                    <p class="theme-secondary-text text-sm mt-5"> Today Users </p>
+                    <h3 class="text-3xl font-bold theme-dark-text mt-1"> {{ today_registrations }} </h3>
+                </div>
+
+                <!-- EVENTS -->
+                <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-12 h-12 rounded-xl theme-soft flex items-center justify-center theme-primary-text text-xl"> 📅 </div>
+                        <span class="text-xs font-semibold theme-primary-text theme-soft px-2 py-1 rounded-full"> Upcoming </span>
+                    </div>
+                    <p class="theme-secondary-text text-sm mt-5"> This Month Users </p>
+                    <h3 class="text-3xl font-bold theme-dark-text mt-1"> {{ this_month_registrations }} </h3>
+                </div>
+
+                <!-- REPORTS -->
+                <div class="theme-card rounded-2xl border p-5 shadow-sm hover:shadow-md transition">
+                    <div class="flex items-center justify-between">
+                        <div class="w-12 h-12 rounded-xl theme-soft flex items-center justify-center theme-primary-text text-xl"> 📊 </div>
+                        <span class="text-xs font-semibold theme-primary-text theme-soft px-2 py-1 rounded-full"> This Month </span>
+                    </div>
+                    <p class="theme-secondary-text text-sm mt-5"> Reports </p>
+                    <h3 class="text-3xl font-bold theme-dark-text mt-1"> 156 </h3>
+                </div>
+            </div>
+
+            <!-- ================================================= -->
+            <!-- SAMPLE USERS TABLE -->
+            <!-- ================================================= -->
+            <div class="theme-card rounded-2xl border shadow-sm mb-8">
+                <!-- TABLE HEADER -->
+                <div class="p-5 sm:p-6 border-b theme-border">
+                    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"> <div>
+                            <h3 class="text-lg font-bold theme-dark-text">Banners </h3>
+                            <p class="text-sm theme-secondary-text mt-1"> Manage sample users and their status </p>
+                        </div>
+
+                        <!-- CREATE -->
+                        <button type="button" onclick="openCreateModal()" class="theme-primary text-white px-4 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-90 transition flex items-center justify-center gap-2"> <span class="text-lg"> + </span> Create Banner </button>
+                    </div>
+                </div>
+
+                <!-- SEARCH + FILTER -->
+                <div class="p-5 sm:p-6">
+                    <div class="flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
+                        <!-- SEARCH -->
+                        <div class="relative w-full md:max-w-md">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 theme-secondary-text"> 🔍 </span>
+                            <input type="text" id="userSearch" onkeyup="filterUsers()" placeholder="Search users..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400">
+                        </div>
+
+                        <!-- STATUS FILTER -->
+                        <div class="flex items-center gap-1 theme-soft p-1 rounded-xl w-fit">
+                            <button type="button" onclick="filterStatus('all')" id="filterAll" class="status-filter px-4 py-2 rounded-lg text-sm font-semibold theme-primary text-white transition"> All </button>
+                            <button type="button" onclick="filterStatus('active')" id="filterActive" class="status-filter px-4 py-2 rounded-lg text-sm font-semibold theme-dark-text transition"> Active </button>
+                            <button type="button" onclick="filterStatus('inactive')" id="filterInactive" class="status-filter px-4 py-2 rounded-lg text-sm font-semibold theme-dark-text transition"> Inactive </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                <!-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full"> -->
+                    <table class="w-full min-w-[850px] text-sm">
+                        <thead>
+                            <tr class="theme-soft border-y theme-border">
+                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> # </th>
+                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Type </th>
+                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Title </th>
+                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Image</th>
+                                <th class="px-6 py-4 text-left font-semibold theme-dark-text"> Status</th>
+                                <th class="px-6 py-4 text-right font-semibold theme-dark-text"> Action </th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody" class="divide-y theme-border">
+                            {% for bl in banners_list %}
+                            <tr class="user-row" data-status="active">
+                                <td class="px-6 py-4 theme-secondary-text"> {{ forloop.counter }}</td>
+                                <td class="px-6 py-4">{{ bl.banner_type }}</td>
+                                <td class="px-6 py-4">{{ bl.title }}</td>
+                                <td class="px-6 py-4">{{bl.image}}</td>
+                                <td class="px-6 py-4">{{bl.status}}</td>
+                                <td class="px-6 py-4 text-right whitespace-nowrap">
+                                    <button type="button" onclick="viewUser(1)" class="theme-primary-text hover:underline font-semibold mr-3">View</button>
+                                    <button type="button" onclick="editUser(1)" class="theme-primary-text hover:underline font-semibold mr-3">Edit</button>
+                                    <button type="button" onclick="deleteUser(1)" class="text-red-500 hover:text-red-700 font-semibold"> Delete </button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- TABLE FOOTER -->
+                <div class="px-6 py-4 border-t theme-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                    <p class="text-sm theme-secondary-text"> Showing <span id="visibleCount" class="font-semibold theme-dark-text"> 4 </span> users </p>
+                    <div class="text-sm theme-secondary-text"> Sample Data </div>
+                </div>
+            </div>
+
+            <!-- ========================================= -->
+            <!-- LOWER SECTION -->
+            <!-- ========================================= -->
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                <!-- RECENT ACTIVITY -->
+                <div class="xl:col-span-2 theme-card rounded-2xl border shadow-sm">
+                    <div class="p-6 border-b theme-border flex items-center justify-between">
+                        <h3 class="font-bold text-lg theme-dark-text"> Recent Activity </h3>
+                        <button type="button" class="theme-primary-text text-sm font-semibold"> View All </button>
+                    </div>
+                    <div class="divide-y theme-border"> 
+                        <div class="p-5 flex items-center gap-4"> 
+                            <div class="w-10 h-10 rounded-full theme-soft flex items-center justify-center"> 👤 </div> 
+                            <div class="flex-1 min-w-0"> 
+                                <p class="font-semibold text-sm theme-dark-text"> New user registered </p> 
+                                <p class="text-xs theme-secondary-text mt-1"> A new user joined the system </p> 
+                            </div>
+                            <span class="text-xs theme-secondary-text"> 2 min ago </span>
+                        </div>
+                        <div class="p-5 flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full theme-soft flex items-center justify-center"> 📅 </div>
+                            <div class="flex-1 min-w-0"> 
+                                <p class="font-semibold text-sm theme-dark-text"> New event created </p> 
+                                <p class="text-xs theme-secondary-text mt-1"> An event was added </p> 
+                            </div>
+                            <span class="text-xs theme-secondary-text"> 15 min ago </span>
+                        </div>
+                        <div class="p-5 flex items-center gap-4"> 
+                            <div class="w-10 h-10 rounded-full theme-soft flex items-center justify-center"> ✓ </div> 
+                            <div class="flex-1 min-w-0"> 
+                                <p class="font-semibold text-sm theme-dark-text"> System login successful </p> 
+                                <p class="text-xs theme-secondary-text mt-1"> Super Admin logged in </p> 
+                            </div> 
+                            <span class="text-xs theme-secondary-text"> 1 hour ago </span> 
+                        </div>
+                    </div>
+                </div>
+
+                <!-- QUICK ACTIONS -->
+                <div class="theme-card rounded-2xl border shadow-sm p-6">
+                    <h3 class="font-bold text-lg theme-dark-text mb-5"> Quick Actions </h3>
+                    <div class="space-y-3">
+                        <button type="button" onclick="openCreateModal()" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl theme-soft theme-primary-text hover:opacity-80 transition"> <span class="text-xl"> + </span> Add New User </button>
+                        <button type="button" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl theme-soft theme-primary-text hover:opacity-80 transition"> <span class="text-xl"> + </span> Create Event </button>
+                        <button type="button" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl theme-soft theme-primary-text hover:opacity-80 transition"> <span> ▤ </span> View Reports </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- ====================================================== -->
+<!-- VIEW USER MODAL -->
+<!-- ====================================================== -->
+
+<div id="viewModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+    <div class="theme-card w-full max-w-lg rounded-2xl shadow-2xl overflow-hidden">
+        <!-- HEADER -->
+        <div class="p-5 border-b theme-border flex items-center justify-between"> <div>
+                <h3 class="text-lg font-bold theme-dark-text"> User Details </h3>
+                <p class="text-sm theme-secondary-text"> View user information </p>
+            </div>
+            <button type="button" onclick="closeModal('viewModal')" class="w-9 h-9 rounded-lg theme-soft theme-primary-text"> ✕ </button>
+        </div>
+
+        <!-- BODY -->
+        <div class="p-6">
+            <div class="flex items-center gap-4 mb-6">
+                <div id="viewAvatar" class="w-16 h-16 rounded-full theme-primary text-white flex items-center justify-center text-xl font-bold"> NR </div>
+                <div>
+                    <h4 id="viewName" class="text-xl font-bold theme-dark-text"> Nagaraju </h4>
+                    <p id="viewUsername" class="text-sm theme-secondary-text"> @nagaraju </p>
+                </div>
+            </div>
+            <div class="space-y-4">
+                <div class="flex justify-between border-b theme-border pb-3">
+                    <span class="theme-secondary-text"> Email </span>
+                    <span id="viewEmail" class="font-semibold theme-dark-text"> nagaraju@example.com </span>
+                </div>
+                <div class="flex justify-between border-b theme-border pb-3">
+                    <span class="theme-secondary-text"> Role </span>
+                    <span id="viewRole" class="font-semibold theme-dark-text"> Admin </span>
+                </div>
+                <div class="flex justify-between"> 
+                    <span class="theme-secondary-text"> Status </span>
+                    <span id="viewStatus" class="font-semibold text-green-600"> Active </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="p-5 border-t theme-border flex justify-end"> <button type="button" onclick="closeModal('viewModal')" class="theme-primary text-white px-5 py-2.5 rounded-xl font-semibold"> Close </button> </div>
+    </div>
+</div>
+
+<!-- ====================================================== -->
+<!-- CREATE USER MODAL -->
+<!-- ====================================================== -->
+{% if create_user_result %}
+    <div class="alert {% if create_user_result.success %}alert-success{% else %}alert-danger{% endif %}" role="alert" style="display: block; padding: 15px; margin: 15px 0; border-radius: 8px;"> {{ create_user_result.message|default:"Registration completed." }} </div>
+{% else %}
+    <div class="alert alert-info" role="alert" style="display: block; padding: 15px; margin: 15px 0; border-radius: 8px;"> No registration message available. </div>
+{% endif %}
+
+<form id="createUserForm" method="post" action="{% url 'createUser' %}">
+<div id="createModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+    <div class="theme-card w-full max-w-7xl max-h-[95vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+        <div class="p-5 border-b theme-border flex items-center justify-between"> 
+        <div> 
+        <h3 class="text-lg font-bold theme-dark-text"> Create User </h3> 
+        <p class="text-sm theme-secondary-text"> Add a new sample user </p> 
+        </div> 
+        <button type="button" onclick="closeModal('createModal')" class="w-9 h-9 rounded-lg theme-soft theme-primary-text"> ✕ </button> </div>
+
+        <div class="p-6 w-full overflow-y-auto flex-1">
+            <!-- Create User Form -->
+            {% csrf_token %} 
+            <div class="grid grid-cols-12 gap-5">
+                <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Basic Information </h1> </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Name<span class="text-red-500">*</span></label>
+                    <input type="text" id="createName" name="createName" placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" required>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Gender <span class="text-red-500">*</span></label>
+                    <select id="gender" name="gender" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
+                        <option value="">--Select--</option>
+                        <option value="M">Male</option>
+                        <option value="F">Female</option>
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Date Of Birth <span class="text-red-500">*</span></label>
+                    <input type="date" id="dob" name="dob" placeholder="Enter username" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" required>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Phone Number<span class="text-red-500">*</span></label>
+                    <input type="text" name="phoneNumber" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber" placeholder="Enter 10-digit mobile number" maxlength="10" pattern="[0-9]{10}" inputmode="numeric" required >
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion <span class="text-red-500">*</span></label>
+                    <select id="religion" name="religion" onchange="religionSelect(this.value)" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
+                        <option value="" selected>--Select--</option>
+                        {% for rl in religion_list %}
+                        <option value="{{rl.religion_id}}">{{rl.religion_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2" id="christianDenominationDiv" style="display: none;">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Christian Denominations </label>
+                    <select id="christianDenomination" name="christianDenomination" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="" selected>--Select--</option>
+                         {% for cr in christianDenomination_list %}
+                        <option value="{{cr.denomination_id}}">{{cr.denomination}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2" id="muslimSubsectsDiv" style="display: none;">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Muslim Subsects</label>
+                    <select id="muslimSubsects" name="muslimSubsects" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="" selected>--Select--</option>
+                        {% for mss in muslimSubsects_list %}
+                        <option value="{{mss.denomination_id}}">{{mss.denomination}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2" id="casteDiv">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Caste <span class="text-red-500">*</span></label>
+                    <select id="caste" name="caste" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
+                        <option value="" selected>--Select--</option>
+                        {% for cl in caste_list %}
+                        <option value="{{cl.caste_id}}">{{cl.caste_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2" id="otherCasteDiv" style="display:none;">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Other Caste </label>
+                    <input type="text" id="otherCaste" name="otherCaste"placeholder="Enter otherCaste nme" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Sub Caste </label>
+                    <input type="text" id="subCaste" name="subCaste"placeholder="Enter subcaste" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Marital Status <span class="text-red-500">*</span></label>
+                    <select id="maritalStatus" name="maritalStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none"  onchange="maritalStatusSelect(this.value)" required>
+                        <option value="">--Select--</option>
+                        <option value="1">UnMarried</option>
+                        <option value="2">Widow/Widower</option>
+                        <option value="3">Divorcee</option>
+                        <option value="4">Awaiting Divorcee</option>
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2" id="num_child_div" style="display:none;">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Number Of Children(If any) </label> 
+                    <input type="text" id="childstatus" name="childstatus" placeholder="Enter Number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Time Of Birth </label>
+                    <input type="time" id="tob" name="tob" placeholder="Enter name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Email </label>
+                    <input type="email" id="email" name="email" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Height </label>
+                    <select id="height" name="height" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="" selected>--Select--</option>
+                        {% for hl in height_list %}
+                        <option value="{{hl.height_id}}">{{hl.height}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Registered By <span class="text-red-500">*</span></label>
+                    <select id="registerby" name="registerby" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
+                        <option value="">--Select--</option>
+                        <option value="Self">SELF</option>
+                        <option value="Parents">PARENTS</option>
+                        <option value="Siblings">SIBLINGS</option>
+                        <option value="Relatives">RELATIVES</option>
+                        <option value="Friends">FRIENDS</option>
+                        <option value="Offline">OFFLINE</option>
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Registered Team Member <span class="text-red-500">*</span> </label>
+                    <select id="offline_empid" name="offline_empid" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
+                        <option value="">--Select--</option>
+                        {% for el in employee_list %}
+                        <option value="{{ el.emp_id }}"> {{ el.username }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Physical Status </label>
+                    <select id="physical_status" name="physical_status" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="physicalStatusSelect(this.value)">
+                        <option value="N">--Select--</option>
+                        <option value="N">Normal</option>
+                        <option value="D">Disabled</option>
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2" id="about_physical_status_div" style="display:none;">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Disable </label>
+                    <input type="text" id="about_physical_status" name="about_physical_status" placeholder="Enter email" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-5 mt-8">
+                <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Education Details </h1> </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Education<span class="text-red-500">*</span></label>
+                    <select id="qualification_id" name="qualification_id" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
+                        <option value="" selected>--Select--</option>
+                        {% for qul in educationQualification_list %}
+                        <option value="{{qul.qualification_id}}">{{qul.qualification}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Qualification </label>
+                    <input type="text" id="qualification" name="qualification" placeholder="Enter qualification" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Specialization </label>
+                    <input type="text" id="specialization" placeholder="Enter specialization" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Place of Study </label>
+                    <input type="text" id="placeOfStudy" name="placeOfStudy" placeholder="Enter place" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Year of Passing </label>
+                    <input type="text" id="yearOfPassing" name="yearOfPassing" placeholder="Enter year" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 Year of Passing printDigitsonly" >
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-5 mt-8">
+                <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Employment Details: </h1> </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Employment Status <span class="text-red-500">*</span></label>
+                    <select id="employmentStatus" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="employeeStatusSelect(this.value)" required>
+                        <option value="">--Select--</option>
+                        <option value="working">Working</option>
+                        <option value="notworking">Not Working</option>
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label for="designation" class="block text-sm font-semibold theme-dark-text mb-2">Designation <span class="text-red-500">*</span></label>
+                    <select id="designation" name="designation" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" required>
+                        <option value="">--Select--</option>
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Company Name </label>
+                    <input type="text" id="company_name" name="company_name" placeholder="Enter company name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Experience </label>
+                    <input type="text" id="total_work_experiance" name="total_work_experiance" placeholder="Enter experience" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Location </label>
+                    <input type="text" id="employment_location" name="employment_location" placeholder="Enter location" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <h1 class="block text-sm font-semibold theme-dark-text mb-2">Annual Income</h1>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            <label for="currency_type" class="text-sm theme-dark-text"></label>
+                            <select id="currency_type" name="currency_type" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" onchange="changeCurrency(this.value)">
+                                <option value="0">Currency</option>
+                                <option value="1">INR</option>
+                                <option value="2">USD</option>
+                                <option value="3">EURO</option>
+                                <option value="4">POUNDS</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <label for="currency_value" class="text-sm theme-dark-text"></label>
+                            <select id="currency_value" name="currency_value" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                                <option value="">Income</option>
+                                {% for incom_lt in income_list %}
+                                <option value="{{ incom_lt.income_id }}" data-currency="{{ incom_lt.currency_id }}" style="display:none;" > {{ incom_lt.income }} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-5 mt-8">
+                <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Family Details </h1> </div>
+                <div class="col-span-12 md:col-span-2"> 
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Father Name </label> 
+                    <input type="text" id="father_name" name="father_name" placeholder="Enter father name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" > 
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Father Occupation </label>
+                    <select id="father_occupation_id" name="father_occupation_id" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="">--Select--</option>
+                        {% for category in occupation_groups %}
+                            <optgroup label="{{ category.cat_name }}" >
+                            {% for occupation in category.occupations %}
+                            <option value="{{ occupation.occupation_id }}">{{ occupation.occupation }}</option>
+                            {% endfor %}
+                            </optgroup>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Mother Name </label>
+                    <input type="text" id="mother_name" name="mother_name" placeholder="Enter mother name" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Mother Occupation </label>
+                    <select id="mother_occupation_id" name="mother_occupation_id" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="">--Select--</option>
+                        {% for category in occupation_groups %}
+                            <optgroup label="{{ category.cat_name }}" >
+                            {% for occupation in category.occupations %}
+                            <option value="{{ occupation.occupation_id }}">{{ occupation.occupation }}</option>
+                            {% endfor %}
+                            </optgroup>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Married Brothers </label> 
+                    <input type="text" id="family_brothers_married" name="family_brothers_married" placeholder="Enter Number" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> UnMarried Brothers </label> 
+                    <input type="text" id="family_brothers_unmarried" name="family_brothers_unmarried" placeholder="Enter Number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Married Sisters </label>
+                    <input type="text" id="family_sisters_married" name="family_sisters_married" placeholder="Enter Number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly" >
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> UnMarried Sisters </label>
+                    <input type="text" id="family_sisters_unmarried" name="family_sisters_unmarried" placeholder="Enter Number" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 printDigitsonly">
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Family Current Living In </label>
+                    <input type="text" id="family_livingcity" name="family_livingcity" placeholder="Enter living place" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400">
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Family HomeTown </label>
+                    <input type="text" id="family_hometown" name="family_hometown" placeholder="Enter home town" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" > 
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-5 mt-8">
+                <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Socio-Religious </h1> </div>
+                <div class="col-span-12 md:col-span-4">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Raasi </label>
+                    <select id="raasi_id" name="raasi_id" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="">--Select--</option>
+                        {% for rsl in raasi_list %}
+                        <option value="{{rsl.raasi_id}}">{{rsl.raasi}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-4">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Star </label>
+                    <select id="star_id" name="star_id" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="">--Select--</option>
+                        {% for stl in star_list %}
+                        <option value="{{stl.star_id}}">{{stl.star}}</option>
+                        {% endfor %}
+                        star_list
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-4">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Gothram </label>
+                    <input type="text" id="gothram" name="gothram" placeholder="Enter gothram" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-5 mt-8">
+                <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Current Location Details </h1> </div>
+
+                <!-- Country -->
+                <div class="col-span-12 md:col-span-3">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Country <span class="text-red-500">*</span> </label>
+                    <select id="currentCountry" name="currentCountry" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="currentCountrySelect(this.value)" required >
+                        <option value="">--Select Country--</option>
+                        {% for cl in counry_list %}
+                            <option value="{{ cl.country_id }}"> {{ cl.country_name }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- State -->
+                <div class="col-span-12 md:col-span-3" id="currentStateDiv" style="display: none;" >
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> State </label>
+                    <select id="currentState" name="currentState" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="currentStateSelect(this.value)" >
+                        <option value="">--Select State--</option>
+                        {% for st in inadian_states_list %}
+                        <option value="{{ st.state_id }}"> {{ st.state_name }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- City / District -->
+                <div class="col-span-12 md:col-span-3" id="currentDistrictDiv" style="display: none;" >
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> City / District </label>
+                    <select id="currentTeluguCities_list" name="currentTeluguCities_list" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="currentDistrictSelect(this.value)" >
+                        <option value="">--Select City / District--</option>
+                        {% for city in teluguCities_list %}
+                            <option value="{{ city.city_id }}" data-state="{{ city.state_id }}" > {{ city.city_name }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Town / Village -->
+                <div class="col-span-12 md:col-span-3" id="currentVillageDiv" style="display: none;" >
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Town / Village </label>
+                    <input type="text" id="currentVillage" name="currentVillage" placeholder="Enter town / village" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" />
+                </div>
+            </div>
+
+            <div class="grid grid-cols-12 gap-5 mt-8">
+                <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Permanent Location Details </h1> </div>
+                <div class="col-span-12 md:col-span-3">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Country<span class="text-red-500">*</span></label>
+                    <select class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" id="permanentCountry" name="permanentCountry" onchange="permanentCountrySelect(this.value)" required>
+                        <option value="">--Select--</option>
+                        {% for cl in counry_list %}
+                        <option value="{{cl.country_id}}">{{cl.country_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-3" id="permanentStateDiv" style="display:none;">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> State </label>
+                    <select class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" id="permanentState" name="permanentState" onchange="permanentStateSelect(this.value)">
+                        <option value="">Select</option>
+                        {% for ind_stl in inadian_states_list %}
+                        <option value="{{ ind_stl.state_id}}">{{ ind_stl.state_name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-3" id="permanentDistrictDiv" style="display:none;">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> City/District </label>
+                    <select id="permanentTeluguCities_list" name="permanentTeluguCities_list" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" onchange="permanentDistrictSelect(this.value)">
+                        <option value="">Select</option>
+                        {% for city in teluguCities_list %}
+                        <option value="{{ city.city_id }}" data-state="{{ city.state_id }}" style="display:none;" > {{ city.city_name }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-3" id="permanentVillageDiv" style="display:none;">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Town / Village </label> 
+                    <input type="text" id="permanentVillage" name="permanentVillage" placeholder="Enter town/village" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-12 gap-5 mt-8">
+                <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Contact Information </h1> </div>
+                <div class="col-span-12 md:col-span-6">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Alternative Phone Number </label>
+                    <input type="text" id="alternative_phone_number" name="alternative_phone_number" placeholder="Enter phone number" maxlength="10" pattern="[0-9]{10}" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
+                </div>
+                <div class="col-span-12 md:col-span-6">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Family / Friends / Other contact person mobile number </label>
+                    <input type="text" id="other_contact_person_phonenum" name="other_contact_person_phonenum" placeholder="Enter phone number" maxlength="10" pattern="[0-9]{10}" inputmode="numeric" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400 insertMobileNumber">
+                </div>
+            </div>
+            <div class="grid grid-cols-12 gap-5 mt-8">
+                <div class="col-span-12"> <h1 class="text-lg font-bold theme-dark-text"> Partner Preferences </h1></div>
+                <div class="col-span-12 md:col-span-2">
+                    <h1 class="block text-sm font-semibold theme-dark-text mb-2"> Age </h1>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            <label for="minage" class="text-sm theme-dark-text"> <!-- Min --> </label>
+                            <select id="minage" name="minage" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" ><option value="">Min</option> </select>
+                        </div>
+                        <div class="flex items-center gap-1"> <label for="maxage" class="text-sm theme-dark-text"> <!-- Max --> </label>
+                            <select id="maxage" name="maxage" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" ><option value="">Max</option> </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <h1 class="block text-sm font-semibold theme-dark-text mb-2"> Height </h1>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-1">
+                            <label for="minheight_id" class="text-sm theme-dark-text"></label>
+                            <select id="minheight_id" name="minheight_id" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                                <option value="">Min</option>
+                                {% for minHeight in height_list %}
+                                <option value="{{ minHeight.height_id }}"> {{ minHeight.height }} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <label for="maxheight_id" class="text-sm theme-dark-text"></label>
+                            <select id="maxheight_id" name="maxheight_id" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" >
+                                <option value="">Max</option>
+                                {% for maxHeight in height_list %}
+                                <option value="{{ maxHeight.height_id }}"> {{ maxHeight.height }} </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2 relative">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Marital Status</label>
+                    <div id="preference_maritalStatusDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleMaritalStatusDropdown()"> <span id="maritalStatusSelectedText">--Select--</span> </div>
+                    
+                    <div id="preference_maritalStatusDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto">
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> <input type="checkbox" name="preference_marital_status[]" value="any" data-name="Any" class="preference_marital_status-checkbox" onchange="preferenceMaritalStatusChanged(this)"> <span>Any</span> </label>
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> <input type="checkbox" name="preference_marital_status[]" value="1" data-name="UnMarried" class="preference_marital_status-checkbox" onchange="preferenceMaritalStatusChanged(this)"> <span>UnMarried</span> </label>
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> <input type="checkbox" name="preference_marital_status[]" value="2" data-name="Widow/Widower" class="preference_marital_status-checkbox" onchange="preferenceMaritalStatusChanged(this)"> <span>Widow/Widower</span> </label>
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> <input type="checkbox" name="preference_marital_status[]" value="3" data-name="Divorcee" class="preference_marital_status-checkbox" onchange="preferenceMaritalStatusChanged(this)"> <span>Divorcee</span> </label>
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> <input type="checkbox" name="preference_marital_status[]" value="4" data-name="Awaiting Divorcee" class="preference_marital_status-checkbox" onchange="preferenceMaritalStatusChanged(this)"> <span>Awaiting Divorcee</span> </label>
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2 relative">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Education </label>
+                    <div id="preference_educationDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleEducationDropdown()"> <span id="educationSelectedText">--Select--</span> </div>
+                    <div id="preference_educationDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto">
+                        <!-- ANY -->
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> 
+                            <input type="checkbox" name="preference_education[]" value="any" data-name="Any" class="preference_education-checkbox" onchange="preferenceEducationChanged(this)"> 
+                            <span>Any</span> 
+                        </label>
+                        
+                        <!-- EDUCATION QUALIFICATIONS -->
+                        {% for qul in educationQualification_list %}
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
+                            <input type="checkbox" name="preference_education[]" value="{{qul.qualification_id}}" data-name="{{qul.qualification}}" class="preference_education-checkbox" onchange="preferenceEducationChanged(this)">
+                            <span>{{qul.qualification}}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Employment Details </label>
+                    <div class="relative">
+                        <!-- Selected Text -->
+                        <button type="button" onclick="preferenceToggleOccupationDropdown()" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none text-left flex justify-between items-center" > <span id="preference_occupationSelectedText">--Select--</span></button>
+
+                        <!-- Dropdown -->
+                        <div id="preference_occupationDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-72 overflow-y-auto" >
+                            <!-- Any -->
+                            <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> <input type="checkbox" name="preference_occupation[]" value="any" class="preference_occupation-checkbox" data-name="Any" onchange="preferenceOccupationChanged(this)" > <span>Any</span> </label>
+                            {% for category in occupation_groups %}
+                                <div class="px-4 py-2 font-semibold text-sm theme-dark-text border-t theme-border"> {{ category.cat_name }} </div>
+                                {% for occupation in category.occupations %}
+                                    <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
+                                        <input type="checkbox" name="preference_occupation[]" value="{{ occupation.occupation_id }}" class="preference_occupation-checkbox" data-name="{{ occupation.occupation }}" onchange="preferenceOccupationChanged(this)" >
+                                        <span> {{ occupation.occupation }} </span>
+                                    </label>
+                                {% endfor %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <h1 class="block text-sm font-semibold theme-dark-text mb-2"> Annual Income </h1>
+                    <div class="flex items-center gap-3">
+                        <!-- Currency -->
+                        <div class="flex items-center gap-1">
+                            <label for="preference_incomeId" class="text-sm theme-dark-text"> </label>
+                            <select id="preference_incomeId" name="preference_incomeId" class="w-20 px-2 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400" onchange="preferenceChangeCurrency(this.value)" >
+                                <option value="0">Currency</option>
+                                <option value="1">INR</option>
+                                <option value="2">USD</option>
+                                <option value="3">EURO</option>
+                                <option value="4">POUNDS</option>
+                            </select>
+                        </div>
+
+                        <!-- Income Multiple Selection -->
+                        <div class="relative flex items-center gap-1">
+                            <button type="button" onclick="preferenceToggleIncomeDropdown()" class="w-32 px-3 py-2 rounded-xl border theme-border theme-page theme-dark-text outline-none text-left" > <span id="preference_incomeSelectedText"> Income </span> </button>
+
+                            <!-- Income Dropdown -->
+                            <div id="preference_incomeDropdown" class="hidden absolute top-full left-0 mt-1 z-50 w-56 max-h-64 overflow-y-auto rounded-xl border theme-border theme-page shadow-lg" >
+
+                            <!-- ANY -->
+                            <label id="preference_incomeAnyOption" class="flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-100" style="display: none;" > <input type="checkbox" name="preference_incomeValue[]" value="any" data-name="Any" class="preference_income-checkbox" onchange="preferenceIncomeChanged(this)" > <span>Any</span> </label>
+
+                            <!-- INCOME OPTIONS -->
+                            {% for income in income_list %}
+                                <label class="preference-income-option flex items-center gap-2 px-3 py-2 cursor-pointer hover:bg-gray-100" data-currency="{{ income.currency_id }}" style="display:none;" >
+                                    <input type="checkbox" name="preference_incomeValue[]" value="{{ income.income_id }}" data-name="{{ income.income }}" data-currency="{{ income.currency_id }}" class="preference_income-checkbox" onchange="preferenceIncomeChanged(this)" >
+                                    <span> {{ income.income }} </span>
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="col-span-12 md:col-span-2 relative">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Country </label>
+                    <div id="preference_countryDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleCountryDropdown()" > <span id="countrySelectedText">--Select--</span> </div>
+
+                    <div id="preference_countryDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto" >
+                        <!-- ANY -->
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> 
+                            <input type="checkbox" name="preference_country[]" value="any" data-name="Any" class="preference_country-checkbox" onchange="preferenceCountryChanged(this)" > <span>Any</span> 
+                        </label>
+
+                        <!-- COUNTRIES -->
+                        {% for cl in counry_list %}
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
+                            <input type="checkbox" name="preference_country[]" value="{{ cl.country_id }}" data-name="{{ cl.country_name }}" class="preference_country-checkbox" onchange="preferenceCountryChanged(this)" >
+                            <span>{{ cl.country_name }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2 relative" id="preference_state_div" style="display:none;" >
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> State </label>
+
+                    <!-- State dropdown button -->
+                    <div id="preference_stateDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleStateDropdown()" >
+                        <span id="preference_stateSelectedText">--Select--</span>
+                    </div>
+
+                    <!-- State dropdown -->
+                    <div id="preference_stateDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto" >
+                        <!-- Any -->
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
+                            <input type="checkbox" name="preference_state[]" value="any" data-name="Any" class="preference_state-checkbox" onchange="preferenceStateChanged(this)" >
+                            <span>Any</span>
+                        </label>
+
+                        <!-- Dynamic States -->
+                        {% for ind_stl in inadian_states_list %}
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
+                            <input type="checkbox" name="preference_state[]" value="{{ ind_stl.state_id }}" data-name="{{ ind_stl.state_name }}" class="preference_state-checkbox" onchange="preferenceStateChanged(this)" >
+                            <span> {{ ind_stl.state_name }} </span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2 relative" id="preferenceDistrictDiv" style="display:none;" >
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> City / District </label>
+                    <div id="preference_districtDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleDistrictDropdown()" >
+                        <span id="preference_districtSelectedText">--Select--</span>
+                    </div>
+                    <div id="preference_districtDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto" >
+                        <!-- Any -->
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
+                            <input type="checkbox" name="preference_city[]" value="any" data-name="Any" class="preference_district-checkbox" onchange="preferenceDistrictChanged(this)" >
+                            <span>Any</span>
+                        </label>
+
+                        <!-- Dynamic Districts -->
+                        {% for city in teluguCities_list %}
+                        <label class="preference-district-option flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100" data-state="{{ city.state_id }}" style="display:none;" >
+                            <input type="checkbox" name="preference_city[]" value="{{ city.city_id }}" data-name="{{ city.city_name }}" data-state="{{ city.state_id }}" class="preference_district-checkbox" onchange="preferenceDistrictChanged(this)" >
+                            <span> {{ city.city_name }} </span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2"> <label class="block text-sm font-semibold theme-dark-text mb-2"> Religion </label>
+                    <select id="preference_religion" name="preference_religion" onchange="preferenceReligionSelect(this.value)" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none" >
+                        <option value="">--Select--</option>
+                        {% for rl in religion_list %}
+                            <option value="{{ rl.religion_id }}"> {{ rl.religion_name }} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-span-12 md:col-span-2 hidden" id="preference_christianDenominationDiv" >
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Christian Denominations </label>
+                    <div class="relative">
+                        <button type="button" onclick="preferenceToggleChristianDenominationDropdown()" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none text-left" > <span id="preference_christianDenominationSelectedText"> --Select-- </span> </button>
+                        <div id="preference_christianDenominationDropdown" class="hidden absolute z-50 w-full mt-1 max-h-64 overflow-y-auto rounded-xl border theme-border theme-page shadow-lg" >
+                            <!-- ANY -->
+                            <label class="flex items-center gap-2 px-4 py-2 cursor-pointer"> <input type="checkbox" value="any" data-name="Any" class="preference_christianDenomination-checkbox" onchange="preferenceChristianDenominationChanged(this)" > <span>Any</span> </label>
+                            {% for pref_cr in christianDenomination_list %}
+                            <label class="flex items-center gap-2 px-4 py-2 cursor-pointer"> <input type="checkbox" name="preference_christianDenomination[]" value="{{ pref_cr.denomination_id }}" data-name="{{ pref_cr.denomination }}" class="preference_christianDenomination-checkbox" onchange="preferenceChristianDenominationChanged(this)" > <span>{{ pref_cr.denomination }}</span> </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2 hidden" id="preference_muslimSubsectsDiv" >
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Muslim Subsects</label>
+                    <div class="relative">
+                        <button type="button" onclick="preferenceToggleMuslimSubsectsDropdown()" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none text-left" > <span id="preference_muslimSubsectsSelectedText"> --Select-- </span> </button>
+                        <div id="preference_muslimSubsectsDropdown" class="hidden absolute z-50 w-full mt-1 max-h-64 overflow-y-auto rounded-xl border theme-border theme-page shadow-lg" >
+                        <!-- ANY -->
+                            <label class="flex items-center gap-2 px-4 py-2 cursor-pointer"> <input type="checkbox" value="any" data-name="Any" class="preference_muslimSubsects-checkbox" onchange="preferenceMuslimSubsectsChanged(this)" > <span>Any</span> </label>
+                            {% for pref_mss in muslimSubsects_list %}
+                            <label class="flex items-center gap-2 px-4 py-2 cursor-pointer"> <input type="checkbox" name="preference_muslimSubsects[]" value="{{ pref_mss.denomination_id }}" data-name="{{ pref_mss.denomination }}" class="preference_muslimSubsects-checkbox" onchange="preferenceMuslimSubsectsChanged(this)" > <span>{{ pref_mss.denomination }}</span> </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2 relative">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Caste </label>
+                    <!-- Selected Caste Display -->
+                    <div id="preference_casteDropdownButton" class="w-full min-h-[42px] px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text cursor-pointer" onclick="preferenceToggleCasteDropdown()" > 
+                        <span id="preference_casteSelectedText">--Select--</span> 
+                    </div>
+
+                    <div id="preference_casteDropdown" class="hidden absolute z-50 w-full mt-1 rounded-xl border theme-border theme-page shadow-lg max-h-60 overflow-y-auto" >
+                        <!-- Any -->
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100"> <input type="checkbox" name="preference_caste[]" value="any" data-name="Any" class="preference_caste-checkbox" onchange="preferenceCasteChanged(this)" > <span>Any</span> </label>
+                        <!-- Dynamic Castes -->
+                        {% for cl in caste_list %}
+                        <label class="flex items-center gap-2 px-4 py-2 cursor-pointer hover:bg-gray-100">
+                            <input type="checkbox" name="preference_caste[]" value="{{ cl.caste_id }}" data-name="{{ cl.caste_name }}" class="preference_caste-checkbox" onchange="preferenceCasteChanged(this)" >
+                            <span> {{ cl.caste_name }} </span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> Willing to Marry Other Caste or Religion </label>
+                    <div class="flex items-center gap-6">
+                        <label class="flex items-center gap-2 cursor-pointer"> <input type="radio" name="willing_tomarryothres_cast" value="Y" class="w-4 h-4" > <span>Yes</span> </label>
+                        <label class="flex items-center gap-2 cursor-pointer"> <input type="radio" name="willing_tomarryothres_cast" value="N" class="w-4 h-4" checked> <span>No</span> </label>
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-4">
+                    <label class="block text-sm font-semibold theme-dark-text mb-2"> About Preferred Partner </label> 
+                    <textarea name="otherinfo" id="otherinfo" rows="3" cols="20" border="3" class="w-full px-4 py-2.5 rounded-xl border theme-border theme-page theme-dark-text outline-none focus:ring-2 focus:ring-sky-400"></textarea> 
+                </div>
+            </div>
+        </div>
+        <div class="p-5 border-t theme-border flex justify-end gap-3">
+            <button type="button" onclick="closeModal('createModal')" class="px-5 py-2.5 rounded-xl theme-soft theme-primary-text font-semibold"> Cancel </button>
+            <button type="submit" class="theme-primary text-white px-5 py-2.5 rounded-xl font-semibold"> Create User </button>
+        </div>
+    </div>
+</div>
+</form>
+
+<!-- DELETE MODAL -->
+<div id="deleteModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+    <div class="theme-card w-full max-w-sm rounded-2xl shadow-2xl p-6 text-center">
+        <div class="w-14 h-14 rounded-full bg-red-100 text-red-600 flex items-center justify-center mx-auto text-2xl mb-4"> ! </div>
+        <h3 class="text-lg font-bold theme-dark-text"> Delete User? </h3> 
+        <p class="text-sm theme-secondary-text mt-2"> Are you sure you want to delete this user? </p>
+        <div class="flex justify-center gap-3 mt-6">
+            <button type="button" onclick="closeModal('deleteModal')" class="px-5 py-2.5 rounded-xl theme-soft theme-primary-text font-semibold"> Cancel </button>
+            <button type="button" onclick="confirmDelete()" class="px-5 py-2.5 rounded-xl bg-red-500 text-white font-semibold hover:bg-red-600"> Delete </button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
