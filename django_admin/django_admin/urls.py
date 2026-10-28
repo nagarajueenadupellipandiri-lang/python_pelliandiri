@@ -1,35 +1,17 @@
-"""
-URL configuration for django_admin project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/4.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
 from django.urls import path
 from admin_app import views
 
 urlpatterns = [     
-    path("admin/", views.login_view, name="login"),
-    path( "login/", views.login_view, name="login" ),     
-    path( "dashboard/", views.dashboard_view, name="dashboard" ), 
-    path( "logout/", views.logout_view, name="logout" ), 
-    path( "users/", views.user_view, name="users"), 
-    path( "occupationAsWorking/", views.occupations_as_working, name="occupationAsWorking" ),
-    path( "occupationsAsNotWorking/", views.occupations_as_not_working, name="occupationsAsNotWorking" ),
-    path( "createUser/", views.createUser, name="createUser"),
-
-    path("banners_logo_view/", views.banners_logo_view, name="banners_logo_view"),
-
-    # for ract application
     path("", views.react_home, name="home"),
+    path("admin/", views.login_view, name="login"),
+    path("login/", views.login_view, name="login" ),     
+    path("dashboard/", views.dashboard_view, name="dashboard" ), 
+    path("logout/", views.logout_view, name="logout" ), 
+    path("users/", views.user_view, name="users"), 
+    path("occupationAsWorking/", views.occupations_as_working, name="occupationAsWorking" ),
+    path("occupationsAsNotWorking/", views.occupations_as_not_working, name="occupationsAsNotWorking" ),
+    path("createUser/", views.createUser, name="createUser"),
+    path("banners/", views.banners_view, name="banners"),
+    path("packages/", views.pacakges_view, name="packages"),
 ]

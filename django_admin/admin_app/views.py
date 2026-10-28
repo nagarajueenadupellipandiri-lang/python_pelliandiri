@@ -6,12 +6,8 @@ import json
 from django.http import JsonResponse
 from django.conf import settings
 from datetime import datetime
-
-
-
 import logging
 from datetime import datetime
-
 
 def common_payload(request):
     access_token = request.session.get("access_token")
@@ -486,16 +482,25 @@ def get_events_data(request):
         )
     return events_response
 
-
 def get_banners_list(request):
     payload, headers = common_payload(request)
     banners_response = requests.post(
-            f"{settings.FASTAPI_BASE_URL}/logoAndBanners",
+            f"{settings.FASTAPI_BASE_URL}/SiteSettings/banners",
             json=payload,
             headers=headers,
             timeout=10
         )
     return banners_response
+
+def get_package_categories_list(request):
+    payload, headers = common_payload(request)
+    packagesCategories_response = requests.post(
+            f"{settings.FASTAPI_BASE_URL}/packages/categories",
+            json=payload,
+            headers=headers,
+            timeout=10
+        )
+    return packagesCategories_response
 
 def login_view(request):
 
@@ -1077,15 +1082,70 @@ def createUser(request):
         }
         return redirect("createUser")
 
-def banners_logo_view(request):
+def banners_view(request):
     payload, headers = common_payload(request)
 
     if payload is None or headers is None:
         return redirect("login")
-    return render(request, "admin_app/settings.html")
+
+    # --------------------------------
+    # Call FastAPI API
+    # --------------------------------
+    try:
+        banners_response = get_banners_list(request)
+        banners_response_data= banners_response.json()
+        banners_list = banners_response_data.get("data", [])
+
+    except requests.RequestException as e:
+        print("FastAPI connection error:", e)
+        return render(
+            request,
+            "admin_app/settings.html",
+            {
+                "error": "Unable to connect to API server."
+            }
+        )
+
+    # --------------------------------
+    # Send data to template
+    # --------------------------------
+    data = {
+        "banners_list": banners_list,
+    }  
+    return render(request, "admin_app/banners.html", data)
+
+def pacakges_view(request):
+    payload, headers = common_payload(request)
+
+    if payload is None or headers is None:
+        return redirect("login")
+
+    # --------------------------------
+    # Call FastAPI API
+    # --------------------------------
+    try:
+        packageCategories = get_package_categories_list(request)
+        packageCategories_response_data= packageCategories.json()
+        packageCategories_list = packageCategories_response_data.get("data", [])
+
+    except requests.RequestException as e:
+        print("FastAPI connection error:", e)
+        return render(
+            request,
+            "admin_app/packages.html",
+            {
+                "error": "Unable to connect to API server."
+            }
+        )
+
+    # --------------------------------
+    # Send data to template
+    # --------------------------------
+    data = {
+        "packageCategories_list": packageCategories_list,
+    }  
+    return render(request, "admin_app/packages.html", data)
 
 # redierct to react page
 def react_home(request):
     return redirect("http://localhost:5173/")
-
-
