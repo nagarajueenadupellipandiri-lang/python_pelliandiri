@@ -502,6 +502,16 @@ def get_package_categories_list(request):
         )
     return packagesCategories_response
 
+def get_package_subCategories_list(request):
+    payload, headers = common_payload(request)
+    packagesSubCategories_response = requests.post(
+            f"{settings.FASTAPI_BASE_URL}/packages/subCategories",
+            json=payload,
+            headers=headers,
+            timeout=10
+        )
+    return packagesSubCategories_response
+
 def login_view(request):
 
     logout_success = request.session.pop(
@@ -1145,6 +1155,39 @@ def pacakges_view(request):
         "packageCategories_list": packageCategories_list,
     }  
     return render(request, "admin_app/packages.html", data)
+
+def subPacakges_view(request):
+    payload, headers = common_payload(request)
+
+    if payload is None or headers is None:
+        return redirect("login")
+
+    # --------------------------------
+    # Call FastAPI API
+    # --------------------------------
+    try:
+        packageSubCategories = get_package_subCategories_list(request)
+        packageSubCategories_response_data= packageSubCategories.json()
+        packageSubCategories_list = packageSubCategories_response_data.get("data", [])
+
+    except requests.RequestException as e:
+        print("FastAPI connection error:", e)
+        return render(
+            request,
+            "admin_app/packages.html",
+            {
+                "error": "Unable to connect to API server."
+            }
+        )
+
+    # --------------------------------
+    # Send data to template
+    # --------------------------------
+    data = {
+        "packageSubCategories_list": packageSubCategories_list,
+    }  
+    # print("data is ", data)
+    return render(request, "admin_app/subPackages.html", data)
 
 # redierct to react page
 def react_home(request):

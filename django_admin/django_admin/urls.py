@@ -14,4 +14,5 @@ urlpatterns = [
     path("createUser/", views.createUser, name="createUser"),
     path("banners/", views.banners_view, name="banners"),
     path("packages/", views.pacakges_view, name="packages"),
+    path("subPackages/", views.subPacakges_view, name="subPackages"),
 ]

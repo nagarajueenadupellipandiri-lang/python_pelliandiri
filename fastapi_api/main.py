@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import text
 from database import engine
 from routes.auth import router as auth_router
@@ -14,8 +15,24 @@ from routes.employmentDetails import router as employmentDetails_router
 from routes.settings import router as settings_router
 from routes.package import router as package_router
 
-app = FastAPI( title="Pellipandiri API", version="1.0.0" )
+app = FastAPI(
+    title="Pellipandiri API",
+    version="1.0.0"
+)
 
+# CORS configuration: allow React frontend
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+    ],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Register API routers
 app.include_router(theme_router)
 app.include_router(auth_router)
 app.include_router(employees_router)
@@ -28,6 +45,7 @@ app.include_router(educationDetails_router)
 app.include_router(employmentDetails_router)
 app.include_router(settings_router)
 app.include_router(package_router)
+
 
 @app.get("/db-test")
 def db_test():
@@ -48,4 +66,3 @@ def db_test():
             "message": "MySQL connection failed",
             "error": str(e)
         }
-
