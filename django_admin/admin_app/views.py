@@ -41,6 +41,8 @@ def get_registartions_data(request):
 
     registers = registers_response.json()
     total_registrations = registers.get( "pagination", {} ) .get( "total_registrations", 0 )
+    male_registartions = registers.get('male_registartions')
+    female_registartions = registers.get('female_registartions')
     today_registrations = registers.get("today_registrations")
     this_month_registrations = registers.get("this_month_registrations")
 
@@ -48,6 +50,8 @@ def get_registartions_data(request):
         registers_response.status_code, 
         registers, 
         total_registrations,
+        male_registartions,
+        female_registartions,
         today_registrations,
         this_month_registrations,
     )
@@ -663,7 +667,7 @@ def dashboard_view(request):
     try:
         events_response = get_events_data(request)
         employees_response = get_employees_data(request)
-        registers_status_code, registers, total_registrations, today_registrations, this_month_registrations  = get_registartions_data(request)
+        (registers_status_code, registers, total_registrations, male_registartions, female_registartions, today_registrations, this_month_registrations)  = get_registartions_data(request)
         employees = employees_response.json()
         events = events_response.json()
 
@@ -720,10 +724,11 @@ def dashboard_view(request):
         "total_employees": total_employees,
         "total_events": total_events,
         "total_registrations": total_registrations,
+        "male_registartions": male_registartions,
+        "female_registartions": male_registartions,
         "user": request.session.get( "user", {} ),
         "template":"dashboard",
     }
-
     return render( request, "admin_app/dashboard.html", data )
 
 def logout_view(request):
@@ -772,7 +777,7 @@ def user_view(request):
     # Call FastAPI API
     # --------------------------------
     try:
-        ( registers_status_code, registers_response, total_registrations, today_registrations, this_month_registrations ) = get_registartions_data(request)
+        ( registers_status_code, registers_response, total_registrations, male_registartions, female_registartions, today_registrations, this_month_registrations ) = get_registartions_data(request)
 
         register_users = registers_response.get("data", [])
 
@@ -862,6 +867,8 @@ def user_view(request):
     # --------------------------------
     data = {
         "total_registrations": total_registrations,
+        "male_registartions": male_registartions,
+        "female_registartions": female_registartions,
         "today_registrations": today_registrations,
         "this_month_registrations": this_month_registrations,
         "register_users": register_users,

@@ -107,8 +107,23 @@ def get_registrations(
     total_registrations = query.with_entities(
         func.count(EngRegister.register_id)
     ).scalar()
-
     total_registrations = total_registrations or 0
+
+    # male registartions
+    male_registartions = query.filter(
+        EngRegister.gender == "M"
+    ).with_entities(
+        func.count(EngRegister.register_id)
+    ).scalar() or 0
+    male_registartions = male_registartions or 0
+
+    # female registartions
+    female_registartions = query.filter(
+        EngRegister.gender == "F"
+    ).with_entities(
+        func.count(EngRegister.register_id)
+    ).scalar() or 0
+    female_registartions = female_registartions or 0
 
     # -----------------------------------------
     # Today count
@@ -325,6 +340,9 @@ def get_registrations(
         "search": search,
         "today_registrations": today_registrations,
         "this_month_registrations": this_month_registrations,
+
+        "male_registartions": male_registartions,
+        "female_registartions": female_registartions,
         "data": data,
     }
 
