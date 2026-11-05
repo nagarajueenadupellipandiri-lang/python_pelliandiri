@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Package Subcategories</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 25px;
+            background: #f8fafc;
+        }
+
+        h2 {
+            color: #1e293b;
+        }
+
+        .message {
+            color: #0369a1;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            text-align: left;
+        }
+
+        th {
+            background: #0369a1;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f1f5f9;
+        }
+
+        tr:hover {
+            background: #e0f2fe;
+        }
+
+        .status {
+            color: green;
+            font-weight: bold;
+        }
+
+        .no-data {
+            color: red;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h2>Package Subcategories</h2>
+
+    <p class="message">{{ message }}</p>
+
+    {% if subcategories %}
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Category ID</th>
+                    <th>Package Name</th>
+                    <th>Subcategory ID</th>
+                    <th>Main Category ID</th>
+                    <th>Subcategory Name</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for row in subcategories %}
+
+                    <tr>
+                        <td>{{ row.category_id }}</td>
+                        <td>{{ row.package_name }}</td>
+                        <td>{{ row.cid }}</td>
+                        <td>{{ row.main_catid }}</td>
+                        <td>{{ row.subcatname }}</td>
+                        <td class="status">{{ row.status }}</td>
+                    </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    {% else %}
+
+        <p class="no-data">No subcategories found.</p>
+
+    {% endif %}
+
+</body>
+</html>

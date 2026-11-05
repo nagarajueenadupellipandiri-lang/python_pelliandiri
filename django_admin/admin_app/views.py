@@ -1,13 +1,30 @@
-import requests
+import sys, requests, json
+
+from pathlib import Path
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib import messages
-import json
 from django.http import JsonResponse
 from django.conf import settings
 from datetime import datetime
 import logging
 from datetime import datetime
+
+# Get main project root
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+# FastAPI project path
+FASTAPI_DIR = PROJECT_ROOT / "fastapi_api"
+
+# Add FastAPI folder to Python path
+if str(FASTAPI_DIR) not in sys.path:
+    sys.path.insert(0, str(FASTAPI_DIR))
+
+# Import FastAPI database
+from database import SessionLocal
+
+# Import FastAPI SQLAlchemy models
+from models import EnPackageCategories, EnPackageSubcategories
 
 def common_payload(request):
     access_token = request.session.get("access_token")
@@ -1222,6 +1239,74 @@ def liveEvents_view(request):
     }
     return render(request, "admin_app/liveEvents.html", data)
 
-# redierct to react page
+#db calling directly from fastapi 
+def withoutAPI(request):
+    # --------------------------------
+    # Authentication
+    # --------------------------------
+    payload, headers = common_payload(request)
+
+    if payload is None or headers is None:
+        return redirect("login")
+
+    # --------------------------------
+    # Connect to Database
+    # --------------------------------
+    db = SessionLocal()
+
+    try:
+        # --------------------------------
+        # Fetch Subcategories from MySQL
+        # --------------------------------
+        subcategories = (
+            db.query(
+                EnPackageCategories.id.label("category_id"),
+                EnPackageCategories.package_name,
+                EnPackageSubcategories.cid,
+                EnPackageSubcategories.main_catid,
+                EnPackageSubcategories.subcatname,
+                EnPackageSubcategories.status
+            )
+            .join(
+                EnPackageSubcategories,
+                EnPackageCategories.id == EnPackageSubcategories.main_catid
+            )
+            .filter(
+                EnPackageCategories.status == 1,
+                EnPackageSubcategories.status == "1"
+            )
+            .order_by(
+                EnPackageSubcategories.cid.asc()
+            )
+            .all()
+        )
+
+        print("Total subcategories:", len(subcategories))
+
+        # --------------------------------
+        # Send data to HTML Template
+        # --------------------------------
+        data = {
+            "message": "All subcategories fetched successfully",
+            "subcategories": subcategories
+        }
+
+        return render(request, "admin_app/test.html", data)
+
+    except Exception as e:
+        print("Database error:", e)
+        return render(
+            request,
+            "admin_app/test.html",
+            {
+                "message": "Unable to fetch subcategories.",
+                "subcategories": []
+            }
+        )
+
+    finally:
+        db.close()
+
+# redierct to react application
 def react_home(request):
     return redirect("http://localhost:5173/")
