@@ -15,4 +15,5 @@ urlpatterns = [
     path("banners/", views.banners_view, name="banners"),
     path("packages/", views.pacakges_view, name="packages"),
     path("subPackages/", views.subPacakges_view, name="subPackages"),
+    path("liveEvents/", views.liveEvents_view, name="liveEvents")
 ]

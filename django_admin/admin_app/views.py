@@ -475,11 +475,11 @@ def occupations_as_not_working(request):
             status=400
         )
 
-def get_events_data(request):
+def get_liveEvents_list(request):
     payload, headers = common_payload(request)
     
     events_response = requests.post(
-            f"{settings.FASTAPI_BASE_URL}/parichayaVedika",
+            f"{settings.FASTAPI_BASE_URL}/parichayaVedika/liveEvents",
             json=payload,
             headers=headers,
             timeout=10
@@ -665,7 +665,7 @@ def dashboard_view(request):
     # Call FastAPI APIs
     # --------------------------------
     try:
-        events_response = get_events_data(request)
+        events_response = get_liveEvents_list(request)
         employees_response = get_employees_data(request)
         (registers_status_code, registers, total_registrations, male_registartions, female_registartions, today_registrations, this_month_registrations)  = get_registartions_data(request)
         employees = employees_response.json()
@@ -1195,6 +1195,32 @@ def subPacakges_view(request):
     }  
     # print("data is ", data)
     return render(request, "admin_app/subPackages.html", data)
+
+def liveEvents_view(request):
+    payload, headers = common_payload(request)
+
+    if payload is None or headers is None:
+        return redirect("login")
+
+    try:
+       liveEvents = get_liveEvents_list(request)
+       liveEvents_response_data = liveEvents.json()
+       liveEvents_list = liveEvents_response_data.get("data", [])
+    
+    except requests.RequestException as e:
+        print("FastAPI connection error:", e)
+        return render(
+            request,
+            "admin_app/liveEvents.html",
+            {
+                "error": "Unable to connect to API server."
+            }
+        )
+
+    data = {
+        "liveEvents_list":liveEvents_list,
+    }
+    return render(request, "admin_app/liveEvents.html", data)
 
 # redierct to react page
 def react_home(request):
