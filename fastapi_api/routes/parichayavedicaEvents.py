@@ -12,15 +12,13 @@ from core.security import (
 from schemas.common import CommonRequest
 
 router = APIRouter( prefix="/parichayaVedika", tags=["ParichayaVedika"] )
-@router.post("/parichayavedicaEvents")
+@router.post("/liveEvents")
 def get_parichayavedica_events(
     request: CommonRequest,
     current_user: dict = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-
     validate_common_request(request, "login")
-
     events = db.query(EnParichayaVedika).all()
 
     return {
@@ -36,7 +34,7 @@ def get_parichayavedica_events(
                 "venue_address": event.venue_address,
                 "online_link": event.online_link,
                 "description": event.description,
-                "start_date": event.id,
+                "start_date": event.start_date,
                 "end_date": event.end_date,
                 "display_date": event.display_date,
                 "display_time": event.display_time,
