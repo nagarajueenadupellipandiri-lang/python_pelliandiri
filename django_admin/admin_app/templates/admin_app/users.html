@@ -86,7 +86,7 @@
                         </div>
 
                         <!-- CREATE -->
-                        <button type="button" onclick="openCreateModal()" class="theme-primary text-white px-4 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-90 transition flex items-center justify-center gap-2"> <span class="text-lg"> + </span> Create User </button>
+                        <button type="button" onclick="openCreateModal()" class="theme-primary text-white px-4 py-2.5 rounded-xl font-semibold shadow-sm hover:opacity-90 transition flex items-center justify-center gap-2"> <span class="text-lg"> + </span> Create User456 </button>
                     </div>
                 </div>
 
@@ -272,11 +272,40 @@
 <!-- ====================================================== -->
 <!-- CREATE USER MODAL -->
 <!-- ====================================================== -->
-{% if create_user_result %}
+<!-- {% if create_user_result %}
     <div class="alert {% if create_user_result.success %}alert-success{% else %}alert-danger{% endif %}" role="alert" style="display: block; padding: 15px; margin: 15px 0; border-radius: 8px;"> {{ create_user_result.message|default:"Registration completed." }} </div>
 {% else %}
     <div class="alert alert-info" role="alert" style="display: block; padding: 15px; margin: 15px 0; border-radius: 8px;"> No registration message available. </div>
+{% endif %} -->
+
+{% if create_user_result %}
+
+    {% if create_user_result.success %}
+
+        <div class="alert alert-success">
+            {{ create_user_result.message }}
+
+            <br>
+
+            Registration ID:
+            {{ create_user_result.register_id }}
+
+            <br>
+
+            Profile ID:
+            {{ create_user_result.profile_id }}
+        </div>
+
+    {% else %}
+
+        <div class="alert alert-danger">
+            {{ create_user_result.message }}
+        </div>
+
+    {% endif %}
+
 {% endif %}
+
 
 <form id="createUserForm" method="post" action="{% url 'createUser' %}">
 <div id="createModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
@@ -1036,36 +1065,21 @@
     const users = {
 
         1: {
-
             name: "Nagaraju",
-
             username: "@nagaraju",
-
             email: "nagaraju@example.com",
-
             role: "Admin",
-
             status: "Active",
-
             avatar: "NR"
-
         },
 
-
         2: {
-
             name: "Ravi Kumar",
-
             username: "@ravi",
-
             email: "ravi@example.com",
-
             role: "Manager",
-
             status: "Active",
-
             avatar: "RK"
-
         }
     };
 
@@ -1074,70 +1088,34 @@
     /* ========================================= */
     /* VIEW USER */
     /* ========================================= */
-
     function viewUser(id) {
         const user = users[id];
         if (!user) {
             return;
         }
 
-        document.getElementById("viewName")
-            .innerText = user.name;
-
-        document.getElementById("viewUsername")
-            .innerText = user.username;
-
-        document.getElementById("viewEmail")
-            .innerText = user.email;
-
-
-        document.getElementById("viewRole")
-            .innerText = user.role;
-
-
-        document.getElementById("viewStatus")
-            .innerText = user.status;
-
-
-        document.getElementById("viewAvatar")
-            .innerText = user.avatar;
-
-
+        document.getElementById("viewName") .innerText = user.name;
+        document.getElementById("viewUsername") .innerText = user.username;
+        document.getElementById("viewEmail") .innerText = user.email;
+        document.getElementById("viewRole") .innerText = user.role;
+        document.getElementById("viewStatus") .innerText = user.status;
+        document.getElementById("viewAvatar") .innerText = user.avatar;
         openModal("viewModal");
-
     }
 
     /* ========================================= */
     /* EDIT USER */
     /* ========================================= */
-
     function editUser(id) {
-
         const user = users[id];
-
-
         if (!user) {
-
             return;
-
         }
-
-
-        document.getElementById("createName")
-            .value = user.name;
-
-
-        document.getElementById("email")
-            .value = user.email;
-
-
-        document.getElementById("currentTeluguCities_list")
-            .value = user.role;
-
+        document.getElementById("createName") .value = user.name;
+        document.getElementById("email") .value = user.email;
+        document.getElementById("currentTeluguCities_list") .value = user.role;
         alert( "Edit mode for " + user.name + " will be connected to API later." );
     }
-
-
 
     /* ========================================= */
     /* DELETE USER */
@@ -1174,14 +1152,11 @@
     /* ========================================= */
     /* MODAL OPEN */
     /* ========================================= */
-
     function openModal(id) {
         const modal = document.getElementById(id);
         modal.classList.remove("hidden");
         modal.classList.add("flex");
     }
-
-
 
     /* ========================================= */
     /* MODAL CLOSE */
