@@ -1,30 +1,30 @@
-import sys, requests, json
-
+import sys, requests, json, hashlib, logging, math, uuid
 from pathlib import Path
+from datetime import datetime, date
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib import messages
 from django.http import JsonResponse
-from django.conf import settings
-from datetime import datetime
-import logging
-from datetime import datetime
+from django.views.decorators.http import require_http_methods
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import func
 
-# Get main project root
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
-
-# FastAPI project path
 FASTAPI_DIR = PROJECT_ROOT / "fastapi_api"
 
-# Add FastAPI folder to Python path
 if str(FASTAPI_DIR) not in sys.path:
     sys.path.insert(0, str(FASTAPI_DIR))
 
-# Import FastAPI database
 from database import SessionLocal
-
-# Import FastAPI SQLAlchemy models
-from models import EnPackageCategories, EnPackageSubcategories
+from models import (
+    EnLogin,
+    EnPackageCategories,
+    EnPackageSubcategories,
+    EngRegister,
+    EnBanners,
+    EnParichayaVedika,
+)
+from core.security import create_access_token
 
 def common_payload(request):
     access_token = request.session.get("access_token")
@@ -47,31 +47,115 @@ def common_payload(request):
     return payload, headers
 
 def get_registartions_data(request):
-    payload, headers = common_payload(request)
+    access_token = request.session.get("access_token")
 
-    registers_response = requests.post(
-            f"{settings.FASTAPI_BASE_URL}/registrations/getRegistartions",
-            json=payload,
-            headers=headers,
-            timeout=10
+    if not access_token:
+        return (401, {}, 0, 0, 0, 0, 0)
+
+    # Current page number
+    try:
+        page = int(request.GET.get("page", 1))
+        page = max(page, 1)
+    except (ValueError, TypeError):
+        page = 1
+
+    # Only 25 records per page
+    per_page = 20
+    offset = (page - 1) * per_page
+
+    db = SessionLocal()
+
+    try:
+        now = datetime.now()
+
+        # Total registrations count
+        total_registrations = (
+            db.query(func.count(EngRegister.register_id)).scalar() or 0
         )
 
-    registers = registers_response.json()
-    total_registrations = registers.get( "pagination", {} ) .get( "total_registrations", 0 )
-    male_registartions = registers.get('male_registartions')
-    female_registartions = registers.get('female_registartions')
-    today_registrations = registers.get("today_registrations")
-    this_month_registrations = registers.get("this_month_registrations")
+        male_registartions = (
+            db.query(func.count(EngRegister.register_id))
+            .filter(EngRegister.gender == "M")
+            .scalar() or 0
+        )
 
-    return (
-        registers_response.status_code, 
-        registers, 
-        total_registrations,
-        male_registartions,
-        female_registartions,
-        today_registrations,
-        this_month_registrations,
-    )
+        female_registartions = (
+            db.query(func.count(EngRegister.register_id))
+            .filter(EngRegister.gender == "F")
+            .scalar() or 0
+        )
+
+        today_registrations = (
+            db.query(func.count(EngRegister.register_id))
+            .filter(func.date(EngRegister.datecreated) == now.date())
+            .scalar() or 0
+        )
+
+        month_start = datetime(now.year, now.month, 1)
+
+        if now.month == 12:
+            next_month = datetime(now.year + 1, 1, 1)
+        else:
+            next_month = datetime(now.year, now.month + 1, 1)
+
+        this_month_registrations = (
+            db.query(func.count(EngRegister.register_id))
+            .filter(
+                EngRegister.datecreated >= month_start,
+                EngRegister.datecreated < next_month
+            )
+            .scalar() or 0
+        )
+
+        # Calculate pagination
+        total_pages = max(1, math.ceil(total_registrations / per_page))
+
+        # Prevent requesting a page beyond the last page
+        page = min(page, total_pages)
+        offset = (page - 1) * per_page
+
+        # Fetch only 20 records
+        register_users = (
+            db.query(EngRegister)
+            .order_by(EngRegister.register_id.desc())
+            .offset(offset)
+            .limit(per_page)
+            .all()
+        )
+
+        # print("Current page:", page)
+        # print("Records loaded:", len(register_users))
+
+        registers = {
+            "data": register_users,
+            "pagination": {
+                "total_registrations": total_registrations,
+                "current_page": page,
+                "per_page": per_page,
+                "total_pages": total_pages
+            },
+            "male_registartions": male_registartions,
+            "female_registartions": female_registartions,
+            "today_registrations": today_registrations,
+            "this_month_registrations": this_month_registrations
+        }
+
+        return (
+            200,
+            registers,
+            total_registrations,
+            male_registartions,
+            female_registartions,
+            today_registrations,
+            this_month_registrations
+        )
+
+    except SQLAlchemyError:
+        logging.exception("Registration database error")
+        return (500, {}, 0, 0, 0, 0, 0)
+
+    finally:
+        db.close()
 
 def get_religion_list(request):
     payload, headers = common_payload(request)
@@ -493,184 +577,168 @@ def occupations_as_not_working(request):
         )
 
 def get_liveEvents_list(request):
-    payload, headers = common_payload(request)
-    
-    events_response = requests.post(
-            f"{settings.FASTAPI_BASE_URL}/parichayaVedika/liveEvents",
-            json=payload,
-            headers=headers,
-            timeout=10
+    db= SessionLocal()
+    try:
+        pv_events = (
+            db.query(EnParichayaVedika)
+            .order_by(EnParichayaVedika.id.desc())
+            .all()
         )
-    return events_response
+        
+        return pv_events
+    except Exception as e:
+        print("Events Error:", e)
+        return []
+
+    finally:
+        db.close()
 
 def get_banners_list(request):
-    payload, headers = common_payload(request)
-    banners_response = requests.post(
-            f"{settings.FASTAPI_BASE_URL}/SiteSettings/banners",
-            json=payload,
-            headers=headers,
-            timeout=10
+    db = SessionLocal()
+    try:
+        banners = (
+            db.query(EnBanners)
+            .filter(
+                # EnBanners.status == 1,
+                # EnBanners.deleted == 0
+            )
+            .order_by(EnBanners.id.desc())
+            .all()
         )
-    return banners_response
+        return banners
 
-def get_package_categories_list(request):
-    payload, headers = common_payload(request)
-    packagesCategories_response = requests.post(
-            f"{settings.FASTAPI_BASE_URL}/packages/categories",
-            json=payload,
-            headers=headers,
-            timeout=10
-        )
-    return packagesCategories_response
+    except Exception as e:
+        print("Banner Error:", e)
+        return []
 
-def get_package_subCategories_list(request):
-    payload, headers = common_payload(request)
-    packagesSubCategories_response = requests.post(
-            f"{settings.FASTAPI_BASE_URL}/packages/subCategories",
-            json=payload,
-            headers=headers,
-            timeout=10
+    finally:
+        db.close()
+
+def get_package_categories_list():
+    db = SessionLocal()
+
+    try:
+        packageCategories_list = (
+            db.query(EnPackageCategories)
+            .order_by(EnPackageCategories.id.desc())
+            .all()
         )
-    return packagesSubCategories_response
+        return packageCategories_list
+
+    except Exception as e:
+        print("Package Categories Error:", e)
+        return []
+
+    finally:
+        db.close()
+
+def get_package_subCategories_list():
+
+    db = SessionLocal()
+
+    try:
+        packageSubCategories_list = (
+            db.query(EnPackageSubcategories)
+            .order_by(EnPackageSubcategories.cid.desc())
+            .all()
+        )
+
+        return packageSubCategories_list
+
+    except Exception as e:
+        print("Package Subcategories Error:", e)
+        return []
+
+    finally:
+        db.close()
 
 def login_view(request):
+    logout_success = request.session.pop("logout_success", False)
 
-    logout_success = request.session.pop(
-        "logout_success",
-        False
-    )
-
-    if request.method == "POST":
-
-        username = request.POST.get( "username", "" ).strip()
-        password = request.POST.get( "password", "" )
-
-        payload = {
-            "type": settings.FASTAPI_AUTH_TYPE,
-            "Authkey": settings.FASTAPI_AUTH_KEY,
-            "params": {
-                "username": username,
-                "password": password
-            }
-        }
-
-        try:
-
-            response = requests.post(
-                f"{settings.FASTAPI_BASE_URL}/auth/login",
-                json=payload,
-                timeout=10
-            )
-
-            data = response.json()
-
-        except requests.RequestException:
-
-            return render(
-                request,
-                "admin_app/login.html",
-                {
-                    "error": "FastAPI server is not available."
-                }
-            )
-
-        except ValueError:
-
-            return render(
-                request,
-                "admin_app/login.html",
-                {
-                    "error": "Invalid response from FastAPI."
-                }
-            )
-
-        # --------------------------------------
-        # Login failed
-        # --------------------------------------
-        if response.status_code != 200:
-
-            return render(
-                request,
-                "admin_app/login.html",
-                {
-                    "error": data.get(
-                        "message",
-                        data.get(
-                            "detail",
-                            "Invalid username or password."
-                        )
-                    )
-                }
-            )
-
-        if not data.get("status"):
-
-            return render(
-                request,
-                "admin_app/login.html",
-                {
-                    "error": data.get(
-                        "message",
-                        "Login failed."
-                    )
-                }
-            )
-
-        # --------------------------------------
-        # Login success
-        # --------------------------------------
-
-        access_token = data.get( "access_token" )
-        user = data.get( "data", {} )
-        if not access_token:
-
-            return render(
-                request,
-                "admin_app/login.html",
-                {
-                    "error": "Access token not received."
-                }
-            )
-
-        # --------------------------------------
-        # API configuration
-        # --------------------------------------
-
-        api_type = settings.FASTAPI_AUTH_TYPE
-        api_authkey = settings.FASTAPI_AUTH_KEY
-
-        # --------------------------------------
-        # Save session
-        # --------------------------------------
-
-        request.session["access_token"] = access_token
-        request.session["api_type"] = api_type
-        request.session["api_authkey"] = api_authkey
-        request.session["user"] = user
-
-        request.session["user_id"] = user.get(
-            "login_id"
-        )
-
-        request.session["username"] = user.get(
-            "username"
-        )
-
-        request.session.modified = True
-
+    # Already logged in
+    if request.session.get("access_token"):
         return redirect("dashboard")
 
-    # --------------------------------------
-    # Login page
-    # --------------------------------------
+    if request.method == "POST":
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "")
 
-    return render(
-        request,
-        "admin_app/login.html",
-        {
-            "logout_success": logout_success
-        }
-    )
+        if not username or not password:
+            return render(request, "admin_app/login.html", {
+                "error": "Please enter username and password."
+            })
+
+        db = SessionLocal()
+
+        try:
+            # ----------------------------------
+            # 1. Get user from MySQL
+            # ----------------------------------
+            employee = db.query(EnLogin).filter( EnLogin.username == username ).first()
+
+            if not employee:
+                return render(request, "admin_app/login.html", {
+                    "error": "Invalid username or password."
+                })
+
+            # ----------------------------------
+            # 2. Verify password (MD5)
+            # ----------------------------------
+            entered_password = hashlib.md5( password.encode("utf-8") ).hexdigest()
+
+            if employee.password != entered_password:
+                return render(request, "admin_app/login.html", {
+                    "error": "Invalid username or password."
+                })
+
+            # ----------------------------------
+            # 3. Check employee status
+            # ----------------------------------
+            if employee.status != 1:
+                return render(request, "admin_app/login.html", {
+                    "error": "Your account is inactive."
+                })
+
+            # ----------------------------------
+            # 4. Generate JWT Token
+            # ----------------------------------
+            token_data = {
+                "sub": str(employee.login_id),
+                "login_id": employee.login_id,
+                "username": employee.username
+            }
+
+            access_token = create_access_token(token_data)
+
+            # ----------------------------------
+            # 5. Save Django Session
+            # ----------------------------------
+            request.session.cycle_key()
+            request.session["access_token"] = access_token
+            request.session["api_type"] = settings.FASTAPI_AUTH_TYPE
+            request.session["api_authkey"] = settings.FASTAPI_AUTH_KEY
+            request.session["user"] = {
+                "login_id": employee.login_id,
+                "username": employee.username
+            }
+
+            request.session["user_id"] = employee.login_id
+            request.session["username"] = employee.username
+            request.session.set_expiry(3600)
+            return redirect("dashboard")
+
+        except SQLAlchemyError as e:
+            logging.exception("Database login error")
+            return render(request, "admin_app/login.html", {
+                "error": "Database connection error."
+            })
+
+        finally:
+            db.close()
+
+    return render(request, "admin_app/login.html", {
+        "logout_success": logout_success
+    })
 
 def dashboard_view(request):
     payload, headers = common_payload(request)
@@ -794,13 +862,21 @@ def user_view(request):
     # Call FastAPI API
     # --------------------------------
     try:
-        ( registers_status_code, registers_response, total_registrations, male_registartions, female_registartions, today_registrations, this_month_registrations ) = get_registartions_data(request)
+        (
+            registers_status_code,
+            registers_response,
+            total_registrations,
+            male_registartions,
+            female_registartions,
+            today_registrations,
+            this_month_registrations
+        ) = get_registartions_data(request)
+
 
         register_users = registers_response.get("data", [])
 
         religion_response = get_religion_list(request)
         religion_list = religion_response.get("data", [])
-        # print("religion_list is ", religion_list)
 
         christianDenomination_response  = get_christianDenomination_list(request)
         christianDenomination_list = christianDenomination_response.get("data", [])
@@ -912,400 +988,350 @@ def user_view(request):
     return render( request, "admin_app/users.html", data )
 
 logger = logging.getLogger(__name__)
-def createUser(request):
+def form_value(data, key, default=""):
+    return (data.get(key) or default).strip()
 
-    # GET: Load existing dropdown data
+def get_int(data, key, default=None):
+    value = form_value(data, key)
+
+    if not value:
+        return default
+
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        raise ValueError(f"Invalid value for {key}")
+
+def calculate_age(dob_date):
+    today = date.today()
+    age = today.year - dob_date.year
+    if (today.month, today.day) < (dob_date.month, dob_date.day):
+        age -= 1
+
+    return age
+
+def get_timestamp():
+    return int(datetime.now().timestamp())
+
+def createUser(request):
+    # =========================================
+    # GET: Dropdown data from FastAPI
+    # =========================================
     if request.method == "GET":
         return user_view(request)
 
-    # Allow only POST
+    # =========================================
+    # Only POST allowed
+    # =========================================
     if request.method != "POST":
         return JsonResponse({
             "status": False,
             "message": "Only POST method is allowed"
         }, status=405)
 
-    try:
-        payload, headers = common_payload(request)
-
-        # Check authentication
-        if payload is None or headers is None:
-            logger.warning("Create user failed: authentication data missing")
-            return redirect("login")
-
-        data = request.POST
-        # print("data is ", data)
-
-        # Validate DOB
-        dob = data.get("dob", "").strip()
-        if not dob:
-            request.session["create_user_result"] = {
-                "success": False,
-                "message": "Date of birth is required."
-            }
-            return redirect("createUser")
-
-        dob_date = datetime.strptime(dob, "%Y-%m-%d").date()
-
-        # Validate marital status
-        maritialstatus = data.get("maritalStatus", "").strip()
-
-        if not maritialstatus:
-            request.session["create_user_result"] = {
-                "success": False,
-                "message": "Marital status is required."
-            }
-            return redirect("createUser")
-
-        # Get preference marital status
-        preference_marital_status = data.getlist( "preference_marital_status[]" )
-        preference_country = data.getlist("preference_country[]")
-        preference_marital_status = ",".join( str(value) for value in preference_marital_status )
-        preference_country = ",".join( str(value) for value in preference_country )
-
-        height_value = data.get("height_id", "").strip()
-        if height_value:
-            try:
-                height_id = int(height_value)
-            except (TypeError, ValueError):
-                request.session["create_user_result"] = {
-                    "success": False,
-                    "message": "Invalid height value."
-                }
-                return redirect("createUser")
-        else:
-            height_id = 0
-
-        permnt_country_id = data.get("currentCountry", "").strip()
-        state_id = data.get("currentState", "").strip()
-        permnt_city_id = data.get("currentCity", "").strip()
-        permnt_village = data.get("currentVillage").strip()
-
-        temp_country = data.get("permanentCountry", "").strip()
-        temp_state = data.get("permanentState", "").strip()
-        temp_city = data.get("permanentTeluguCities_list", "").strip()
-        temp_town = data.get("permanentVillage").strip()
-
-        # Prepare registration parameters
-        registration_params = {
-            "name": data.get("createName", "").strip(),
-            "gender": data.get("gender", ""),
-            "dob": dob_date.strftime("%Y-%m-%d"),
-            "mobile": data.get("phoneNumber", "").strip(),
-            "religion_id": data.get("religion", ""),
-            "caste_id": data.get("caste", ""),
-            "denomination": data.get("denomination", 0),
-            "subcaste": data.get("subcaste", ""),
-            "maritialstatus": int(maritialstatus),
-            "childstatus": data.get("childstatus", ""),
-            "tob": data.get("tob", ""),
-            "email": data.get("email", "").strip(),
-            "height_id": height_id,
-            "registerby": data.get("registerby", "Self"),
-            "offline_empid": data.get("offline_empid"),
-            "physicalstatus": data.get("physical_status"),
-            "marital_status": preference_marital_status,
-            "person_citizenship": 1,
-            "qualification_id": data.get("qualification_id"),
-            "qualification": data.get("qualification"),
-            "Specialization": data.get("Specialization"),
-            "placeofstudy": data.get("placeOfStudy"),
-            "yearofpassing": data.get("yearOfPassing"),
-            "occupation_id": data.get("designation"),
-            "company_name": data.get("company_name"),
-            "total_work_experiance": data.get("total_work_experiance"),
-            "employment_location": data.get("employment_location"),
-            "annualincome_id":data.get("currency_type"),
-            "annualincome":data.get("currency_value"),
-            "father_name":data.get("father_name"),
-            "father_occupation_id":data.get("father_occupation_id"),
-            "mother_name":data.get("mother_name"),
-            "mother_occupation_id":data.get("mother_occupation_id"),
-            "family_brothers_married":data.get("family_brothers_married"),
-            "family_brothers_unmarried":data.get("family_brothers_unmarried"),
-            "family_sisters_married":data.get("family_sisters_married"),
-            "family_sisters_unmarried":data.get("family_sisters_unmarried"),
-            "family_livingcity":data.get("family_livingcity"),
-            "family_hometown":data.get("family_hometown"),
-            "star_id":data.get("star_id"),
-            "raasi_id":data.get("raasi_id"),
-            "gothram": data.get("gothram"),
-            "temp_country":temp_country,
-            "temp_state": temp_state, 
-            "temp_city": temp_city, 
-            "temp_town":temp_town,
-            "permnt_country_id": permnt_country_id,
-            "state_id": state_id,
-            "permt_residing_city": permnt_city_id,
-            "permnt_village": permnt_village,
-            "partner_country_id": preference_country,
-
-            "alternative_phone_number": data.get("alternative_phone_number"),
-            "other_contact_person_phonenum":data.get("other_contact_person_phonenum"),
-            "minage":data.get("minage"),
-            "maxage":data.get("maxage"),
-            "minheight_id":data.get("minheight_id"),
-            "maxheight_id":data.get("maxheight_id"),
-            "marital_status":data.get("preference_marital_status"),
-            "partner_qualification_id":data.get("preference_education"),
-            "partner_occupation_id": data.get("preference_occupation"),
-            "partner_annualincome_id": data.get("preference_incomeId"),
-            "partner_annualincome": data.get("preference_incomeValue"),
-            "partner_country_id": data.get("preference_country"),
-            "partner_state_id": data.get("preference_state"),
-            "partner_residing_city": data.get("preference_city"),
-            "partner_religion_id": data.get("preference_religion"),
-            "partner_caste_id":data.get("preference_caste"),
-            "willing_tomarryothres_cast": data.get("willing_tomarryothres_cast"),
-            "otherinfo": data.get("otherinfo"),
-        }
-
-        payload["params"] = registration_params
-
-        # Call FastAPI
-        response = requests.post(
-            f"{settings.FASTAPI_BASE_URL}/registrations/createRegistartion",
-            json=payload,
-            headers=headers,
-            timeout=10
-        )
-
-        try:
-            apidata = response.json()
-        except ValueError:
-            apidata = {
-                "status": False,
-                "message": "Invalid JSON response from FastAPI"
-            }
-
-        success = response.ok and apidata.get("status") is True
-        logger.info( "Registration API response: HTTP status=%s, success=%s", response.status_code, success )
-
-        if not success:
-            logger.error(
-                "Registration API failed: HTTP status=%s, response=%s",
-                response.status_code,
-                apidata
-            )
-
-        request.session["create_user_result"] = {
-            "success": success,
-            "message": apidata.get(
-                "message",
-                "Registration created successfully"
-                if success else "Registration failed"
-            ),
-            "apidata": apidata.get("data", {})
-        }
-        request.session.modified = True
-        return redirect("createUser")
-
-    except requests.RequestException:
-        logger.exception("FastAPI registration request failed")
-        request.session["create_user_result"] = {
-            "success": False,
-            "message": "Unable to connect to registration API"
-        }
-        return redirect("createUser")
-
-    except Exception:
-        logger.exception("Unexpected error in createUser")
-        request.session["create_user_result"] = {
-            "success": False,
-            "message": "An unexpected error occurred"
-        }
-        return redirect("createUser")
-
-def banners_view(request):
-    payload, headers = common_payload(request)
-
-    if payload is None or headers is None:
+    # =========================================
+    # Django Session Authentication
+    # =========================================
+    if not request.session.get("access_token"):
         return redirect("login")
 
-    # --------------------------------
-    # Call FastAPI API
-    # --------------------------------
-    try:
-        banners_response = get_banners_list(request)
-        banners_response_data= banners_response.json()
-        banners_list = banners_response_data.get("data", [])
-
-    except requests.RequestException as e:
-        print("FastAPI connection error:", e)
-        return render(
-            request,
-            "admin_app/settings.html",
-            {
-                "error": "Unable to connect to API server."
-            }
-        )
-
-    # --------------------------------
-    # Send data to template
-    # --------------------------------
-    data = {
-        "banners_list": banners_list,
-    }  
-    return render(request, "admin_app/banners.html", data)
-
-def pacakges_view(request):
-    payload, headers = common_payload(request)
-
-    if payload is None or headers is None:
-        return redirect("login")
-
-    # --------------------------------
-    # Call FastAPI API
-    # --------------------------------
-    try:
-        packageCategories = get_package_categories_list(request)
-        packageCategories_response_data= packageCategories.json()
-        packageCategories_list = packageCategories_response_data.get("data", [])
-
-    except requests.RequestException as e:
-        print("FastAPI connection error:", e)
-        return render(
-            request,
-            "admin_app/packages.html",
-            {
-                "error": "Unable to connect to API server."
-            }
-        )
-
-    # --------------------------------
-    # Send data to template
-    # --------------------------------
-    data = {
-        "packageCategories_list": packageCategories_list,
-    }  
-    return render(request, "admin_app/packages.html", data)
-
-def subPacakges_view(request):
-    payload, headers = common_payload(request)
-
-    if payload is None or headers is None:
-        return redirect("login")
-
-    # --------------------------------
-    # Call FastAPI API
-    # --------------------------------
-    try:
-        packageSubCategories = get_package_subCategories_list(request)
-        packageSubCategories_response_data= packageSubCategories.json()
-        packageSubCategories_list = packageSubCategories_response_data.get("data", [])
-
-    except requests.RequestException as e:
-        print("FastAPI connection error:", e)
-        return render(
-            request,
-            "admin_app/packages.html",
-            {
-                "error": "Unable to connect to API server."
-            }
-        )
-
-    # --------------------------------
-    # Send data to template
-    # --------------------------------
-    data = {
-        "packageSubCategories_list": packageSubCategories_list,
-    }  
-    # print("data is ", data)
-    return render(request, "admin_app/subPackages.html", data)
-
-def liveEvents_view(request):
-    payload, headers = common_payload(request)
-
-    if payload is None or headers is None:
-        return redirect("login")
-
-    try:
-       liveEvents = get_liveEvents_list(request)
-       liveEvents_response_data = liveEvents.json()
-       liveEvents_list = liveEvents_response_data.get("data", [])
-    
-    except requests.RequestException as e:
-        print("FastAPI connection error:", e)
-        return render(
-            request,
-            "admin_app/liveEvents.html",
-            {
-                "error": "Unable to connect to API server."
-            }
-        )
-
-    data = {
-        "liveEvents_list":liveEvents_list,
-    }
-    return render(request, "admin_app/liveEvents.html", data)
-
-#db calling directly from fastapi 
-def withoutAPI(request):
-    # --------------------------------
-    # Authentication
-    # --------------------------------
-    payload, headers = common_payload(request)
-
-    if payload is None or headers is None:
-        return redirect("login")
-
-    # --------------------------------
-    # Connect to Database
-    # --------------------------------
     db = SessionLocal()
 
     try:
-        # --------------------------------
-        # Fetch Subcategories from MySQL
-        # --------------------------------
-        subcategories = (
-            db.query(
-                EnPackageCategories.id.label("category_id"),
-                EnPackageCategories.package_name,
-                EnPackageSubcategories.cid,
-                EnPackageSubcategories.main_catid,
-                EnPackageSubcategories.subcatname,
-                EnPackageSubcategories.status
-            )
-            .join(
-                EnPackageSubcategories,
-                EnPackageCategories.id == EnPackageSubcategories.main_catid
-            )
-            .filter(
-                EnPackageCategories.status == 1,
-                EnPackageSubcategories.status == "1"
-            )
-            .order_by(
-                EnPackageSubcategories.cid.asc()
-            )
-            .all()
+        data = request.POST
+
+        # =====================================
+        # 1. Basic validations
+        # =====================================
+        name = form_value(data, "createName")
+        gender = form_value(data, "gender")
+        mobile = form_value(data, "phoneNumber")
+        dob = form_value(data, "dob")
+
+        if not name:
+            raise ValueError("Name is required.")
+
+        if gender not in ["M", "F"]:
+            raise ValueError("Please select valid gender.")
+
+        if len(mobile) != 10 or not mobile.isdigit():
+            raise ValueError("Mobile number must contain 10 digits.")
+
+        if not dob:
+            raise ValueError("Date of birth is required.")
+
+        dob_date = datetime.strptime(
+            dob, "%Y-%m-%d"
+        ).date()
+
+        age = calculate_age(dob_date)
+
+        if age < 18:
+            raise ValueError("Age must be at least 18.")
+
+        # EngRegister.dob is Integer.
+        # Here we store Unix timestamp.
+        dob_timestamp = int(
+            datetime.combine(
+                dob_date,
+                datetime.min.time()
+            ).timestamp()
         )
 
-        print("Total subcategories:", len(subcategories))
+        # =====================================
+        # 2. Religion and caste
+        # =====================================
+        religion_id = get_int(data, "religion")
+        caste_id = get_int(data, "caste")
 
-        # --------------------------------
-        # Send data to HTML Template
-        # --------------------------------
-        data = {
-            "message": "All subcategories fetched successfully",
-            "subcategories": subcategories
+        if not religion_id or not caste_id:
+            raise ValueError("Religion and caste are required.")
+
+        denomination = get_int( data, "denomination", 0 )
+        subcaste = form_value(data, "subcaste")
+
+        # =====================================
+        # 3. Marital information
+        # =====================================
+        marital_status = get_int( data, "maritalStatus" )
+
+        if marital_status is None:
+            raise ValueError("Marital status is required.")
+
+        childstatus = form_value( data, "childstatus", "N" )
+
+        # =====================================
+        # 4. Current and permanent address
+        # =====================================
+        state_id = get_int(data, "currentState")
+
+        if state_id is None:
+            raise ValueError("Current state is required.")
+
+        livingin = get_int( data, "currentCountry" ) 
+        temp_country = get_int( data, "permanentCountry" ) 
+        temp_state = form_value( data, "permanentState" ) 
+        temp_city = form_value( data, "permanentTeluguCities_list" ) 
+        temp_town = form_value( data, "permanentVillage" )
+        current_city = form_value( data, "currentCity" ) 
+        current_village = form_value( data, "currentVillage" )
+
+        # =====================================
+        # 5. Multiple selection preferences
+        # =====================================
+        preference_marital_status = ",".join( data.getlist("preference_marital_status[]") ) 
+        preference_country = ",".join( data.getlist("preference_country[]") ) 
+        preference_state = ",".join( data.getlist("preference_state[]") ) 
+        preference_city = ",".join( data.getlist("preference_city[]") ) 
+        preference_religion = ",".join( data.getlist("preference_religion[]") ) 
+        preference_caste = ",".join( data.getlist("preference_caste[]") ) 
+        preference_education = ",".join( data.getlist("preference_education[]") ) 
+        preference_occupation = ",".join( data.getlist("preference_occupation[]") ) 
+        preference_income = ",".join( data.getlist("preference_incomeId[]") )
+
+        # =====================================
+        # 6. Generate registration values
+        # =====================================
+        current_timestamp = get_timestamp()
+        temporary_profile_id = ( "TEMP-" + uuid.uuid4().hex )
+
+        # =====================================
+        # 7. Create EngRegister object
+        # =====================================
+
+        register = EngRegister(
+
+            # Basic information
+            profile_id=temporary_profile_id,
+            password="",
+            name=name,
+            dob=dob_timestamp,
+            tob=form_value(data, "tob"),
+            age=age,
+            gender=gender,
+
+            # Religion
+            religion_id=religion_id,
+            denomination=denomination,
+            caste_id=caste_id,
+            subcaste=subcaste,
+
+            # Citizenship
+            citizenship=1,
+            livingin=livingin,
+
+            # Marital information
+            maritialstatus=marital_status,
+            childstatus=childstatus,
+
+            # Address
+            state_id=state_id,
+            state_other=None,
+            temp_country=temp_country,
+            temp_state=temp_state,
+            temp_city=temp_city,
+            temp_town=temp_town,
+            residing_city=current_city,
+            residing_other_city=current_village,
+
+            # Photos and security
+            hasphoto=0,
+            hasvideo=0,
+            photopassword="",
+            isprotected=0,
+            hasastro=0,
+
+            # Registration dates
+            datecreated=current_timestamp,
+            valid_upto=current_timestamp,
+            valid_upto_time="",
+            grace_time="",
+            date_deactivated=date.today(),
+
+            # Registration status
+            member_status=0,
+            featured_member=0,
+            isactive=0,
+            status=1,
+            deleted=0,
+
+            # Login settings
+            generated_password="",
+            loginstatus=0,
+
+            # Contact limits
+            view_contacts_limit=getattr( settings, "REGISTER_VIEW_CONTACTS_LIMIT", 0 ),
+            pm_limit=getattr( settings, "REGISTER_PM_LIMIT", 0 ),
+
+            # Registration source
+            register_from="WEB",
+            offline_empid=form_value( data, "offline_empid" ),
+
+            # Personal information
+            privacy_access=0,
+
+            # Preferences are not EngRegister columns.
+            # They may belong to related tables.
+        )
+
+        # =====================================
+        # 8. Direct MySQL INSERT
+        # =====================================
+
+        db.add(register)
+
+        # INSERT execute చేసి auto increment ID పొందుతాం.
+        db.flush()
+
+        register_id = register.register_id
+
+        # Generate final profile ID.
+        register.profile_id = ( f"EP{register_id:06d}" )
+
+        # Save everything permanently.
+        db.commit()
+        db.refresh(register)
+        logger.info(
+            "Registration inserted successfully. ID=%s",
+            register_id
+        )
+
+        # =====================================
+        # 9. Success message
+        # =====================================
+        request.session["create_user_result"] = {
+            "success": True,
+            "message": "Registration created successfully.",
+            "register_id": register_id,
+            "profile_id": register.profile_id
         }
+        return redirect("createUser")
 
-        return render(request, "admin_app/test.html", data)
+    # =========================================
+    # Validation error
+    # =========================================
 
-    except Exception as e:
-        print("Database error:", e)
-        return render(
-            request,
-            "admin_app/test.html",
-            {
-                "message": "Unable to fetch subcategories.",
-                "subcategories": []
-            }
+    except ValueError as e:
+        db.rollback()
+        logger.warning(
+            "Registration validation failed: %s",
+            str(e)
         )
+
+        request.session["create_user_result"] = {
+            "success": False,
+            "message": str(e)
+        }
+        return redirect("createUser")
+
+    # =========================================
+    # Database error
+    # =========================================
+
+    except SQLAlchemyError as e:
+        db.rollback()
+        logger.exception( "Registration database insert failed" )
+        request.session["create_user_result"] = {
+            "success": False,
+            "message": "Database insertion failed: " + str(e)
+        }
+        return redirect("createUser")
+
+    # =========================================
+    # Unexpected error
+    # =========================================
+    except Exception as e:
+        db.rollback()
+        logger.exception(
+            "Unexpected registration error"
+        )
+        request.session["create_user_result"] = {
+            "success": False,
+            "message": str(e)
+        }
+        return redirect("createUser")
 
     finally:
         db.close()
+
+def banners_view(request):
+    banners_list = get_banners_list(request)
+    return render(
+        request,
+        "admin_app/banners.html",
+        {
+            "banners_list": banners_list
+        }
+    )
+
+def pacakges_view(request):
+    packageCategories_list = get_package_categories_list()
+    return render(
+        request,
+        "admin_app/packages.html",
+        {
+            "packageCategories_list": packageCategories_list
+        }
+    )
+    data = {
+        "packageCategories_list": packageCategories_list
+    }
+    return render(request, "admin_app/packages.html", data)
+
+def subPacakges_view(request):
+    packageSubCategories_list = get_package_subCategories_list()
+    data = {
+        "packageSubCategories_list": packageSubCategories_list
+    }
+    return render(request, "admin_app/subPackages.html", data)
+
+def liveEvents_view(request):
+    liveEvents_list = get_liveEvents_list(request)
+    print("liveEvents is ", liveEvents_list)
+    data = {
+        "liveEvents_list": liveEvents_list
+    }
+    return render(request, "admin_app/liveEvents.html", data)
 
 # redierct to react application
 def react_home(request):
