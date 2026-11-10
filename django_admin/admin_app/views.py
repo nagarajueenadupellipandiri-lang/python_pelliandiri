@@ -1,6 +1,6 @@
 import sys, requests, json, hashlib, logging, math, uuid
 from pathlib import Path
-from datetime import datetime, date
+from datetime import datetime, time, timedelta
 from django.shortcuts import render, redirect
 from django.conf import settings
 from django.contrib import messages
@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import func
+from django.views.decorators.cache import never_cache
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 FASTAPI_DIR = PROJECT_ROOT / "fastapi_api"
@@ -23,6 +24,9 @@ from models import (
     EngRegister,
     EnBanners,
     EnParichayaVedika,
+    EnProfileInfo,
+    EnReligionMaster,
+    EnCasteMaster,
 )
 from core.security import create_access_token
 
@@ -52,14 +56,15 @@ def get_registartions_data(request):
     if not access_token:
         return (401, {}, 0, 0, 0, 0, 0)
 
-    # Current page number
+    # --------------------------------
+    # Pagination
+    # --------------------------------
     try:
         page = int(request.GET.get("page", 1))
         page = max(page, 1)
     except (ValueError, TypeError):
         page = 1
 
-    # Only 25 records per page
     per_page = 20
     offset = (page - 1) * per_page
 
@@ -68,72 +73,191 @@ def get_registartions_data(request):
     try:
         now = datetime.now()
 
-        # Total registrations count
-        total_registrations = (
-            db.query(func.count(EngRegister.register_id)).scalar() or 0
+        # --------------------------------
+        # JOIN REGISTER + PROFILE + RELIGION + CASTE
+        # --------------------------------
+        query = (
+            db.query(
+                EngRegister,
+                EnProfileInfo,
+                EnReligionMaster,
+                EnCasteMaster
+            )
+            .outerjoin(
+                EnProfileInfo,
+                EngRegister.register_id == EnProfileInfo.register_id
+            )
+            .outerjoin(
+                EnReligionMaster,
+                EngRegister.religion_id == EnReligionMaster.religion_id
+            )
+            .outerjoin(
+                EnCasteMaster,
+                EngRegister.caste_id == EnCasteMaster.caste_id
+            )
         )
 
+        # --------------------------------
+        # Total registrations
+        # --------------------------------
+        total_registrations = (
+            db.query(func.count(EngRegister.register_id))
+            .scalar() or 0
+        )
+
+        # --------------------------------
+        # Male registrations
+        # --------------------------------
         male_registartions = (
             db.query(func.count(EngRegister.register_id))
             .filter(EngRegister.gender == "M")
             .scalar() or 0
         )
 
+        # --------------------------------
+        # Female registrations
+        # --------------------------------
         female_registartions = (
             db.query(func.count(EngRegister.register_id))
             .filter(EngRegister.gender == "F")
             .scalar() or 0
         )
 
-        today_registrations = (
-            db.query(func.count(EngRegister.register_id))
-            .filter(func.date(EngRegister.datecreated) == now.date())
-            .scalar() or 0
+        # --------------------------------
+        # Today registrations
+        # --------------------------------
+        today_start = int(
+            now.replace(
+                hour=0,
+                minute=0,
+                second=0,
+                microsecond=0
+            ).timestamp()
         )
 
-        month_start = datetime(now.year, now.month, 1)
+        tomorrow_start = today_start + 86400
 
-        if now.month == 12:
-            next_month = datetime(now.year + 1, 1, 1)
-        else:
-            next_month = datetime(now.year, now.month + 1, 1)
-
-        this_month_registrations = (
+        today_registrations = (
             db.query(func.count(EngRegister.register_id))
             .filter(
-                EngRegister.datecreated >= month_start,
-                EngRegister.datecreated < next_month
+                EngRegister.datecreated >= today_start,
+                EngRegister.datecreated < tomorrow_start
             )
             .scalar() or 0
         )
 
-        # Calculate pagination
-        total_pages = max(1, math.ceil(total_registrations / per_page))
+        # --------------------------------
+        # This month registrations
+        # --------------------------------
+        month_start = datetime(
+            now.year, now.month, 1, tzinfo=now.tzinfo
+        )
 
-        # Prevent requesting a page beyond the last page
+        if now.month == 12:
+            next_month = datetime(now.year + 1, 1, 1, tzinfo=now.tzinfo)
+        else:
+            next_month = datetime(
+                now.year, now.month + 1, 1, tzinfo=now.tzinfo
+            )
+
+        this_month_registrations = (
+            db.query(func.count(EngRegister.register_id))
+            .filter(
+                EngRegister.datecreated >= int(month_start.timestamp()),
+                EngRegister.datecreated < int(next_month.timestamp())
+            )
+            .scalar() or 0
+        )
+
+        # --------------------------------
+        # Pagination calculation
+        # --------------------------------
+        total_pages = max(
+            1,
+            math.ceil(total_registrations / per_page)
+        )
+
         page = min(page, total_pages)
         offset = (page - 1) * per_page
 
-        # Fetch only 20 records
-        register_users = (
-            db.query(EngRegister)
+        # --------------------------------
+        # Fetch registrations with JOIN
+        # --------------------------------
+        registrations = (
+            query
             .order_by(EngRegister.register_id.desc())
             .offset(offset)
             .limit(per_page)
             .all()
         )
 
-        # print("Current page:", page)
-        # print("Records loaded:", len(register_users))
+        # --------------------------------
+        # Convert JOIN records into dictionaries
+        # --------------------------------
+        register_users = []
 
+        for reg, profile, religion, caste in registrations:
+
+            register_users.append({
+
+                # EngRegister
+                "register_id": reg.register_id,
+                "profile_id": reg.profile_id,
+                "name": reg.name,
+                "dob": reg.dob,
+                "gender": reg.gender,
+                "maritialstatus": reg.maritialstatus,
+
+                "religion_id": reg.religion_id,
+                "religion_name": ( religion.religion_name if religion else None ),
+                "denomination": reg.denomination,
+
+                "caste_id": reg.caste_id,
+                "caste_name": (
+                    caste.caste_name if caste else None
+                ),
+
+                "subcaste": reg.subcaste,
+
+                "citizenship": reg.citizenship,
+                "livingin": reg.livingin,
+
+                "state_id": reg.state_id,
+                "state_other": reg.state_other,
+
+                "pincode": reg.pincode,
+                "town": reg.town,
+
+                "datecreated": reg.datecreated,
+
+                # EnProfileInfo
+                "email": profile.email if profile else None,
+                "mobile": profile.mobile if profile else None,
+
+                "bloodgroup": profile.bloodgroup if profile else None,
+                "height_id": profile.height_id if profile else None,
+                "weight": profile.weight if profile else None,
+
+                "occupation_id": ( profile.occupation_id if profile else None ),
+                "qualification_id": ( profile.qualification_id if profile else None ),
+
+            })
+
+        # print("Registration JOIN data:", register_users[:2])
+
+        # --------------------------------
+        # Final response
+        # --------------------------------
         registers = {
             "data": register_users,
+
             "pagination": {
                 "total_registrations": total_registrations,
                 "current_page": page,
                 "per_page": per_page,
                 "total_pages": total_pages
             },
+
             "male_registartions": male_registartions,
             "female_registartions": female_registartions,
             "today_registrations": today_registrations,
@@ -345,15 +469,21 @@ def get_teluguCities_list(request):
     return telugCities 
 
 def get_employees_data(request):
-    payload, headers = common_payload(request)
-
-    employees_response = requests.post(
-            f"{settings.FASTAPI_BASE_URL}/employees",
-            json=payload,
-            headers=headers,
-            timeout=10
+    db= SessionLocal()
+    try:
+        employees = (
+            db.query(EnLogin)
+            .order_by(EnLogin.login_id.desc())
+            .all()
         )
-    return employees_response
+        
+        return employees
+    except Exception as e:
+        print("Employees Error:", e)
+        return []
+
+    finally:
+        db.close()
 
 def occupations_as_working(request):
     if request.method != "POST":
@@ -633,7 +763,6 @@ def get_package_categories_list():
         db.close()
 
 def get_package_subCategories_list():
-
     db = SessionLocal()
 
     try:
@@ -740,67 +869,43 @@ def login_view(request):
         "logout_success": logout_success
     })
 
+@never_cache
 def dashboard_view(request):
-    payload, headers = common_payload(request)
-
-    if payload is None or headers is None:
+    if not request.session.get("user"):
         return redirect("login")
 
     # --------------------------------
-    # Call FastAPI APIs
+    # Direct Database Queries
     # --------------------------------
     try:
         events_response = get_liveEvents_list(request)
         employees_response = get_employees_data(request)
-        (registers_status_code, registers, total_registrations, male_registartions, female_registartions, today_registrations, this_month_registrations)  = get_registartions_data(request)
-        employees = employees_response.json()
-        events = events_response.json()
 
-    except requests.RequestException as e:
-        print("FastAPI connection error:", e)
+        # Registrations Direct Database
+        (
+            registers_status_code,
+            registers,
+            total_registrations,
+            male_registartions,
+            female_registartions,
+            today_registrations,
+            this_month_registrations
+        ) = get_registartions_data(request)
+
+        total_employees = len(employees_response)
+        total_events = len(events_response)
+
+    except Exception as e:
+
+        print("Dashboard Database Error:", e)
 
         return render(
             request,
             "admin_app/dashboard.html",
             {
-                "error": "Unable to connect to API server."
+                "error": "Unable to load dashboard data."
             }
         )
-
-    # --------------------------------
-    # JWT invalid / expired
-    # --------------------------------
-    if (
-        employees_response.status_code == 401
-        or events_response.status_code == 401
-        or registers_status_code == 401
-    ):
-        request.session.flush()
-        return redirect("login")
-
-    # --------------------------------
-    # Employees API error
-    # --------------------------------
-    if (
-        employees_response.status_code != 200
-        or not employees.get("status")
-    ):
-        return render(
-            request,
-            "admin_app/dashboard.html",
-            {
-                "error": employees.get(
-                    "message",
-                    "Unable to load employees."
-                )
-            }
-        )
-
-    # --------------------------------
-    # Dashboard totals
-    # --------------------------------
-    total_employees = employees.get( "total_employees", 0 )
-    total_events = events.get( "total_events", 0 )
 
     # --------------------------------
     # Dashboard data
@@ -810,41 +915,23 @@ def dashboard_view(request):
         "total_events": total_events,
         "total_registrations": total_registrations,
         "male_registartions": male_registartions,
-        "female_registartions": male_registartions,
-        "user": request.session.get( "user", {} ),
-        "template":"dashboard",
+        "female_registartions": female_registartions,
+        "user": request.session.get("user", {}),
+        "template": "dashboard",
     }
-    return render( request, "admin_app/dashboard.html", data )
+
+    return render(
+        request,
+        "admin_app/dashboard.html",
+        data
+    )
 
 def logout_view(request):
-    access_token = request.session.get("access_token")
-    if access_token:
-        headers = {
-            "Authorization": f"Bearer {access_token}"
-        }
-
-        payload = {
-            "type": "logout",
-            "Authkey": settings.FASTAPI_AUTH_KEY,
-            "params": {}
-        }
-
-        try:
-            response = requests.post(
-                f"{settings.FASTAPI_BASE_URL}/auth/logout",
-                json=payload,
-                headers=headers,
-                timeout=10
-            )
-            print("LOGOUT STATUS:", response.status_code)
-
-        except requests.RequestException as e:
-            print("FASTAPI LOGOUT ERROR:", e)
 
     # Clear Django session
     request.session.flush()
 
-    # Logout message
+    # Logout success message
     messages.success(
         request,
         "You have been securely logged out."
@@ -852,16 +939,12 @@ def logout_view(request):
 
     return redirect("login")
 
+@never_cache
 def user_view(request):
-    payload, headers = common_payload(request)
-
-    if payload is None or headers is None:
-        return redirect("login")
-
-    # --------------------------------
-    # Call FastAPI API
-    # --------------------------------
     try:
+        # --------------------------------
+        # 1. Registration Data (SQLAlchemy)
+        # --------------------------------
         (
             registers_status_code,
             registers_response,
@@ -872,59 +955,198 @@ def user_view(request):
             this_month_registrations
         ) = get_registartions_data(request)
 
+        # --------------------------------
+        # 2. JWT Session Check
+        # --------------------------------
+        if registers_status_code == 401:
+            request.session.flush()
+            return redirect("login")
 
+        # --------------------------------
+        # 3. Registration Error Check
+        # --------------------------------
+        if registers_status_code != 200:
+            return render(
+                request,
+                "admin_app/users.html",
+                {
+                    "error": registers_response.get(
+                        "message",
+                        "Unable to load registrations."
+                    )
+                }
+            )
+
+        # Registration records
         register_users = registers_response.get("data", [])
 
+        # --------------------------------
+        # 4. Religion
+        # --------------------------------
         religion_response = get_religion_list(request)
-        religion_list = religion_response.get("data", [])
 
-        christianDenomination_response  = get_christianDenomination_list(request)
-        christianDenomination_list = christianDenomination_response.get("data", [])
+        if isinstance(religion_response, dict):
+            religion_list = religion_response.get("data", [])
+        else:
+            religion_list = religion_response
 
+        # --------------------------------
+        # 5. Christian Denomination
+        # --------------------------------
+        christianDenomination_response = get_christianDenomination_list(request)
+
+        if isinstance(christianDenomination_response, dict):
+            christianDenomination_list = christianDenomination_response.get("data", [])
+        else:
+            christianDenomination_list = christianDenomination_response
+
+        # --------------------------------
+        # 6. Muslim Subsects
+        # --------------------------------
         muslimSubsects_response = get_muslimSubsects_list(request)
-        muslimSubsects_list = muslimSubsects_response.get("data", [])
 
+        if isinstance(muslimSubsects_response, dict):
+            muslimSubsects_list = muslimSubsects_response.get("data", [])
+        else:
+            muslimSubsects_list = muslimSubsects_response
+
+        # --------------------------------
+        # 7. Caste
+        # --------------------------------
         caste_response = get_cste_list(request)
-        caste_list = caste_response.get("data", [])
 
+        if isinstance(caste_response, dict):
+            caste_list = caste_response.get("data", [])
+        else:
+            caste_list = caste_response
+
+        # --------------------------------
+        # 8. Height
+        # --------------------------------
         height_response = get_height_list(request)
-        height_list = height_response.get("data", [])
 
-        educationQualification_rsponse = get_education_qualification_list(request)
-        educationQualification_list = educationQualification_rsponse.get("data", [])
+        if isinstance(height_response, dict):
+            height_list = height_response.get("data", [])
+        else:
+            height_list = height_response
 
+        # --------------------------------
+        # 9. Education Qualification
+        # --------------------------------
+        educationQualification_response = get_education_qualification_list(request)
+
+        if isinstance(educationQualification_response, dict):
+            educationQualification_list = educationQualification_response.get("data", [])
+        else:
+            educationQualification_list = educationQualification_response
+
+        # --------------------------------
+        # 10. Raasi
+        # --------------------------------
         raasi_response = get_raasi_list(request)
-        raasi_list = raasi_response.get("data", [])
 
+        if isinstance(raasi_response, dict):
+            raasi_list = raasi_response.get("data", [])
+        else:
+            raasi_list = raasi_response
+
+        # --------------------------------
+        # 11. Star
+        # --------------------------------
         star_response = get_star_list(request)
-        star_list = star_response.get("data", [])
 
+        if isinstance(star_response, dict):
+            star_list = star_response.get("data", [])
+        else:
+            star_list = star_response
+
+        # --------------------------------
+        # 12. Country
+        # --------------------------------
         country_response = get_county_list(request)
-        counry_list = country_response.get("data", [])
 
+        if isinstance(country_response, dict):
+            counry_list = country_response.get("data", [])
+        else:
+            counry_list = country_response
+
+        # --------------------------------
+        # 13. Indian States
+        # --------------------------------
         indianStates_response = get_indianState_list(request)
-        inadian_states_list = indianStates_response.get("data", [])
 
+        if isinstance(indianStates_response, dict):
+            inadian_states_list = indianStates_response.get("data", [])
+        else:
+            inadian_states_list = indianStates_response
+
+        # --------------------------------
+        # 14. Telugu Cities
+        # --------------------------------
         teluguCities_response = get_teluguCities_list(request)
-        teluguCities_list = teluguCities_response.get("data", [])
 
+        if isinstance(teluguCities_response, dict):
+            teluguCities_list = teluguCities_response.get("data", [])
+        else:
+            teluguCities_list = teluguCities_response
+
+        # --------------------------------
+        # 15. Occupation Master Head
+        # --------------------------------
         occupationMasterHead_response = get_occupation_master_head_list(request)
-        occupationMasterHead_list = occupationMasterHead_response.get("data", [])
 
+        if isinstance(occupationMasterHead_response, dict):
+            occupationMasterHead_list = occupationMasterHead_response.get("data", [])
+        else:
+            occupationMasterHead_list = occupationMasterHead_response
+
+        # --------------------------------
+        # 16. Occupation
+        # --------------------------------
         occupation_response = get_occupation_list(request)
-        ocupation_list = occupation_response.get("data", [])
 
-        occupation_groups = get_occupation_groups( occupationMasterHead_list, ocupation_list )
+        if isinstance(occupation_response, dict):
+            ocupation_list = occupation_response.get("data", [])
+        else:
+            ocupation_list = occupation_response
 
+        # --------------------------------
+        # 17. Occupation Groups
+        # --------------------------------
+        occupation_groups = get_occupation_groups(
+            occupationMasterHead_list,
+            ocupation_list
+        )
+
+        # --------------------------------
+        # 18. Income
+        # --------------------------------
         income_response = get_income_list(request)
-        income_list = income_response.get("data", [])
 
+        if isinstance(income_response, dict):
+            income_list = income_response.get("data", [])
+        else:
+            income_list = income_response
+
+        # --------------------------------
+        # 19. Employees
+        # --------------------------------
         employees_response = get_employees_data(request)
-        employee_response_data= employees_response.json()
-        employee_list = employee_response_data.get("data", [])
+
+        if hasattr(employees_response, "json"):
+            employee_response_data = employees_response.json()
+            employee_list = employee_response_data.get("data", [])
+
+        elif isinstance(employees_response, dict):
+            employee_list = employees_response.get("data", [])
+
+        else:
+            employee_list = employees_response
 
     except requests.RequestException as e:
+
         print("FastAPI connection error:", e)
+
         return render(
             request,
             "admin_app/users.html",
@@ -933,59 +1155,73 @@ def user_view(request):
             }
         )
 
-    # --------------------------------
-    # JWT invalid / expired
-    # --------------------------------
-    if registers_status_code == 401:
-        request.session.flush()
-        return redirect("login")
+    except Exception as e:
 
-    # --------------------------------
-    # API error
-    # --------------------------------
-    if registers_status_code != 200:
+        print("User View Error:", e)
+
         return render(
             request,
             "admin_app/users.html",
             {
-                "error": registers_response.get(
-                    "message",
-                    "Unable to load registrations."
-                )
+                "error": str(e)
             }
         )
 
     # --------------------------------
-    # Send data to template
+    # 20. Send Data to Template
     # --------------------------------
     data = {
+
         "total_registrations": total_registrations,
         "male_registartions": male_registartions,
         "female_registartions": female_registartions,
         "today_registrations": today_registrations,
         "this_month_registrations": this_month_registrations,
+
         "register_users": register_users,
+
         "religion_list": religion_list,
         "christianDenomination_list": christianDenomination_list,
         "muslimSubsects_list": muslimSubsects_list,
+
         "caste_list": caste_list,
         "height_list": height_list,
+
         "educationQualification_list": educationQualification_list,
+
         "raasi_list": raasi_list,
         "star_list": star_list,
+
         "teluguCities_list": teluguCities_list,
         "counry_list": counry_list,
         "inadian_states_list": inadian_states_list,
+
         "occupation_groups": occupation_groups,
+
         "income_list": income_list,
         "employee_list": employee_list,
-        "template":"users",
+
+        "template": "users",
     }
 
-    # Read registration result after redirect
-    create_user_result = request.session.pop( "create_user_result", None )
+    # --------------------------------
+    # 21. Create User Result
+    # --------------------------------
+    create_user_result = request.session.pop(
+        "create_user_result",
+        None
+    )
+
     data["create_user_result"] = create_user_result
-    return render( request, "admin_app/users.html", data )
+
+    # --------------------------------
+    # 22. Render Template
+    # --------------------------------
+    return render(
+        request,
+        "admin_app/users.html",
+        data
+    )
 
 logger = logging.getLogger(__name__)
 def form_value(data, key, default=""):
@@ -1294,7 +1530,11 @@ def createUser(request):
     finally:
         db.close()
 
+@never_cache
 def banners_view(request):
+    if not request.session.get("user"):
+        return redirect("login")
+
     banners_list = get_banners_list(request)
     return render(
         request,
@@ -1304,7 +1544,12 @@ def banners_view(request):
         }
     )
 
+@never_cache
 def pacakges_view(request):
+
+    if not request.session.get("user"):
+        return redirect("login")
+
     packageCategories_list = get_package_categories_list()
     return render(
         request,
@@ -1318,21 +1563,26 @@ def pacakges_view(request):
     }
     return render(request, "admin_app/packages.html", data)
 
+@never_cache
 def subPacakges_view(request):
+
+    if not request.session.get("user"):
+        return redirect("login")
+
     packageSubCategories_list = get_package_subCategories_list()
     data = {
         "packageSubCategories_list": packageSubCategories_list
     }
     return render(request, "admin_app/subPackages.html", data)
 
+@never_cache
 def liveEvents_view(request):
+
+    if not request.session.get("user"):
+        return redirect("login")
+
     liveEvents_list = get_liveEvents_list(request)
-    print("liveEvents is ", liveEvents_list)
     data = {
         "liveEvents_list": liveEvents_list
     }
     return render(request, "admin_app/liveEvents.html", data)
-
-# redierct to react application
-def react_home(request):
-    return redirect("http://localhost:5173/")

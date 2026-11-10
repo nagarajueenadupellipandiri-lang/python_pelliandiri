@@ -1,9 +1,9 @@
 from django.contrib import admin
 from django.urls import path
 from admin_app import views
+from admin_app import front_view
 
 urlpatterns = [     
-    path("", views.react_home, name="home"),
     path("admin/", views.login_view, name="login"),
     path("login/", views.login_view, name="login" ),     
     path("dashboard/", views.dashboard_view, name="dashboard" ), 
@@ -13,7 +13,10 @@ urlpatterns = [
     path("occupationsAsNotWorking/", views.occupations_as_not_working, name="occupationsAsNotWorking" ),
     path("createUser/", views.createUser, name="createUser"),
     path("banners/", views.banners_view, name="banners"),
-    path("packages/", views.pacakges_view, name="packages"),
-    path("subPackages/", views.subPacakges_view, name="subPackages"),
+    path("packageCategories/", views.pacakges_view, name="packageCategories"),
+    path("packages/", views.subPacakges_view, name="packages"),
     path("liveEvents/", views.liveEvents_view, name="liveEvents"),
+    
+    # go to front end
+    path("reactApplication/", front_view.home, name="reactApplication"),
 ]
