@@ -18,5 +18,5 @@ urlpatterns = [
     path("liveEvents/", views.liveEvents_view, name="liveEvents"),
     
     # go to front end
-    path("reactApplication/", front_view.home, name="reactApplication"),
+    path("", front_view.home, name="reactApplication"),
 ]
